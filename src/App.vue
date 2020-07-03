@@ -1,0 +1,28 @@
+<template lang='pug'>
+	div#app
+		LastFM
+</template>
+
+<script>
+import LastFM from './components/LastFM.vue';
+
+export default {
+	name: 'App',
+	
+	components: {
+		LastFM
+	}
+}
+</script>
+
+<style lang='stylus'>
+@import './assets/variables.styl'
+
+#app
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	// text-align: center;
+	color: $text-color;
+	margin-top: 40px;
+</style>
