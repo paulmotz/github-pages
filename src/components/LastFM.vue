@@ -1,28 +1,32 @@
 <template lang='pug'>
 	.last-fm-wrapper
-		img.logo(alt="last.fm logo" src="../assets/last-fm.png")
+		img.logo(alt="Vue logo" src="../assets/last-fm.png")
 		.inputs
 			label last.fm username
 			input(v-model="username" placeholder="last.fm username")
 			label uts
 			input(v-model="uts" placeholder="last track uts")
-		//- button(v-on:click="logTracks(username, uts)") Get tracks
-		Hello
+		PJMButton(
+			v-bind:isDisabled="isButtonLoading"
+			v-bind:text="'Get tracks'"
+			v-bind:loadingText="'Geting tracks...'"
+			v-on:clicked="logTracks(username,uts)")
 </template>
 
 <script>
 import { logTracks } from '../lib/lastfm.js';
-import Hello from './Hello.vue';
+import PJMButton from './PJMButton.vue';
 
 export default {
 	name: 'LastFM',
 
-	compontents: {
-		Hello
+	components: {
+		PJMButton
 	},
 
 	data: function() {
 		return {
+			isButtonLoading: false,
 			username: 'paul_motz',
 			uts: '',
 		};
@@ -30,8 +34,18 @@ export default {
 
 	methods: {
 		async logTracks(user, from) {
-			await logTracks({ user, from });
+			this.setIsButtonLoading(true);
+
+			const result = await logTracks({ user, from });
+
+			console.log(result)
+
+			this.setIsButtonLoading(false);
 		},
+
+		setIsButtonLoading(isButtonLoading) {
+			this.isButtonLoading = isButtonLoading;
+		}
 	}
 }
 </script>

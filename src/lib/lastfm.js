@@ -53,6 +53,12 @@ const logTracks = async ({ user, from, to }) => {
 	console.table(scrobbleCounts);
 	console.log(totalScrobbles);
 	console.log(lastTrackInfo);
+
+	return {
+		lastTrackInfo,
+		scrobbleCounts,
+		totalScrobbles,
+	}
 };
 
 const fetchAllTracks = async ({user, from, to, limit = 1000} = {}) => {
