@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import LastFM from './components/LastFM.vue';
+import LastFM from './components/LastFM/LastFM.vue';
 
 export default {
 	name: 'App',

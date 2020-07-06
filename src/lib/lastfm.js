@@ -1,6 +1,6 @@
 const user = 'paul_motz';
 
-const logTracks = async ({ user, from, to }) => {
+const getTracks = async ({ user, from, to }) => {
 	const scrobbleCounts = [];
 	let totalScrobbles = 0;
 	const fetchedTracks = await fetchAllTracks({
@@ -122,7 +122,9 @@ const getTrack = async (trackName, pagesToSearch = 5) => {
 };
 
 const getOldestTrackUts = tracks => {
-	return tracks[tracks.length - 1].date.uts;
+	// If there is currently a track being scrobbled and it is the only track returned
+	// it will not have a date property.
+	return tracks[tracks.length - 1].date && tracks[tracks.length - 1].date.uts;
 };
 
 const getNewestTrackInfo = tracks => {
@@ -143,7 +145,7 @@ const getDate = date => {
 
 // logTracks(1592927031);
 
-export { getTrack, logTracks };
+export { getTrack, getTracks };
 
 // const dates = [ 1505505307, 1506232862, 1506802762, 1511741570, 1512434635, 1514834830, 1516490975 ];
 

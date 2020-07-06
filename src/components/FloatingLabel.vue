@@ -8,6 +8,7 @@
 
 <script>
 export default {
+	// Adopted from https://github.com/bartkozal/vue-float-label
 	name : 'FloatingLabel',
 
 	props : {

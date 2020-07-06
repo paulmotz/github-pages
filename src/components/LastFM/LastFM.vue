@@ -1,6 +1,6 @@
 <template lang='pug'>
 	.last-fm-wrapper
-		img.logo(alt="Vue logo" src="../assets/last-fm.png")
+		img.logo(alt="Vue logo" src="../../assets/last-fm.png")
 		.inputs
 			FloatingLabel(v-bind:labelText="'Last.fm username'")
 				ValidatedInput(v-bind:errorMessage="userErrorMessage")
@@ -16,19 +16,22 @@
 			v-bind:text="'Get tracks'"
 			v-bind:loadingText="'Geting tracks...'"
 			v-on:clicked="getLastFMTracks(username, fromUts, toUts)")
+		LastFMTrackDisplay(v-bind:lastFMDataProp="lastFMData")
 </template>
 
 <script>
-import { logTracks } from '../lib/lastfm.js';
-import FloatingLabel from './FloatingLabel.vue';
-import PJMButton from './PJMButton.vue';
-import ValidatedInput from './ValidatedInput.vue';
+import { getTracks } from '../../lib/lastfm.js';
+import FloatingLabel from '../FloatingLabel.vue';
+import LastFMTrackDisplay from './LastFMTrackDisplay.vue';
+import PJMButton from '../PJMButton.vue';
+import ValidatedInput from '../ValidatedInput.vue';
 
 export default {
 	name : 'LastFM',
 
 	components : {
 		FloatingLabel,
+		LastFMTrackDisplay,
 		PJMButton,
 		ValidatedInput
 	},
@@ -38,10 +41,11 @@ export default {
 			isButtonLoading: false,
 			userErrorMessage: '',
 			username: 'paul_motz',
-			fromUts: '',
+			fromUts: '1592927031',
 			fromUtsErrorMessage: '',
-			toUts: '',
+			toUts: '1592937031',
 			toUtsErrorMessage: '',
+			lastFMData: {},
 		};
 	},
 
@@ -81,7 +85,7 @@ export default {
 				return;
 			}
 
-			await this.logTracks(user, from, to);
+			await this.getTracks(user, from, to);
 		},
 
 		hideUserErrorMessage() {
@@ -96,12 +100,10 @@ export default {
 			this.toUtsErrorMessage = '';
 		},
 
-		async logTracks(user, from, to = '') {
+		async getTracks(user, from, to = '') {
 			this.setIsButtonLoading(true);
 
-			const result = await logTracks({ user, from, to });
-
-			console.log(result)
+			this.lastFMData = await getTracks({ user, from, to });
 
 			this.setIsButtonLoading(false);
 		},
