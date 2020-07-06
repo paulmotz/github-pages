@@ -2,45 +2,124 @@
 	.last-fm-wrapper
 		img.logo(alt="Vue logo" src="../assets/last-fm.png")
 		.inputs
-			label last.fm username
-			input(v-model="username" placeholder="last.fm username")
-			label uts
-			input(v-model="uts" placeholder="last track uts")
+			FloatingLabel(v-bind:labelText="'Last.fm username'")
+				ValidatedInput(v-bind:errorMessage="userErrorMessage")
+					input(v-model="username" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
+			FloatingLabel(v-bind:labelText="'First track uts'")
+				ValidatedInput(v-bind:errorMessage="fromUtsErrorMessage")
+					input(v-model="fromUts" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
+			FloatingLabel(v-bind:labelText="'Last track uts (optional)'")
+				ValidatedInput(v-bind:errorMessage="toUtsErrorMessage")
+					input(v-model="toUts" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
 		PJMButton(
 			v-bind:isDisabled="isButtonLoading"
 			v-bind:text="'Get tracks'"
 			v-bind:loadingText="'Geting tracks...'"
-			v-on:clicked="logTracks(username,uts)")
+			v-on:clicked="getLastFMTracks(username, fromUts, toUts)")
 </template>
 
 <script>
 import { logTracks } from '../lib/lastfm.js';
+import FloatingLabel from './FloatingLabel.vue';
 import PJMButton from './PJMButton.vue';
+import ValidatedInput from './ValidatedInput.vue';
 
 export default {
-	name: 'LastFM',
+	name : 'LastFM',
 
-	components: {
-		PJMButton
+	components : {
+		FloatingLabel,
+		PJMButton,
+		ValidatedInput
 	},
 
 	data: function() {
 		return {
 			isButtonLoading: false,
+			userErrorMessage: '',
 			username: 'paul_motz',
-			uts: '',
+			fromUts: '',
+			fromUtsErrorMessage: '',
+			toUts: '',
+			toUtsErrorMessage: '',
 		};
 	},
 
-	methods: {
-		async logTracks(user, from) {
+	computed : {
+		shouldShowUserErrorMessage () {
+			return this.username.length > 0 && this.userErrorMessage.length > 0;
+		},
+
+		shouldShowUtsErrorMessage () {
+			return this.fromUts.length > 0 && this.fromUtsErrorMessage.length > 0;
+		}
+	},
+
+	watch : {
+		username : function() {
+			this.hideUserErrorMessage();
+		},
+
+		fromUts : function() {
+			this.hideFromUtsErrorMessage();
+		},
+
+		toUts : function() {
+			this.hideToUtsErrorMessage();
+		}
+	},
+
+	methods : {
+		async getLastFMTracks(user, from, to) {
+			this.resetErrorMessages();
+
+			if (!user) {
+				this.userErrorMessage = 'Please enter a last.fm user'
+			}
+
+			if (!from) {
+				this.fromUtsErrorMessage = 'Please enter a starting uts'
+			}
+
+			const isToUtsLessThanFromUts = Number(to) < Number(from) && to !== '';
+
+			if (isToUtsLessThanFromUts) {
+				this.toUtsErrorMessage = 'Invalid last track uts'
+			}
+
+			if (!user || !from || isToUtsLessThanFromUts) {
+				return;
+			}
+
+			await this.logTracks(user, from, to);
+		},
+
+		hideUserErrorMessage() {
+			this.userErrorMessage = '';
+		},
+
+		hideFromUtsErrorMessage() {
+			this.fromUtsErrorMessage = '';
+		},
+
+		hideToUtsErrorMessage() {
+			this.toUtsErrorMessage = '';
+		},
+
+		async logTracks(user, from, to = '') {
 			this.setIsButtonLoading(true);
 
-			const result = await logTracks({ user, from });
+			const result = await logTracks({ user, from, to });
 
 			console.log(result)
 
 			this.setIsButtonLoading(false);
+		},
+
+		resetErrorMessages() {
+			this.hideUserErrorMessage();
+			this.hideFromUtsErrorMessage();
+			this.hideToUtsErrorMessage();
 		},
 
 		setIsButtonLoading(isButtonLoading) {
@@ -52,27 +131,26 @@ export default {
 
 <style lang='stylus'>
 .last-fm-wrapper
-	margin: 0 auto
+	display: flex
+	flex-direction: column
+	align-items: center
 	width: 80%
 
 .logo
 	height: 75px
 	width: 75px
-	display: flex
-	margin: 0 auto 25px auto
+	margin-bottom: 1.25rem
 
 .inputs
-	display: grid
-	grid-template-columns: 50% 50%
-	grid-gap: 5px
-	width: 75%
-	margin: 0 auto
+	width: 10rem
 
-.inputs label
-	text-align: right
+.inputs .floating-label
+	display flex
+
+.inputs input
+	width: 100%
 
 button
 	display: flex
-	margin: 10px auto
-
+	margin-top: 1.25rem
 </style>

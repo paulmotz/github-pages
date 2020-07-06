@@ -30,17 +30,22 @@ export default {
 </script>
 
 <style lang='stylus'>
+@import '../assets/variables.styl'
+
 button
-	background-color: blue
+	background-color: $button-background-color
 	border: none
 	border-radius: 5px
 	color: white
 	padding: 10px
+	cursor: pointer
 
 button:hover
-	background-color: green
+	background-color: $button-background-color-hover
 
 button:disabled
-	background-color: cyan
-	color: black
+	background-color: $button-background-color-disabled
+	// color: black
+	cursor: not-allowed
+	opacity: 0.7
 </style>

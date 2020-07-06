@@ -25,4 +25,7 @@ export default {
 	// text-align: center;
 	color: $text-color;
 	margin-top: 40px;
+	display: flex
+	align-items: center
+	justify-content: center
 </style>

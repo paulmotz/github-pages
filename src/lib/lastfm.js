@@ -1,13 +1,23 @@
 const user = 'paul_motz';
 
 const logTracks = async ({ user, from, to }) => {
+	const scrobbleCounts = [];
+	let totalScrobbles = 0;
 	const fetchedTracks = await fetchAllTracks({
 		user,
 		from,
 		to,
 	});
+
+	if (fetchedTracks.length === 0) {
+		return {
+			lastTrackInfo,
+			scrobbleCounts,
+			totalScrobbles,
+		}
+	}
+
 	const lastTrackInfo = getNewestTrackInfo(fetchedTracks);
-	let totalScrobbles = 0;
 
 	const scrobbles = {};
 
@@ -29,7 +39,6 @@ const logTracks = async ({ user, from, to }) => {
 		}
 	}
 
-	const scrobbleCounts = [];
 
 	for (const scrobble of Object.values(scrobbles)) {
 		scrobbleCounts.push({
@@ -63,6 +72,11 @@ const logTracks = async ({ user, from, to }) => {
 
 const fetchAllTracks = async ({user, from, to, limit = 1000} = {}) => {
 	const allTracks = await fetchTracks({user, from, to, limit});
+
+	if (allTracks.length === 0) {
+		return [];
+	}
+
 	let oldestTrackUts = getOldestTrackUts(allTracks);
 	let tracksFound = allTracks.length > 0;
 
