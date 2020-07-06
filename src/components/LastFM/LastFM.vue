@@ -16,13 +16,13 @@
 			v-bind:text="'Get tracks'"
 			v-bind:loadingText="'Geting tracks...'"
 			v-on:clicked="getLastFMTracks(username, fromUts, toUts)")
-		LastFMTrackDisplay(v-bind:lastFMDataProp="lastFMData")
+		SortableTable(v-bind:tableDataProp="scrobbleCounts" v-bind:columnData="lastFmColumnData")
 </template>
 
 <script>
 import { getTracks } from '../../lib/lastfm.js';
 import FloatingLabel from '../FloatingLabel.vue';
-import LastFMTrackDisplay from './LastFMTrackDisplay.vue';
+import SortableTable from '../SortableTable.vue';
 import PJMButton from '../PJMButton.vue';
 import ValidatedInput from '../ValidatedInput.vue';
 
@@ -31,21 +31,41 @@ export default {
 
 	components : {
 		FloatingLabel,
-		LastFMTrackDisplay,
 		PJMButton,
+		SortableTable,
 		ValidatedInput
 	},
 
 	data: function() {
 		return {
-			isButtonLoading: false,
-			userErrorMessage: '',
-			username: 'paul_motz',
-			fromUts: '1592927031',
-			fromUtsErrorMessage: '',
-			toUts: '1592937031',
-			toUtsErrorMessage: '',
-			lastFMData: {},
+			lastFmColumnData : [
+				{
+					columnLabel : 'Track',
+					columnName  : 'track',
+				},
+				{
+					columnLabel : 'Artist',
+					columnName  : 'artist',
+				},
+				{
+					columnLabel : 'Album',
+					columnName  : 'album',
+				},
+				{
+					columnLabel : 'Scrobble Counts',
+					columnName  : 'scrobbleCount',
+				},
+			],
+			isButtonLoading : false,
+			lastTrackInfo : '',
+			userErrorMessage : '',
+			username : 'paul_motz',
+			fromUts : '1592927031',
+			fromUtsErrorMessage : '',
+			scrobbleCounts : [],
+			totalScrobbles : 0,
+			toUts : '1592937031',
+			toUtsErrorMessage : '',
 		};
 	},
 
@@ -103,7 +123,11 @@ export default {
 		async getTracks(user, from, to = '') {
 			this.setIsButtonLoading(true);
 
-			this.lastFMData = await getTracks({ user, from, to });
+			const lastFmData = await getTracks({ user, from, to });
+
+			this.lastTrackInfo = lastFmData.lastTrackInfo;
+			this.scrobbleCounts = lastFmData.scrobbleCounts;
+			this.totalScrobbles = lastFmData.totalScrobbles;
 
 			this.setIsButtonLoading(false);
 		},
