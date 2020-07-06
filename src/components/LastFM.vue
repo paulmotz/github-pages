@@ -45,16 +45,6 @@ export default {
 		};
 	},
 
-	computed : {
-		shouldShowUserErrorMessage () {
-			return this.username.length > 0 && this.userErrorMessage.length > 0;
-		},
-
-		shouldShowUtsErrorMessage () {
-			return this.fromUts.length > 0 && this.fromUtsErrorMessage.length > 0;
-		}
-	},
-
 	watch : {
 		username : function() {
 			this.hideUserErrorMessage();
