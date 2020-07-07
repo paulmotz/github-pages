@@ -1,18 +1,22 @@
 <template lang='pug'>
 	table.sortable-table(v-if="tableData.length > 0")
-		tr
-			th.track-header(v-for="column in columnData" v-on:click="sort(column.columnName)") {{ column.columnLabel }}
-		tr(v-for="row in tableData")
-			td.track(v-for="column in columnData") {{ row[column.columnName] }}
+		tr.table-header-row
+			th.table-header-item(v-for="column in columnData" v-on:click="sort(column.columnName)") {{ column.columnLabel }}
+				span.caret-up(v-bind:class="{ 'up-clicked' : column.columnName === currentlySortedColumn && isCurrentlySortedAscending }")
+				span.caret-down(v-bind:class="{ 'down-clicked' : column.columnName === currentlySortedColumn && !isCurrentlySortedAscending }")
+		tr.table-row(v-for="row in tableData")
+			td.table-cell(v-for="column in columnData") {{ row[column.columnName] }}
 </template>
 
 <script>
 export default {
-	name: 'SortableTable',
+	name : 'SortableTable',
 	
-	data: function() {
+	data : function() {
 		return {
-			tableData: Array
+			currentlySortedColumn       : '',
+			isCurrentlySortedAscending  : true,
+			tableData                   : [],
 		}
 	},
 
@@ -23,7 +27,7 @@ export default {
 	},
 
 	props : {
-		columnData   : Array,
+		columnData    : Array,
 		tableDataProp : Array
 	},
 
@@ -33,17 +37,21 @@ export default {
 
 	methods : {
 		sort(fieldName) {
-			const isNumericValue = typeof this.tableData[0][fieldName] === 'number';
+			const isNumericValue   = typeof this.tableData[0][fieldName] === 'number';
+			const shouldInvertSort = this.currentlySortedColumn === fieldName && this.isCurrentlySortedAscending;
 			
 			this.tableData.sort((a, b) => {
 				if (a[fieldName] < b[fieldName] && !isNumericValue || a[fieldName] > b[fieldName] && isNumericValue) {
-					return -1;
+					return shouldInvertSort ? 1 : -1;
 				}
 				if (a[fieldName] > b[fieldName] && !isNumericValue || a[fieldName] < b[fieldName] && isNumericValue) {
-					return 1;
+					return shouldInvertSort ? -1 : 1;
 				}
 				return 0;
 			});
+
+			this.isCurrentlySortedAscending = this.currentlySortedColumn !== fieldName || !this.isCurrentlySortedAscending;
+			this.currentlySortedColumn      = fieldName;
 		},
 	}
 }
@@ -53,11 +61,56 @@ export default {
 @import '../assets/variables.styl'
 .sortable-table
 	display: table-header-group
-	width: 500px
 
 tr th
 	text-align: left
 
 td
 	width: 25%
+
+table
+	border-collapse: collapse
+
+.table-header-row
+	border-bottom: 2px solid
+	border-color: rgb(32, 32, 32)
+	box-sizing: border-box
+	cursor: pointer
+
+.table-row
+	border-bottom: 1px solid
+	border-color: rgba(196, 196, 196, 0.7)
+	box-sizing: border-box
+
+.caret-up {
+	width: 0
+	height: 0
+	border-left: 5px solid transparent
+	border-right: 5px solid transparent
+
+	border-bottom: 5px solid #ccc
+	position: relative
+	bottom: 17px
+	left: 5px
+}
+
+.caret-down {
+	width: 0
+	height: 0
+	border-left: 5px solid transparent
+	border-right: 5px solid transparent
+
+	border-top: 5px solid #ccc
+	position: relative
+	bottom: -17px
+	right: 5px
+}
+
+.up-clicked {
+	border-bottom: 5px solid #333
+}
+
+.down-clicked {
+	border-top: 5px solid #333
+}
 </style>

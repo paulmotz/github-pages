@@ -168,5 +168,5 @@ export default {
 
 button
 	display: flex
-	margin-top: 1.25rem
+	margin: 1.25rem 0
 </style>
