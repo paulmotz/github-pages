@@ -37,14 +37,13 @@ export default {
 
 	methods : {
 		sort(fieldName) {
-			const isNumericValue   = typeof this.tableData[0][fieldName] === 'number';
 			const shouldInvertSort = this.currentlySortedColumn === fieldName && this.isCurrentlySortedAscending;
 			
 			this.tableData.sort((a, b) => {
-				if (a[fieldName] < b[fieldName] && !isNumericValue || a[fieldName] > b[fieldName] && isNumericValue) {
+				if (a[fieldName] < b[fieldName]) {
 					return shouldInvertSort ? 1 : -1;
 				}
-				if (a[fieldName] > b[fieldName] && !isNumericValue || a[fieldName] < b[fieldName] && isNumericValue) {
+				if (a[fieldName] > b[fieldName]) {
 					return shouldInvertSort ? -1 : 1;
 				}
 				return 0;
