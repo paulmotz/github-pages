@@ -14,21 +14,21 @@ export default {
 	
 	data : function() {
 		return {
-			currentlySortedColumn       : '',
-			isCurrentlySortedAscending  : true,
-			tableData                   : [],
-		}
+			currentlySortedColumn      : '',
+			isCurrentlySortedAscending : true,
+			tableData                  : [],
+		};
 	},
 
 	watch : {
 		tableDataProp : function() {
 			this.tableData = [ ...this.tableDataProp ];
-		}
+		},
 	},
 
 	props : {
 		columnData    : Array,
-		tableDataProp : Array
+		tableDataProp : Array,
 	},
 
 	mounted() {
@@ -52,8 +52,8 @@ export default {
 			this.isCurrentlySortedAscending = this.currentlySortedColumn !== fieldName || !this.isCurrentlySortedAscending;
 			this.currentlySortedColumn      = fieldName;
 		},
-	}
-}
+	},
+};
 </script>
 
 <style lang='stylus'>

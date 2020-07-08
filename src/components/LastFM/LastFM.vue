@@ -33,10 +33,10 @@ export default {
 		FloatingLabel,
 		PJMButton,
 		SortableTable,
-		ValidatedInput
+		ValidatedInput,
 	},
 
-	data: function() {
+	data : function() {
 		return {
 			lastFmColumnData : [
 				{
@@ -56,16 +56,16 @@ export default {
 					columnName  : 'scrobbleCount',
 				},
 			],
-			isButtonLoading : false,
-			lastTrackInfo : '',
-			userErrorMessage : '',
-			username : 'paul_motz',
-			fromUts : '1592927031',
+			isButtonLoading     : false,
+			lastTrackInfo       : '',
+			userErrorMessage    : '',
+			username            : 'paul_motz',
+			fromUts             : '1592927031',
 			fromUtsErrorMessage : '',
-			scrobbleCounts : [],
-			totalScrobbles : 0,
-			toUts : '1592937031',
-			toUtsErrorMessage : '',
+			scrobbleCounts      : [],
+			totalScrobbles      : 0,
+			toUts               : '1592937031',
+			toUtsErrorMessage   : '',
 		};
 	},
 
@@ -80,7 +80,7 @@ export default {
 
 		toUts : function() {
 			this.hideToUtsErrorMessage();
-		}
+		},
 	},
 
 	methods : {
@@ -88,17 +88,17 @@ export default {
 			this.resetErrorMessages();
 
 			if (!user) {
-				this.userErrorMessage = 'Please enter a last.fm user'
+				this.userErrorMessage = 'Please enter a last.fm user';
 			}
 
 			if (!from) {
-				this.fromUtsErrorMessage = 'Please enter a starting uts'
+				this.fromUtsErrorMessage = 'Please enter a starting uts';
 			}
 
 			const isToUtsLessThanFromUts = Number(to) < Number(from) && to !== '';
 
 			if (isToUtsLessThanFromUts) {
-				this.toUtsErrorMessage = 'Invalid last track uts'
+				this.toUtsErrorMessage = 'Invalid last track uts';
 			}
 
 			if (!user || !from || isToUtsLessThanFromUts) {
@@ -129,6 +129,9 @@ export default {
 			this.scrobbleCounts = lastFmData.scrobbleCounts;
 			this.totalScrobbles = lastFmData.totalScrobbles;
 
+			console.log(this.totalScrobbles);
+			console.log(this.lastTrackInfo);
+
 			this.setIsButtonLoading(false);
 		},
 
@@ -140,9 +143,9 @@ export default {
 
 		setIsButtonLoading(isButtonLoading) {
 			this.isButtonLoading = isButtonLoading;
-		}
-	}
-}
+		},
+	},
+};
 </script>
 
 <style lang='stylus'>

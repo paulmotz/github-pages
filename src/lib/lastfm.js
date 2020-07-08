@@ -14,7 +14,7 @@ const getTracks = async ({ user, from, to }) => {
 			lastTrackInfo,
 			scrobbleCounts,
 			totalScrobbles,
-		}
+		};
 	}
 
 	const lastTrackInfo = getNewestTrackInfo(fetchedTracks);
@@ -34,7 +34,7 @@ const getTracks = async ({ user, from, to }) => {
 				title,
 				artist,
 				album,
-				scrobbleCount: 1
+				scrobbleCount : 1,
 			};
 		}
 	}
@@ -45,7 +45,7 @@ const getTracks = async ({ user, from, to }) => {
 			track         : scrobble.title, 
 			artist        : scrobble.artist, 
 			album         : scrobble.album, 
-			scrobbleCount : scrobble.scrobbleCount
+			scrobbleCount : scrobble.scrobbleCount,
 		});
 	}
 
@@ -59,6 +59,7 @@ const getTracks = async ({ user, from, to }) => {
 		return 0;
 	});
 
+	// eslint-disable no-console
 	console.table(scrobbleCounts);
 	console.log(totalScrobbles);
 	console.log(lastTrackInfo);
@@ -67,7 +68,7 @@ const getTracks = async ({ user, from, to }) => {
 		lastTrackInfo,
 		scrobbleCounts,
 		totalScrobbles,
-	}
+	};
 };
 
 const fetchAllTracks = async ({user, from, to, limit = 1000} = {}) => {
@@ -81,14 +82,14 @@ const fetchAllTracks = async ({user, from, to, limit = 1000} = {}) => {
 	let tracksFound = allTracks.length > 0;
 
 	while (Number(from) <= Number(oldestTrackUts) && tracksFound) {
-		const newTracks = await fetchTracks({user, from, to: oldestTrackUts, limit});
+		const newTracks = await fetchTracks({user, from, to : oldestTrackUts, limit});
 		const currentTrackIndex = newTracks.findIndex(track => track['@attr']);
 		if (currentTrackIndex !== -1) {
-			newTracks.splice(currentTrackIndex, 1)
+			newTracks.splice(currentTrackIndex, 1);
 		}
 		allTracks.push(...newTracks);
 		oldestTrackUts = getOldestTrackUts(allTracks);
-		tracksFound = newTracks.length > 0
+		tracksFound = newTracks.length > 0;
 	}
 
 	return allTracks;	
@@ -99,7 +100,7 @@ const fetchTracks = async ({user, from, to, limit = 1000} = {}) => {
 		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&to=${to}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json` :
 		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json`;
 	const rawData = await fetch(url);
-	const data = await rawData.json()
+	const data = await rawData.json();
 	const tracks = data.recenttracks.track;
 
 	return Array.isArray(tracks) ? tracks : [ tracks ];
@@ -137,7 +138,7 @@ const getNewestTrackInfo = tracks => {
 
 const getDate = date => {
 	const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-		'July', 'August', 'September', 'October', 'November', 'December'
+		'July', 'August', 'September', 'October', 'November', 'December',
 	];
 
 	return `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;

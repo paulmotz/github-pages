@@ -12,25 +12,25 @@ export default {
 	name : 'FloatingLabel',
 
 	props : {
-		labelText: String
+		labelText : String,
 	},
 
 	data() {
 		return {
-			formEl: undefined,
-			labelEl: undefined,
-			isActive: false,
-			isFocused: false,
-		}
+			formEl    : undefined,
+			labelEl   : undefined,
+			isActive  : false,
+			isFocused : false,
+		};
 	},
 
 	computed : {
 		classObject () {
 			return {
-				'is-active' : this.isActive,
+				'is-active'  : this.isActive,
 				'is-focused' : this.isFocused,
-			}
-		}
+			};
+		},
 	},
 
 	mounted () {
@@ -74,8 +74,8 @@ export default {
 		updateIsFocused(e) {
 			this.isFocused = e.target === document.activeElement && this.isActive;
 		},
-	}
-}
+	},
+};
 </script>
 
 <style lang='stylus'>

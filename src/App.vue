@@ -7,12 +7,12 @@
 import LastFM from './components/LastFM/LastFM.vue';
 
 export default {
-	name: 'App',
+	name : 'App',
 	
-	components: {
-		LastFM
-	}
-}
+	components : {
+		LastFM,
+	},
+};
 </script>
 
 <style lang='stylus'>

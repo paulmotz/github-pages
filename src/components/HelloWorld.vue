@@ -43,17 +43,17 @@
 import LastFM from './LastFM.vue';
 
 export default {
-  name: 'HelloWorld',
+  name : 'HelloWorld',
 
-  compontents: {
+  compontents : {
 		LastFM,
 	},
 
 
-  props: {
-    msg: String
-  }
-}
+  props : {
+    msg : String,
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

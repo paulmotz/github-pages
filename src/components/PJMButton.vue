@@ -7,26 +7,26 @@
 
 <script>
 export default {
-	name: 'PJMButton',
+	name : 'PJMButton',
 
 	props : {
-		isDisabled: Boolean,
-		loadingText: String,
-		text: String
+		isDisabled  : Boolean,
+		loadingText : String,
+		text        : String,
 	},
 
 	computed : {
 		buttonText() {
-			return this.isDisabled ? this.loadingText : this.text
-		}
+			return this.isDisabled ? this.loadingText : this.text;
+		},
 	},
 
 	methods : {
 		emitClicked() {
 			this.$emit('clicked');
 		},
-	}
-}
+	},
+};
 </script>
 
 <style lang='stylus'>

@@ -35,7 +35,14 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "comma-dangle": ["error", "always-multiline"],
+      "key-spacing": ["error", {
+        "align": "colon",
+        "beforeColon": true
+      }],
+      "semi": ["error", "always"]
+    }
   },
   "browserslist": [
     "> 1%",

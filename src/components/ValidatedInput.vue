@@ -6,13 +6,13 @@
 
 <script>
 export default {
-	name: 'ValidatedInput',
+	name : 'ValidatedInput',
 
 	props : {
-		errorMessage: String,
-		shouldShowError: Boolean
+		errorMessage    : String,
+		shouldShowError : Boolean,
 	},
-}
+};
 </script>
 
 <style lang='stylus'>
