@@ -1,11 +1,11 @@
 <template lang='pug'>
 	table.sortable-table(v-if="tableData.length > 0")
 		tr.table-header-row
-			th.table-header-item(v-for="column in columnData" v-on:click="sort(column.columnName)") {{ column.columnLabel }}
+			th.table-header-item(v-for="(column, columnHeaderIndex) in columnData" v-bind:key="columnHeaderIndex" v-on:click="sort(column.columnName)") {{ column.columnLabel }}
 				span.caret-up(v-bind:class="{ 'up-clicked' : column.columnName === currentlySortedColumn && isCurrentlySortedAscending }")
 				span.caret-down(v-bind:class="{ 'down-clicked' : column.columnName === currentlySortedColumn && !isCurrentlySortedAscending }")
-		tr.table-row(v-for="row in tableData")
-			td.table-cell(v-for="column in columnData") {{ row[column.columnName] }}
+		tr.table-row(v-for="(row, rowIndex) in tableData" v-bind:key="rowIndex")
+			td.table-cell(v-for="(column, columnIndex) in columnData" v-bind:key="columnIndex") {{ row[column.columnName] }}
 </template>
 
 <script>
