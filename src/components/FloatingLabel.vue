@@ -87,14 +87,20 @@ export default {
 
 .label
 	position: absolute
-	top: 0.1875em
+	top: 0.6875em
 	right: 0
-	left: 0.25rem
+	left: 0.5rem
 	overflow: hidden
 	font-size: 0.8125em
 	transition: all 0.2s ease-out;
 	pointer-events: none
 	opacity: 0.5
+
+input
+	border-radius: 0.375em
+	border-style: solid
+	border-width: 1px
+	padding: 0.5rem
 
 .is-active
 	pointer-events: all
