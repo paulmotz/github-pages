@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { getTracks } from '../../lib/lastfm.js';
+import { getTracks } from '../../lib/lastfm';
 import FloatingLabel from '../FloatingLabel.vue';
 import SortableTable from '../SortableTable.vue';
 import PJMButton from '../PJMButton.vue';

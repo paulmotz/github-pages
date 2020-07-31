@@ -39,21 +39,20 @@
 </template>
 
 <script>
-
+import Vue from 'vue';
 import LastFM from './LastFM.vue';
 
-export default {
+export default Vue.extend({
   name : 'HelloWorld',
 
   compontents : {
 		LastFM,
 	},
 
-
   props : {
     msg : String,
   },
-};
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

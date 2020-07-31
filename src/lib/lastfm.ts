@@ -1,9 +1,11 @@
-const user = 'paul_motz';
+import { IAllScrobbles, IFetchInfo, ILastFmTracks, IScrobbleCount } from './types';
 
-const getTracks = async ({ user, from, to }) => {
-	const scrobbleCounts = [];
+const USER = 'paul_motz';
+
+const getTracks = async ({ user, from, to }: IFetchInfo) => {
+	const scrobbleCounts: Array<IScrobbleCount> = [];
 	let totalScrobbles = 0;
-	const fetchedTracks = await fetchAllTracks({
+	const fetchedTracks: Array<ILastFmTracks> = await fetchAllTracks({
 		user,
 		from,
 		to,
@@ -11,7 +13,7 @@ const getTracks = async ({ user, from, to }) => {
 
 	if (fetchedTracks.length === 0) {
 		return {
-			lastTrackInfo,
+			lastTrackInfo : '',
 			scrobbleCounts,
 			totalScrobbles,
 		};
@@ -19,7 +21,7 @@ const getTracks = async ({ user, from, to }) => {
 
 	const lastTrackInfo = getNewestTrackInfo(fetchedTracks);
 
-	const scrobbles = {};
+	const scrobbles: IAllScrobbles = {};
 
 	for (const track of fetchedTracks) {
 		const title = track.name;
@@ -39,12 +41,11 @@ const getTracks = async ({ user, from, to }) => {
 		}
 	}
 
-
 	for (const scrobble of Object.values(scrobbles)) {
 		scrobbleCounts.push({
-			track         : scrobble.title, 
-			artist        : scrobble.artist, 
-			album         : scrobble.album, 
+			track         : scrobble.title,
+			artist        : scrobble.artist,
+			album         : scrobble.album,
 			scrobbleCount : scrobble.scrobbleCount,
 		});
 	}
@@ -71,7 +72,7 @@ const getTracks = async ({ user, from, to }) => {
 	};
 };
 
-const fetchAllTracks = async ({user, from, to, limit = 1000} = {}) => {
+const fetchAllTracks = async ({user = USER, from = '', to = '', limit = 1000} = {}) => {
 	const allTracks = await fetchTracks({user, from, to, limit});
 
 	if (allTracks.length === 0) {
@@ -95,7 +96,7 @@ const fetchAllTracks = async ({user, from, to, limit = 1000} = {}) => {
 	return allTracks;	
 };
 
-const fetchTracks = async ({user, from, to, limit = 1000} = {}) => {
+const fetchTracks = async ({ user = USER, from = '', to = '', limit = 1000 } = {} ) => {
 	const url = to ?
 		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&to=${to}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json` :
 		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json`;
@@ -106,9 +107,9 @@ const fetchTracks = async ({user, from, to, limit = 1000} = {}) => {
 	return Array.isArray(tracks) ? tracks : [ tracks ];
 };
 
-const getTrack = async (trackName, pagesToSearch = 5) => {
+const getTrack = async (trackName: string, pagesToSearch = 5) => {
 	for (let pageNumber = 1; pageNumber <= pagesToSearch; pageNumber++) {
-		const url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${user}&api_key=7c4429b3e36474312ac2157b5e3bcddf&page=${pageNumber}&format=json`;
+		const url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USER}&api_key=7c4429b3e36474312ac2157b5e3bcddf&page=${pageNumber}&format=json`;
 		const rawData = await fetch(url);
 		const data = await rawData.json();
 
@@ -122,13 +123,13 @@ const getTrack = async (trackName, pagesToSearch = 5) => {
 	console.log(`Could not find track: ${trackName}`);
 };
 
-const getOldestTrackUts = tracks => {
+const getOldestTrackUts = (tracks: Array<ILastFmTracks>) => {
 	// If there is currently a track being scrobbled and it is the only track returned
 	// it will not have a date property.
 	return tracks[tracks.length - 1].date && tracks[tracks.length - 1].date.uts;
 };
 
-const getNewestTrackInfo = tracks => {
+const getNewestTrackInfo = (tracks: Array<ILastFmTracks>) => {
 	for (const track of tracks) {
 		if (track.date) {
 			return `last updated ${getDate(new Date())} - last track UTS: ${track.date.uts} (${track.name} - ${track.artist['#text']})`;
@@ -136,7 +137,7 @@ const getNewestTrackInfo = tracks => {
 	}
 };
 
-const getDate = date => {
+const getDate = (date: Date) => {
 	const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
 		'July', 'August', 'September', 'October', 'November', 'December',
 	];
@@ -146,7 +147,7 @@ const getDate = date => {
 
 // logTracks(1592927031);
 
-export { getTrack, getTracks };
+export { getTracks };
 
 // const dates = [ 1505505307, 1506232862, 1506802762, 1511741570, 1512434635, 1514834830, 1516490975 ];
 

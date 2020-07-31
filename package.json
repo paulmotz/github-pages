@@ -12,14 +12,19 @@
     "vue": "^2.6.11"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.4.0",
     "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-plugin-typescript": "^4.4.6",
     "@vue/cli-service": "~4.4.0",
+    "@vue/eslint-config-typescript": "^5.0.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
+    "typescript": "~3.9.3",
     "vue-cli-plugin-pug": "~1.0.7",
     "vue-template-compiler": "^2.6.11"
   },
@@ -30,18 +35,28 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "@vue/typescript"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@typescript-eslint/parser"
     },
     "rules": {
-      "comma-dangle": ["error", "always-multiline"],
-      "key-spacing": ["error", {
-        "align": "colon",
-        "beforeColon": true
-      }],
-      "semi": ["error", "always"]
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "key-spacing": [
+        "error",
+        {
+          "align": "colon",
+          "beforeColon": true
+        }
+      ],
+      "semi": [
+        "error",
+        "always"
+      ]
     }
   },
   "browserslist": [
