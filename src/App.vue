@@ -3,16 +3,17 @@
 		LastFM
 </template>
 
-<script>
+<script lang='ts'>
+import Vue from 'vue';
 import LastFM from './components/LastFM/LastFM.vue';
 
-export default {
+export default Vue.extend({
 	name : 'App',
 	
 	components : {
 		LastFM,
 	},
-};
+});
 </script>
 
 <style lang='stylus'>
