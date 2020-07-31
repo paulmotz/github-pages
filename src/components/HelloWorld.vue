@@ -40,7 +40,7 @@
 
 <script>
 import Vue from 'vue';
-import LastFM from './LastFM.vue';
+import LastFM from './LastFM/LastFM.vue';
 
 export default Vue.extend({
   name : 'HelloWorld',

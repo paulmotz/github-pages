@@ -1,18 +1,16 @@
-<template lang='pug'>
-	div#app
-		LastFM
+<template>
+  <div id="app">
+    <div id="nav">
+    </div>
+    <router-view/>
+  </div>
 </template>
 
 <script lang='ts'>
 import Vue from 'vue';
-import LastFM from './components/LastFM/LastFM.vue';
 
 export default Vue.extend({
 	name : 'App',
-	
-	components : {
-		LastFM,
-	},
 });
 </script>
 
