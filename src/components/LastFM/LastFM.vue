@@ -11,12 +11,20 @@
 			FloatingLabel(v-bind:labelText="'Last track uts (optional)'")
 				ValidatedInput(v-bind:errorMessage="toUtsErrorMessage")
 					input(v-model="toUts" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
-		PJMButton(
-			v-bind:isDisabled="isButtonLoading"
-			v-bind:text="'Get tracks'"
-			v-bind:loadingText="'Geting tracks...'"
-			v-on:clicked="getLastFMTracks(username, fromUts, toUts)")
-		SortableTable(v-bind:tableDataProp="scrobbleCounts" v-bind:columnData="lastFmColumnData")
+		.button-row
+			PJMButton(
+				v-bind:isDisabled="isButtonLoading"
+				v-bind:text="'Get tracks'"
+				v-bind:loadingText="'Geting tracks...'"
+				v-on:clicked="getLastFMTracks(username, fromUts, toUts)")
+			PJMButton(
+				v-bind:isDisabled="!hasTracks"
+				v-bind:text="showTracksText"
+				v-on:clicked="toggleShowTracks")
+		SortableTable(
+			v-bind:tableDataProp="scrobbleCounts"
+			v-bind:columnData="lastFmColumnData"
+			v-show="shouldShowTracks")
 </template>
 
 <script>
@@ -36,8 +44,19 @@ export default {
 		ValidatedInput,
 	},
 
+	computed : {
+		hasTracks() {
+			return this.scrobbleCounts.length > 0;
+		},
+
+		showTracksText() {
+			return this.shouldShowTracks && this.hasTracks ? 'Hide Tracks' : 'Show Tracks';
+		},
+	},
+
 	data : function() {
 		return {
+			isButtonLoading  : false,
 			lastFmColumnData : [
 				{
 					columnLabel : 'Track',
@@ -56,15 +75,15 @@ export default {
 					columnName  : 'scrobbleCount',
 				},
 			],
-			isButtonLoading     : false,
 			lastTrackInfo       : '',
 			userErrorMessage    : '',
 			username            : 'paul_motz',
-			fromUts             : '1592927031',
+			fromUts             : '1597518383',
 			fromUtsErrorMessage : '',
 			scrobbleCounts      : [],
+			shouldShowTracks    : true,
 			totalScrobbles      : 0,
-			toUts               : '1592937031',
+			toUts               : '1597518383',
 			toUtsErrorMessage   : '',
 		};
 	},
@@ -135,6 +154,10 @@ export default {
 			this.setIsButtonLoading(false);
 		},
 
+		toggleShowTracks() {
+			this.shouldShowTracks = !this.shouldShowTracks;
+		},
+
 		resetErrorMessages() {
 			this.hideUserErrorMessage();
 			this.hideFromUtsErrorMessage();
@@ -154,6 +177,7 @@ export default {
 	flex-direction: column
 	align-items: center
 	width: 80%
+	margin: 0.5rem auto 0
 
 .logo
 	height: 75px
@@ -169,7 +193,11 @@ export default {
 .inputs input
 	width: 100%
 
-button
+.button-row
 	display: flex
-	margin: 1.25rem 0
+	width: 100%
+	justify-content: center
+
+button
+	margin: 1.25rem 0.25rem
 </style>

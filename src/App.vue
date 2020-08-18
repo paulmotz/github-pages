@@ -1,21 +1,26 @@
-<template>
-  <div id="app">
-    <div id="nav">
-    </div>
-    <router-view/>
-  </div>
+<template lang='pug'>
+	#app
+		Header
+		.router-view-wrapper
+			router-view
 </template>
 
 <script lang='ts'>
 import Vue from 'vue';
+import Header from '@/components/Header.vue';
 
 export default Vue.extend({
-	name : 'App',
+	name       : 'App',
+	components : {
+		Header,
+	},
 });
 </script>
 
 <style lang='stylus'>
 @import './assets/variables.styl'
+body
+	margin: 0
 
 #app
 	font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -23,8 +28,12 @@ export default Vue.extend({
 	-moz-osx-font-smoothing: grayscale;
 	// text-align: center;
 	color: $text-color;
-	margin-top: 40px;
 	display: flex
+	flex-direction: column
 	align-items: center
 	justify-content: center
+
+.router-view-wrapper
+	margin-top: 50px
+	width: 100%
 </style>

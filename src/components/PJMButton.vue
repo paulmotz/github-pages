@@ -17,7 +17,7 @@ export default {
 
 	computed : {
 		buttonText() {
-			return this.isDisabled ? this.loadingText : this.text;
+			return this.isDisabled && this.loadingText ? this.loadingText : this.text;
 		},
 	},
 
