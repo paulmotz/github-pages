@@ -19,8 +19,9 @@ export default Vue.extend({
 
 <style lang='stylus'>
 @import './assets/variables.styl'
-body
+html, body
 	margin: 0
+	height: 100%
 
 #app
 	font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -30,10 +31,10 @@ body
 	color: $text-color;
 	display: flex
 	flex-direction: column
-	align-items: center
-	justify-content: center
+	height: 100%
 
 .router-view-wrapper
+	height: 100%
 	margin-top: 50px
 	width: 100%
 </style>

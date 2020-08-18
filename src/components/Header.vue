@@ -4,8 +4,8 @@
 			router-link.header-link(to="/") Home
 			label.dropdown-top.visualizations {{'Visualizations'}}
 				.dropdown-content
-					router-link.dropdown-item(to="/about") Provincial COVID-19
-					router-link.dropdown-item(to="/about") States COVID-19
+					router-link.dropdown-item(to="/provincial-covid") Provincial COVID-19
+					router-link.dropdown-item(to="/state-covid") States COVID-19
 			router-link.header-link(to="/lastfm") last.fm
 </template>
 
@@ -32,6 +32,7 @@ export default Vue.extend({
 	background-color: $header-footer-background-color
 	position: fixed
 	top: 0
+	z-index: 1
 
 .links, a
 	color: $router-link-color

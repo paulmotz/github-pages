@@ -172,6 +172,7 @@ export default {
 </script>
 
 <style lang='stylus'>
+@import '../../assets/variables.styl'
 .last-fm-wrapper
 	display: flex
 	flex-direction: column
@@ -191,6 +192,7 @@ export default {
 	display flex
 
 .inputs input
+	color: $text-color
 	width: 100%
 
 .button-row
