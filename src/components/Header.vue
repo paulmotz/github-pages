@@ -2,7 +2,10 @@
 	nav.header
 		.links
 			router-link.header-link(to="/") Home
-			label.dropdown-top.visualizations {{'Visualizations'}}
+			label.dropdown-top.visualizations Games
+				.dropdown-content
+					router-link.dropdown-item(to="/chess") Chess
+			label.dropdown-top.visualizations Visualizations
 				.dropdown-content
 					router-link.dropdown-item(to="/provincial-covid") Provincial COVID-19
 					router-link.dropdown-item(to="/state-covid") States COVID-19
@@ -33,6 +36,8 @@ export default Vue.extend({
 	position: fixed
 	top: 0
 	z-index: 1
+	box-sizing: border-box
+	border-bottom: 2px solid $vue-green
 
 .links, a
 	color: $router-link-color
