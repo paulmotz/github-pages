@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
 import LastFM from '../components/LastFM/LastFM.vue';
+import Chess from '../components/games/chess/Chess.vue';
 import ProvincialCOVID from '../components/visualizations/ProvincialCOVID.vue';
 import StateCOVID from '../components/visualizations/StateCOVID.vue';
 import NotFound from '../components/NotFound.vue';
@@ -18,6 +19,11 @@ const routes: Array<RouteConfig> = [
 		path      : '/lastfm',
 		name      : 'LastFM',
 		component : LastFM,
+	},
+	{
+		path      : '/chess',
+		name      : 'Chess',
+		component : Chess,
 	},
 	{
 		path      : '/provincial-covid',
