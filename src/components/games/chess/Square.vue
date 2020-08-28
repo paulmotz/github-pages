@@ -4,7 +4,7 @@
 
 <script>
 import Vue from 'vue';
-import Piece from './pieces/piece';
+import Piece from '@/lib/games/chess/pieces/piece';
 
 export default Vue.extend({
 	name : 'Square',

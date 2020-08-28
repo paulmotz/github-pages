@@ -3,6 +3,7 @@
 		Header
 		.router-view-wrapper
 			router-view
+			font-awesome-icon(icon="user-secret")
 </template>
 
 <script lang='ts'>
