@@ -2,6 +2,7 @@
 	.square(v-bind:class="{'dark-square' : !isLightSquare, 'light-square' : isLightSquare }")
 		font-awesome-icon(
 			v-if="iconName !== ''"
+			v-bind:color="pieceColor"
 			v-bind:icon="iconName")
 </template>
 
@@ -35,6 +36,10 @@ export default Vue.extend({
 	computed : {
 		iconName(): string {
 			return this.piece && this.piece.iconName ? this.piece.iconName : '';
+		},
+
+		pieceColor(): string {
+			return this.piece && this.piece.color ? this.piece.color : '';
 		},
 
 		isLightSquare(): boolean {

@@ -131,5 +131,6 @@ export default Vue.extend({
 	display: block
 	background-color: $board-border
 	text-align: center
+	color: white
 </style>
 
