@@ -23,7 +23,8 @@
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
 import { pieceColors, allPieceTypes } from '@/lib/types';
-import { getPieceColor, getPieceName, pieceConstructors, pieceStartingPositions } from '@/lib/games/chess/helpers';
+import { getPieceColor, getPieceName, pieceStartingPositions } from '@/lib/games/chess/helpers';
+import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
 // import { occupiedSquares, pieceStartingPositions } from '@/lib/games/chess/game';
 
 export default Vue.extend({
@@ -92,8 +93,6 @@ export default Vue.extend({
 
 				for (const pieceStartingPositionIndex in pieceStartingPositions[piece]) {
 					const [ file, rank ]: number[] = pieceStartingPositions[piece][pieceStartingPositionIndex];
-
-					console.log(pieceConstructors);
 
 					const newPiece: allPieceTypes = new pieceConstructors[pieceName]({ color, abbreviation, file, rank, id : pieceStartingPositionIndex});
 

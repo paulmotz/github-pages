@@ -2,9 +2,6 @@ import { Piece } from './piece';
 import { pieceColors, PieceProps } from '@/lib/types';
 import { isSquareOnBoard } from '../helpers';
 
-console.log(123);
-console.log(isSquareOnBoard);
-
 export class Pawn extends Piece {
 	_iconName: string;
 

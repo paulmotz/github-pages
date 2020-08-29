@@ -1,8 +1,7 @@
 import { pieceColors, AllPieces, PieceMapping, PieceStartingPositions } from '@/lib/types';
-import { Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
-// import { Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 /**
+ *
  * Checks whether the square is on the board
  * @param square - the square's file, two numbers: 1 - 8
  * @return - whether the square is on the board
@@ -51,9 +50,6 @@ export const getPieceName = (abbreviation: string): string => {
 
 	return pieceMapping[abbreviation];
 };
-
-export const pieceConstructors = { Bishop, Rook, Queen };
-// export const pieceConstructors = { Pawn, Knight, Bishop, Rook, Queen, King };
 
 /**
  * Returns the piece's location in its corresponding array. Due to captures, the piece's id may !== its index
