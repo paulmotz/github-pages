@@ -4,12 +4,15 @@
 		.error-message {{ errorMessage }}
 </template>
 
-<script>
+<script lang='ts'>
 export default {
 	name : 'ValidatedInput',
 
 	props : {
-		errorMessage    : String,
+		errorMessage : {
+			type    : String,
+			default : '',
+		},
 		shouldShowError : Boolean,
 	},
 };

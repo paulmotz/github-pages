@@ -3,7 +3,7 @@
 		h1 This is (probably) not the page you are looking for.
 </template>
 
-<script>
+<script lang='ts'>
 import Vue from 'vue';
 
 export default Vue.extend({

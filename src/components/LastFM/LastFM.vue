@@ -27,8 +27,9 @@
 			v-show="shouldShowTracks")
 </template>
 
-<script>
+<script lang='ts'>
 import { getTracks } from '@/lib/lastfm';
+import { LastFmTrackInfo } from '@/lib/types';
 import FloatingLabel from '../FloatingLabel.vue';
 import SortableTable from '../SortableTable.vue';
 import PJMButton from '../PJMButton.vue';
@@ -42,16 +43,6 @@ export default {
 		PJMButton,
 		SortableTable,
 		ValidatedInput,
-	},
-
-	computed : {
-		hasTracks() {
-			return this.scrobbleCounts.length > 0;
-		},
-
-		showTracksText() {
-			return this.shouldShowTracks && this.hasTracks ? 'Hide Tracks' : 'Show Tracks';
-		},
 	},
 
 	data : function() {
@@ -88,22 +79,32 @@ export default {
 		};
 	},
 
+	computed : {
+		hasTracks(): boolean {
+			return this.scrobbleCounts.length > 0;
+		},
+
+		showTracksText(): string {
+			return this.shouldShowTracks && this.hasTracks ? 'Hide Tracks' : 'Show Tracks';
+		},
+	},
+
 	watch : {
-		username : function() {
+		username : function(): void {
 			this.hideUserErrorMessage();
 		},
 
-		fromUts : function() {
+		fromUts : function(): void {
 			this.hideFromUtsErrorMessage();
 		},
 
-		toUts : function() {
+		toUts : function(): void {
 			this.hideToUtsErrorMessage();
 		},
 	},
 
 	methods : {
-		async getLastFMTracks(user, from, to) {
+		async getLastFMTracks(user: string, from: string, to: string): Promise<LastFmTrackInfo | undefined> {
 			this.resetErrorMessages();
 
 			if (!user) {
@@ -127,19 +128,19 @@ export default {
 			await this.getTracks(user, from, to);
 		},
 
-		hideUserErrorMessage() {
+		hideUserErrorMessage(): void {
 			this.userErrorMessage = '';
 		},
 
-		hideFromUtsErrorMessage() {
+		hideFromUtsErrorMessage(): void {
 			this.fromUtsErrorMessage = '';
 		},
 
-		hideToUtsErrorMessage() {
+		hideToUtsErrorMessage(): void {
 			this.toUtsErrorMessage = '';
 		},
 
-		async getTracks(user, from, to = '') {
+		async getTracks(user: string, from: string, to = ''): Promise<void> {
 			this.setIsButtonLoading(true);
 
 			const lastFmData = await getTracks({ user, from, to });
@@ -148,23 +149,24 @@ export default {
 			this.scrobbleCounts = lastFmData.scrobbleCounts;
 			this.totalScrobbles = lastFmData.totalScrobbles;
 
+			console.log(lastFmData);
 			console.log(this.totalScrobbles);
 			console.log(this.lastTrackInfo);
 
 			this.setIsButtonLoading(false);
 		},
 
-		toggleShowTracks() {
+		toggleShowTracks(): void {
 			this.shouldShowTracks = !this.shouldShowTracks;
 		},
 
-		resetErrorMessages() {
+		resetErrorMessages(): void {
 			this.hideUserErrorMessage();
 			this.hideFromUtsErrorMessage();
 			this.hideToUtsErrorMessage();
 		},
 
-		setIsButtonLoading(isButtonLoading) {
+		setIsButtonLoading(isButtonLoading): void {
 			this.isButtonLoading = isButtonLoading;
 		},
 	},

@@ -4,7 +4,7 @@
 		Board
 </template>
 
-<script>
+<script lang='ts'>
 import Vue from 'vue';
 import Board from '@/components/games/chess/Board.vue';
 
