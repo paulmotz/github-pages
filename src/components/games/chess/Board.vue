@@ -1,5 +1,5 @@
 <template lang='pug'>
-	.board
+	.board(v-if="isInitialized")
 		.border-row
 			.border-cell
 			.border-cell(v-for="(file, index) in files") {{ file }}
@@ -25,7 +25,6 @@ import Square from '@/components/games/chess/Square.vue';
 import { pieceColors, allPieceTypes } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions } from '@/lib/games/chess/helpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
-// import { occupiedSquares, pieceStartingPositions } from '@/lib/games/chess/game';
 
 export default Vue.extend({
 	name : 'Board',
@@ -55,7 +54,8 @@ export default Vue.extend({
 				[ null, null, null, null, null, null, null, null ],
 				[ null, null, null, null, null, null, null, null ],
 			],
-			pieces : pieceStartingPositions,
+			pieces        : pieceStartingPositions,
+			isInitialized : false,
 		};
 	},
 
@@ -86,7 +86,6 @@ export default Vue.extend({
 	methods : {
 		initializePieces(): void {
 			for (const piece in pieceStartingPositions) {
-				// allPieces[piece] = []; 
 				const color: pieceColors = getPieceColor(piece);
 				const abbreviation: string = piece[1];
 				const pieceName: string = getPieceName(abbreviation);
@@ -100,6 +99,7 @@ export default Vue.extend({
 					this.occupiedSquares[rank - 1][file - 1] = newPiece;
 				}
 			}
+			this.isInitialized = true;
 		},
 	},
 });

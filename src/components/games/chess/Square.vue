@@ -34,7 +34,6 @@ export default Vue.extend({
 
 	computed : {
 		iconName(): string {
-			// console.log(this.piece);
 			return this.piece && this.piece.iconName ? this.piece.iconName : '';
 		},
 
