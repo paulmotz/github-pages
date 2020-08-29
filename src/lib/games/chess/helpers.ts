@@ -1,4 +1,5 @@
-import { pieceColors, IAllPieces } from '@/lib/types';
+import { pieceColors, IAllPieces, IPieceStartingMapping } from '@/lib/types';
+import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 /**
  * Checks whether the square is on the board
@@ -11,12 +12,46 @@ export const checkSquareOnBoard = (square: Number[]) =>  {
 
 /**
  * Returns the color of the other player
- * @param {String} color - the player's color
+ * @param color - the player's color
+ * @return {pieceColors} - the opposite color
+ */
+export const getOtherColor = (color: pieceColors) => {
+	return color === 'white' ? 'black' : 'white';
+};
+
+export const abbreviationToColor : { [name: string] : pieceColors } = {
+	b : 'black',
+	w : 'white',
+};
+
+/**
+ * Returns the color of the piece from an abbreviation
+ * @param abbreviation - the player's color
+ * @return {pieceColors} - the opposite color
+ */
+export const getPieceColor = (abbreviation: string) => {
+	return abbreviationToColor[abbreviation[0]];
+};
+
+/**
+ * Returns the color of the piece from an abbreviation
+ * @param abbreviation - the player's color
  * @return {String} - the opposite color
  */
-export function otherColor(color: pieceColors) {
-	return color === 'white' ? 'black' : 'white';
-}
+export const getPieceName = (abbreviation: string) => {
+	const pieceMapping : IPieceStartingMapping  = {
+		'P' : 'Pawn',
+		'N' : 'Knight',
+		'B' : 'Bishop',
+		'R' : 'Rook',
+		'Q' : 'Queen',
+		'K' : 'King',
+	}; 
+
+	return pieceMapping[abbreviation];
+};
+
+export const pieceConstructors = { Pawn, Knight, Bishop, Rook, Queen, King };
 
 /**
  * Returns the piece's location in its corresponding array. Due to captures, the piece's id may !== its index

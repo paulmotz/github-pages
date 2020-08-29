@@ -1,10 +1,13 @@
 <template lang='pug'>
-	.square(v-bind:class="{'dark-square' : !isLightSquare, 'light-square' : isLightSquare }") {{ piece }}
+	.square(v-bind:class="{'dark-square' : !isLightSquare, 'light-square' : isLightSquare }")
+		font-awesome-icon(
+			v-if="iconName !== ''"
+			v-bind:icon="iconName")
 </template>
 
 <script>
 import Vue from 'vue';
-import Piece from '@/lib/games/chess/pieces/piece';
+import { Piece } from '@/lib/games/chess/pieces/piece';
 
 export default Vue.extend({
 	name : 'Square',
@@ -24,6 +27,11 @@ export default Vue.extend({
 	},
 
 	computed : {
+		iconName() {
+			console.log(this.piece);
+			return this.piece && this.piece.iconName ? this.piece.iconName : '';
+		},
+
 		isLightSquare() {
 			return ( this.fileIndex + this.rankIndex ) % 2 === (this.isWhiteDown ? 1 : 0);
 		},

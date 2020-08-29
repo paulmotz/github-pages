@@ -3,10 +3,15 @@ import VueRouter from 'vue-router';
 import App from './App.vue';
 import router from './router';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
+import { faChessPawn, faChessKnight, faChessBishop, faChessRook, faChessQueen, faChessKing } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faUserSecret);
+library.add(faChessPawn);
+library.add(faChessKnight);
+library.add(faChessBishop);
+library.add(faChessRook);
+library.add(faChessQueen);
+library.add(faChessKing);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

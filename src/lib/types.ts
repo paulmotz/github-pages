@@ -1,5 +1,4 @@
-import { Piece } from './games/chess/pieces/piece';
-import { Rook } from './games/chess/pieces/rook';
+import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export interface IAllScrobbles {
 	[key: string] : IScrobble,
@@ -63,5 +62,16 @@ export interface IAttackedSquares {
 }
 
 export interface IAllPieces {
-	[key: string] : Piece[] | Rook[],
+	[key: string] : Piece[],
 }
+
+export interface IPieceStartingPositions {
+	[key: string] : number[][],
+}
+
+export interface IPieceStartingMapping {
+	[key: string] : string,
+	// [key: string] : Pawn | Knight | Bishop | Rook | Queen | King,
+}
+
+export type allPieceTypes = Pawn | Knight | Bishop | Rook | Queen | King;

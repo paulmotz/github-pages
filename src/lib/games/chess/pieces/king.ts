@@ -1,10 +1,11 @@
 import { Piece } from './piece';
 import { Rook } from './rook';
-import { checkSquareOnBoard, findPieceIndex, otherColor } from '../helpers';
+import { checkSquareOnBoard, findPieceIndex, getOtherColor } from '../helpers';
 import { pieceAbbreviations, pieceColors, IAttackedSquares, IAllPieces } from '@/lib/types';
 
 export class King extends Piece {
 	_hasMoved : boolean;
+	_iconName : string;
 
 	// TODO:
 	// check if the piece is in check
@@ -21,6 +22,7 @@ export class King extends Piece {
 	constructor(color: pieceColors, abbreviation: pieceAbbreviations, file: number, rank: number, id: number, hasMoved: boolean) {
 		super({color, abbreviation, file, rank, id});
 		this._hasMoved = hasMoved;
+		this._iconName = 'chess-king';
 	}
 	
 	/**
@@ -49,7 +51,7 @@ export class King extends Piece {
 	 */
 	moves(occupiedSquares: string[][], attackedSquares: IAttackedSquares, allPieces: IAllPieces) {
 		const color: pieceColors = this._color;
-		const opponentColor: pieceColors = otherColor(color);
+		const opponentColor: pieceColors = getOtherColor(color);
 		const file: number = this._file;
 		const rank: number = this._rank;
 		const hasMoved: boolean = this._hasMoved;

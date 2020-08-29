@@ -1,8 +1,15 @@
 import { Piece } from './piece';
-import { pieceColors } from '@/lib/types';
+import { pieceColors, IPieceProps } from '@/lib/types';
 import { checkSquareOnBoard } from '../helpers';
 
 export class Pawn extends Piece {
+	_iconName : string;
+
+	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
+		super({ color, abbreviation, file, rank, id });
+		this._iconName = 'chess-pawn';
+	}
+
 	/**
 	 * Get the list of Pawn moves
 	 * @param occupiedSquares - the currently occupied squares

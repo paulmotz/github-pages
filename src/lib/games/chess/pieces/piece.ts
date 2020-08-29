@@ -6,6 +6,7 @@ export class Piece {
 	_file : number;
 	_rank : number;
 	_id : number;
+	_iconName : string;
 
 	/**
 	 * Creates a piece of the given color at the given location
@@ -15,12 +16,13 @@ export class Piece {
 	 * @param rank - the rank of the piece: 1 - 8
 	 * @param id - the id of the piece: 1 - 10 (where 10 = max possible number of any given piece per color)
 	 */
-	constructor({color, abbreviation, file, rank, id}: IPieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
 		this._color = color;
 		this._abbreviation = abbreviation;
 		this._file = file;
 		this._rank = rank;
 		this._id = id;
+		this._iconName = '';
 	}
 
 	/**
@@ -61,6 +63,14 @@ export class Piece {
 	 */
 	get id() {
 		return this._id;
+	}
+
+	/**
+	 * Get the piece's icon
+	 * @return { string } id - The name of the fa icon
+	 */
+	get iconName() {
+		return this._iconName;
 	}
 
 	/**

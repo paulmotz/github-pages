@@ -22,7 +22,7 @@
 <script>
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
-import { occupiedSquares, pieceStartingPositions } from '../../../lib/chess';
+import { occupiedSquares, pieceStartingPositions, Game } from '@/lib/games/chess/game';
 
 export default Vue.extend({
 	name : 'Board',
@@ -43,13 +43,18 @@ export default Vue.extend({
 				? [ 1, 2, 3, 4, 5, 6, 7, 8 ].reverse()
 				: [ 1, 2, 3, 4, 5, 6, 7, 8 ];
 		},
+
+		isBoardSet() {
+			return occupiedSquares.some(rank => {
+				rank.some(square => square !== null);
+			});
+		},
 	},
 
 	data : function() {
 		return {
 			occupiedSquares : occupiedSquares,
-
-			pieces : pieceStartingPositions,
+			pieces          : pieceStartingPositions,
 		};
 	},
 
@@ -58,6 +63,10 @@ export default Vue.extend({
 			type    : Boolean,
 			default : true,
 		},
+	},
+
+	mounted() {
+		new Game();
 	},
 });
 </script>

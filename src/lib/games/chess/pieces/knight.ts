@@ -1,8 +1,15 @@
 import { Piece } from './piece';
 import { checkSquareOnBoard } from '../helpers';
-import { pieceColors } from '@/lib/types';
+import { pieceColors, IPieceProps } from '@/lib/types';
 
 export class Knight extends Piece {
+	_iconName : string;
+
+	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
+		super({ color, abbreviation, file, rank, id });
+		this._iconName = 'chess-knight';
+	}
+
 	/**
 	 * Get the Knight's possible moves
 	 * @param file - file rank of the knight: 1 - 8

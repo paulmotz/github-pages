@@ -3,6 +3,7 @@ import { RangedPiece } from './rangedPiece';
 
 export class Queen extends RangedPiece {
 	_queenDirections : number[][];
+	_iconName: string;
 
 	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
 		super({ color, abbreviation, file, rank, id });
@@ -16,6 +17,7 @@ export class Queen extends RangedPiece {
 			[+1, -1],
 			[+1, +1],
 		];
+		this._iconName = 'chess-queen';
 	}
 
 	/**

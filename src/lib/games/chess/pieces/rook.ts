@@ -2,6 +2,7 @@ import { IPieceProps} from '@/lib/types';
 import { RangedPiece } from './rangedPiece';
 
 export class Rook extends RangedPiece {
+	_iconName : string;
 	_rookDirections : number[][];
 	_hasMoved : boolean;
 
@@ -14,6 +15,7 @@ export class Rook extends RangedPiece {
 			[0, +1],
 		];
 		this._hasMoved = hasMoved || false;
+		this._iconName = 'chess-rook';
 	}
 
 	/**

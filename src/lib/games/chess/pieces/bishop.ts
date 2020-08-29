@@ -2,8 +2,9 @@ import { IPieceProps} from '@/lib/types';
 import { RangedPiece } from './rangedPiece';
 
 export class Bishop extends RangedPiece {
+	_iconName : string;
 	_bishopDirections : number[][];
-
+	
 	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._bishopDirections = [
@@ -12,8 +13,8 @@ export class Bishop extends RangedPiece {
 			[+1, -1],
 			[+1, +1],
 		];
+		this._iconName = 'chess-bishop';
 	}
-
 	
 	/**
 	 * Get the piece's moves
