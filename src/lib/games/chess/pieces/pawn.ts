@@ -1,11 +1,14 @@
 import { Piece } from './piece';
-import { pieceColors, IPieceProps } from '@/lib/types';
-import { checkSquareOnBoard } from '../helpers';
+import { pieceColors, PieceProps } from '@/lib/types';
+import { isSquareOnBoard } from '../helpers';
+
+console.log(123);
+console.log(isSquareOnBoard);
 
 export class Pawn extends Piece {
-	_iconName : string;
+	_iconName: string;
 
-	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._iconName = 'chess-pawn';
 	}
@@ -13,13 +16,13 @@ export class Pawn extends Piece {
 	/**
 	 * Get the list of Pawn moves
 	 * @param occupiedSquares - the currently occupied squares
-	 * @return {Number[][]} moves - the squares to which the Pawn can move as an array of co-ordinates (also an array)
+	 * @return moves - the squares to which the Pawn can move as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: string[][]) {
-		const color : pieceColors = this.color;
-		const file : number = this._file;
-		const rank : number = this._rank;
-		const moves : number[][] = [];
+	moves(occupiedSquares: string[][]): number[][] {
+		const color: pieceColors = this.color;
+		const file: number = this._file;
+		const rank: number = this._rank;
+		const moves: number[][] = [];
 		let rookPin = false; // a vertical pin
 		let bishopPinBD = false; // a diagonal pin that is parallel with the large black diagonal (A1-H8)
 		let bishopPinWD = false; // a diagonal pin that is parallel with the large white diagonal (A8-H1)
@@ -125,16 +128,16 @@ export class Pawn extends Piece {
 
 	/**
 	 * Get the squares that the Pawn protects
-	 * @return {Number[][]} protectedSquares - the squares that the Pawn protects as an array of co-ordinates (also an array)
+	 * @return protectedSquares - the squares that the Pawn protects as an array of co-ordinates (also an array)
 	 */
-	protectedSquares() {
+	protectedSquares(): number[][] {
 		const color = this._color;
 		const file = this._file;
 		const rank = this._rank;
 		let protectedSquares = color === 'white' ? [[file - 1, rank + 1], [file + 1, rank + 1]] : 
 			[[file - 1, rank - 1], [file + 1, rank - 1]];
 
-		protectedSquares = protectedSquares.filter(checkSquareOnBoard);
+		protectedSquares = protectedSquares.filter(isSquareOnBoard);
 
 		return protectedSquares;
 	}

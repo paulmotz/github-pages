@@ -1,11 +1,11 @@
-import { IPieceProps} from '@/lib/types';
+import { PieceProps} from '@/lib/types';
 import { RangedPiece } from './rangedPiece';
 
 export class Queen extends RangedPiece {
-	_queenDirections : number[][];
+	_queenDirections: number[][];
 	_iconName: string;
 
-	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._queenDirections = [
 			[-1, 0],
@@ -23,18 +23,18 @@ export class Queen extends RangedPiece {
 	/**
 	 * Get the piece's moves
 	 * @param occupiedSquares - the currently occupied squares
-	 * @return {Number[][]} moves - the moves of the piece as an array of co-ordinates (also an array)
+	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: string[][]) {
+	moves(occupiedSquares: string[][]): number[][] {
 		return this.rangedMoves(this._queenDirections, occupiedSquares);
 	}
 
 	/**
 	 * Get the squares that the Queen protects
 	 * @param occupiedSquares - the squares that are currently occupied, array entries are piece names (eg wP3)
-	 * @return {Number[][]} protectedSquares - the squares that the Queen protects as an array of co-ordinates (also an array)
+	 * @return {protectedSquares - the squares that the Queen protects as an array of co-ordinates (also an array)
 	 */
-	protectedSquares(occupiedSquares: string[][]) {
+	protectedSquares(occupiedSquares: string[][]): number[][] {
 		return this.rangedProtectedSquares(this._queenDirections, occupiedSquares);
 	}
 }

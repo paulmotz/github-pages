@@ -1,12 +1,12 @@
-import { IPieceProps} from '@/lib/types';
+import { PieceProps} from '@/lib/types';
 import { RangedPiece } from './rangedPiece';
 
 export class Rook extends RangedPiece {
-	_iconName : string;
-	_rookDirections : number[][];
-	_hasMoved : boolean;
+	_iconName: string;
+	_rookDirections: number[][];
+	_hasMoved: boolean;
 
-	constructor({ color, abbreviation, file, rank, id, hasMoved }: IPieceProps) {
+	constructor({ color, abbreviation, file, rank, id, hasMoved }: PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._rookDirections = [
 			[-1, 0], 
@@ -21,7 +21,7 @@ export class Rook extends RangedPiece {
 	/**
 	 * Get whether the rook has moved
 	 */
-	get hasMoved() {
+	get hasMoved(): boolean {
 		return this._hasMoved;
 	}
 
@@ -35,18 +35,18 @@ export class Rook extends RangedPiece {
 	/**
 	 * Get the piece's moves
 	 * @param occupiedSquares - the currently occupied squares
-	 * @return {Number[][]} moves - the moves of the piece as an array of co-ordinates (also an array)
+	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: string[][]) {
+	moves(occupiedSquares: string[][]): number[][] {
 		return this.rangedMoves(this._rookDirections, occupiedSquares);
 	}
 
 	/**
 	 * Get the squares that the Bishop protects
 	 * @param occupiedSquares - the squares that are currently occupied, array entries are piece names (eg wP3)
-	 * @return {Number[][]} protectedSquares - the squares that the Bishop protects as an array of co-ordinates (also an array)
+	 * @return protectedSquares - the squares that the Bishop protects as an array of co-ordinates (also an array)
 	 */
-	protectedSquares(occupiedSquares: string[][]) {
+	protectedSquares(occupiedSquares: string[][]): number[][] {
 		return this.rangedProtectedSquares(this._rookDirections, occupiedSquares);
 	}
 }

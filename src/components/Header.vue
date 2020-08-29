@@ -12,15 +12,18 @@
 			router-link.header-link(to="/lastfm") last.fm
 </template>
 
-<script>
+<script lang='ts'>
 import Vue from 'vue';
 
 export default Vue.extend({
-  name : 'Header',
+	name : 'Header',
 
-  props : {
-	msg : String,
-  },
+	props : {
+		msg : {
+			type    : String,
+			default : '',
+		},
+	},
 });
 </script>
 

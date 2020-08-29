@@ -1,11 +1,12 @@
 import { Piece } from './piece';
 import { Rook } from './rook';
-import { checkSquareOnBoard, findPieceIndex, getOtherColor } from '../helpers';
-import { pieceAbbreviations, pieceColors, IAttackedSquares, IAllPieces } from '@/lib/types';
+// import { isSquareOnBoard, findPieceIndex, getOtherColor } from '../helpers';
+import { pieceColors, AttackedSquares, AllPieces, PieceProps } from '@/lib/types';
+import { isSquareOnBoard, findPieceIndex, getOtherColor } from '@/lib/games/chess/helpers';
 
 export class King extends Piece {
-	_hasMoved : boolean;
-	_iconName : string;
+	_hasMoved: boolean;
+	_iconName: string;
 
 	// TODO:
 	// check if the piece is in check
@@ -19,9 +20,9 @@ export class King extends Piece {
 	 * @param rank - the rank of the king: 1 - 8
 	 * @param hasMoved - whether or not the king has moved (used for checking if castling is possible)
 	 */
-	constructor(color: pieceColors, abbreviation: pieceAbbreviations, file: number, rank: number, id: number, hasMoved: boolean) {
-		super({color, abbreviation, file, rank, id});
-		this._hasMoved = hasMoved;
+	constructor({ color, abbreviation, file, rank, id, hasMoved}: PieceProps) {
+		super({ color, abbreviation, file, rank, id });
+		this._hasMoved = hasMoved || false;
 		this._iconName = 'chess-king';
 	}
 	
@@ -29,9 +30,9 @@ export class King extends Piece {
 	 * Get the Kings's possible moves
 	 * @param file - file rank of the king: 1 - 8
 	 * @param rank - the rank of the king: 1 - 8
-	 * @return {number[][]} moves - the moves of the king as an array of co-ordinates (also an array)
+	 * @return moves - the moves of the king as an array of co-ordinates (also an array)
 	 */
-	getPossibleMoves(file: number, rank: number) {
+	getPossibleMoves(file: number, rank: number): number[][] {
 		return [
 			[file - 1,rank + 1],
 			[file, rank + 1],
@@ -47,9 +48,9 @@ export class King extends Piece {
 	/**
 	 * Get the King's moves
 	 * @param occupiedSquares - the currently occupied squares
-	 * @return {Number[][]} moves - the moves of the King as an array of co-ordinates (also an array)
+	 * @return moves - the moves of the King as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: string[][], attackedSquares: IAttackedSquares, allPieces: IAllPieces) {
+	moves(occupiedSquares: string[][], attackedSquares: AttackedSquares, allPieces: AllPieces): number[][] {
 		const color: pieceColors = this._color;
 		const opponentColor: pieceColors = getOtherColor(color);
 		const file: number = this._file;
@@ -58,7 +59,7 @@ export class King extends Piece {
 		const possibleMoves: number[][] = this.getPossibleMoves(file, rank);
 
 		const moves = possibleMoves.filter((square) => {
-			return checkSquareOnBoard(square) &&
+			return isSquareOnBoard(square) &&
 				(!occupiedSquares[square[0]][square[1]] || occupiedSquares[square[0]][square[1]][0] !== color) &&
 				!attackedSquares[opponentColor].has(square);
 		});
@@ -87,15 +88,15 @@ export class King extends Piece {
 
 	/**
 	 * Get the squares that the King protects
-	 * @return {number[][]} protectedSquares - the squares that the King protects as an array of co-ordinates (also an array)
+	 * @return protectedSquares - the squares that the King protects as an array of co-ordinates (also an array)
 	 */
-	protectedSquares() {
+	protectedSquares(): number[][] {
 		const file = this._file;
 		const rank = this._rank;
 		const possibleMoves = this.getPossibleMoves(file, rank);
 
 		// only need to check if square is on the board
-		const protectedSquares = possibleMoves.filter(checkSquareOnBoard);
+		const protectedSquares = possibleMoves.filter(isSquareOnBoard);
 
 		return protectedSquares;
 	}
@@ -103,7 +104,7 @@ export class King extends Piece {
 	/**
 	 * Get whether the king has moved
 	 */
-	get hasMoved() {
+	get hasMoved(): boolean {
 		return this._hasMoved;
 	}
 

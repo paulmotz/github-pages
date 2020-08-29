@@ -1,8 +1,8 @@
-import { IPieceProps} from '@/lib/types';
+import { PieceProps} from '@/lib/types';
 import { Piece } from './piece';
 
 export class RangedPiece extends Piece {
-	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 	}
 
@@ -10,9 +10,9 @@ export class RangedPiece extends Piece {
 	 * Get the piece's moves
 	 * @param moveDirections - the directions the piece can move
 	 * @param occupiedSquares - the currently occupied squares
-	 * @return {Number[][]} moves - the moves of the piece as an array of co-ordinates (also an array)
+	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	rangedMoves(moveDirections: number[][], occupiedSquares: string[][]) {
+	rangedMoves(moveDirections: number[][], occupiedSquares: string[][]): number[][] {
 		const moves: number[][] = [];
 
 		const file = this._file;
@@ -49,9 +49,9 @@ export class RangedPiece extends Piece {
 	 * @param r - the piece's movement between ranks: -1, 0, 1
 	 * @param isDefending - whether the move's being calculated are attacking or defending. Defending counts pieces of the same color guarded by the piece
 	 * @param occupiedSquares - the currently occupied squares
-	 * @return { number[][] } moves - the moves of the piece as an array of co-ordinates (also an array)
+	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	moveOneWay(file: number, rank: number, f: number, r: number, isDefending: boolean, occupiedSquares: string[][]) {
+	moveOneWay(file: number, rank: number, f: number, r: number, isDefending: boolean, occupiedSquares: string[][]): number[][] {
 		const moves = [];
 		while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 			file += f;
@@ -72,9 +72,9 @@ export class RangedPiece extends Piece {
 	 * Get the squares that the piece protects
 	 * @param moveDirections - the directions the piece can move
 	 * @param occupiedSquares - the squares that are currently occupied, array entries are piece names (eg wP3)
-	 * @return {Number[][]} protectedSquares - the squares that the piece protects as an array of co-ordinates (also an array)
+	 * @return protectedSquares - the squares that the piece protects as an array of co-ordinates (also an array)
 	 */
-	rangedProtectedSquares(moveDirections: number[][], occupiedSquares: string[][]) {
+	rangedProtectedSquares(moveDirections: number[][], occupiedSquares: string[][]): number[][] {
 		const protectedSquares = [];
 
 		const file = this._file;

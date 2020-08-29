@@ -5,16 +5,22 @@
 			v-bind:icon="iconName")
 </template>
 
-<script>
+<script lang='ts'>
 import Vue from 'vue';
-import { Piece } from '@/lib/games/chess/pieces/piece';
+import { Piece } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Square',
 	
 	props : {
-		fileIndex : Number,
-		rankIndex : Number,
+		fileIndex : {
+			type    : Number,
+			default : 0,
+		},
+		rankIndex : {
+			type    : Number,
+			default : 0,
+		},
 		isClicked : {
 			type    : Boolean,
 			default : false,
@@ -27,12 +33,12 @@ export default Vue.extend({
 	},
 
 	computed : {
-		iconName() {
-			console.log(this.piece);
+		iconName(): string {
+			// console.log(this.piece);
 			return this.piece && this.piece.iconName ? this.piece.iconName : '';
 		},
 
-		isLightSquare() {
+		isLightSquare(): boolean {
 			return ( this.fileIndex + this.rankIndex ) % 2 === (this.isWhiteDown ? 1 : 0);
 		},
 	},

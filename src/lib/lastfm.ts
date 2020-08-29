@@ -1,9 +1,69 @@
-import { IAllScrobbles, IFetchInfo, ILastFmTracks, IScrobbleCount } from './types';
+import { AllScrobbles, FetchInfo, LastFmTracks, ScrobbleCount, LastFmTrackInfo } from './types';
 
 const USER = 'paul_motz';
 
-const getTracks = async ({ user, from, to }: IFetchInfo) => {
-	const fetchedTracks: Array<ILastFmTracks> = await fetchAllTracks({
+const getOldestTrackUts = (tracks: Array<LastFmTracks>): string => {
+	// If there is currently a track being scrobbled and it is the only track returned
+	// it will not have a date property.
+	return tracks[tracks.length - 1].date ? tracks[tracks.length - 1].date.uts : '';
+};
+
+const fetchTracks = async ({ user = USER, from = '', to = '', limit = 1000 } = {} ): Promise<LastFmTracks[]> => {
+	const url = to ?
+		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&to=${to}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json` :
+		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json`;
+	const rawData = await fetch(url);
+	const data = await rawData.json();
+	const tracks = data.recenttracks.track;
+
+	return Array.isArray(tracks) ? tracks : [ tracks ];
+};
+
+const fetchAllTracks = async ({user = USER, from = '', to = '', limit = 1000} = {}): Promise<LastFmTracks[]> => {
+	const allTracks = await fetchTracks({user, from, to, limit});
+
+	if (allTracks.length === 0) {
+		return [];
+	}
+
+	let oldestTrackUts = getOldestTrackUts(allTracks);
+	let tracksFound = allTracks.length > 0;
+
+	while (Number(from) <= Number(oldestTrackUts) && tracksFound) {
+		const newTracks = await fetchTracks({user, from, to : oldestTrackUts, limit});
+		const currentTrackIndex = newTracks.findIndex(track => track['@attr']);
+		if (currentTrackIndex !== -1) {
+			newTracks.splice(currentTrackIndex, 1);
+		}
+		allTracks.push(...newTracks);
+		oldestTrackUts = getOldestTrackUts(allTracks);
+		tracksFound = newTracks.length > 0;
+	}
+
+	return allTracks;	
+};
+
+const getDate = (date: Date): string => {
+	const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+		'July', 'August', 'September', 'October', 'November', 'December',
+	];
+
+	return `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+};
+
+const getNewestTrackInfo = (tracks: Array<LastFmTracks>): string => {
+	for (const track of tracks) {
+		if (track.date) {
+			return `last updated ${getDate(new Date())} - last track UTS: ${track.date.uts} (${track.name} - ${track.artist['#text']})`;
+		}
+	}
+
+	return '';
+};
+
+
+const getTracks = async ({ user, from, to }: FetchInfo): Promise<LastFmTrackInfo> => {
+	const fetchedTracks: Array<LastFmTracks> = await fetchAllTracks({
 		user,
 		from,
 		to,
@@ -18,10 +78,10 @@ const getTracks = async ({ user, from, to }: IFetchInfo) => {
 	}
 
 	const newestTrackInfo = getNewestTrackInfo(fetchedTracks);
-	const scrobbleCounts: Array<IScrobbleCount> = [];
+	const scrobbleCounts: Array<ScrobbleCount> = [];
 	let totalScrobbles = 0;
 
-	const scrobbles: IAllScrobbles = {};
+	const scrobbles: AllScrobbles = {};
 
 	for (const track of fetchedTracks) {
 		const title = track.name;
@@ -72,42 +132,8 @@ const getTracks = async ({ user, from, to }: IFetchInfo) => {
 	};
 };
 
-const fetchAllTracks = async ({user = USER, from = '', to = '', limit = 1000} = {}) => {
-	const allTracks = await fetchTracks({user, from, to, limit});
-
-	if (allTracks.length === 0) {
-		return [];
-	}
-
-	let oldestTrackUts = getOldestTrackUts(allTracks);
-	let tracksFound = allTracks.length > 0;
-
-	while (Number(from) <= Number(oldestTrackUts) && tracksFound) {
-		const newTracks = await fetchTracks({user, from, to : oldestTrackUts, limit});
-		const currentTrackIndex = newTracks.findIndex(track => track['@attr']);
-		if (currentTrackIndex !== -1) {
-			newTracks.splice(currentTrackIndex, 1);
-		}
-		allTracks.push(...newTracks);
-		oldestTrackUts = getOldestTrackUts(allTracks);
-		tracksFound = newTracks.length > 0;
-	}
-
-	return allTracks;	
-};
-
-const fetchTracks = async ({ user = USER, from = '', to = '', limit = 1000 } = {} ) => {
-	const url = to ?
-		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&to=${to}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json` :
-		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json`;
-	const rawData = await fetch(url);
-	const data = await rawData.json();
-	const tracks = data.recenttracks.track;
-
-	return Array.isArray(tracks) ? tracks : [ tracks ];
-};
-
-const getTrack = async (trackName: string, pagesToSearch = 5) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getTrack = async (trackName: string, pagesToSearch = 5): Promise<void> => {
 	for (let pageNumber = 1; pageNumber <= pagesToSearch; pageNumber++) {
 		const url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USER}&api_key=7c4429b3e36474312ac2157b5e3bcddf&page=${pageNumber}&format=json`;
 		const rawData = await fetch(url);
@@ -121,28 +147,6 @@ const getTrack = async (trackName: string, pagesToSearch = 5) => {
 		}
 	}
 	console.log(`Could not find track: ${trackName}`);
-};
-
-const getOldestTrackUts = (tracks: Array<ILastFmTracks>) => {
-	// If there is currently a track being scrobbled and it is the only track returned
-	// it will not have a date property.
-	return tracks[tracks.length - 1].date && tracks[tracks.length - 1].date.uts;
-};
-
-const getNewestTrackInfo = (tracks: Array<ILastFmTracks>) => {
-	for (const track of tracks) {
-		if (track.date) {
-			return `last updated ${getDate(new Date())} - last track UTS: ${track.date.uts} (${track.name} - ${track.artist['#text']})`;
-		}
-	}
-};
-
-const getDate = (date: Date) => {
-	const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-		'July', 'August', 'September', 'October', 'November', 'December',
-	];
-
-	return `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 };
 
 export { getTracks };

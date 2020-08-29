@@ -6,18 +6,23 @@
 		slot
 </template>
 
-<script>
-export default {
+<script lang='ts'>
+import Vue from 'vue';
+
+export default Vue.extend({
 	// Adopted from https://github.com/bartkozal/vue-float-label
 	name : 'FloatingLabel',
 
 	props : {
-		labelText : String,
+		labelText : {
+			type    : String,
+			default : '',
+		},
 	},
 
-	data() {
+	data : function() {
 		return {
-			formEl    : undefined,
+			formEl    : null,
 			labelEl   : undefined,
 			isActive  : false,
 			isFocused : false,
@@ -25,7 +30,7 @@ export default {
 	},
 
 	computed : {
-		classObject () {
+		classObject (): Record<string, boolean> {
 			return {
 				'is-active'  : this.isActive,
 				'is-focused' : this.isFocused,
@@ -55,27 +60,27 @@ export default {
 	},
 
 	methods : {
-		emitClicked() {
+		emitClicked(): void {
 			this.$emit('clicked');
 		},
 
-		focusFormEl() {
+		focusFormEl(): void {
 			this.formEl.focus();
 		},
 
-		setInitialIsActive() {
+		setInitialIsActive(): void {
 			this.isActive = this.formEl.value.length > 0;
 		},
 
-		updateIsActive(e) {
+		updateIsActive(e: Event): void {
 			this.isActive = e.target.value.length > 0;
 		},
 
-		updateIsFocused(e) {
+		updateIsFocused(e: Event): void {
 			this.isFocused = e.target === document.activeElement && this.isActive;
 		},
 	},
-};
+});
 </script>
 
 <style lang='stylus'>

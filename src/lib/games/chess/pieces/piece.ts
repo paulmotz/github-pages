@@ -1,12 +1,12 @@
-import { pieceAbbreviations, pieceColors, IPieceProps} from '@/lib/types';
+import { pieceAbbreviations, pieceColors, PieceProps} from '@/lib/types';
 
 export class Piece {
-	_color : pieceColors;
-	_abbreviation : pieceAbbreviations;
-	_file : number;
-	_rank : number;
-	_id : number;
-	_iconName : string;
+	_color: pieceColors;
+	_abbreviation: pieceAbbreviations;
+	_file: number;
+	_rank: number;
+	_id: number;
+	_iconName: string;
 
 	/**
 	 * Creates a piece of the given color at the given location
@@ -16,7 +16,7 @@ export class Piece {
 	 * @param rank - the rank of the piece: 1 - 8
 	 * @param id - the id of the piece: 1 - 10 (where 10 = max possible number of any given piece per color)
 	 */
-	constructor({ color, abbreviation, file, rank, id }: IPieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		this._color = color;
 		this._abbreviation = abbreviation;
 		this._file = file;
@@ -27,68 +27,36 @@ export class Piece {
 
 	/**
 	 * Get the piece's color
-	 * @return { pieceColors } color - The color of the piece: white || black
+	 * @return color - The color of the piece: white || black
 	 */
-	get color() {
+	get color(): pieceColors {
 		return this._color;
-	}
-
-	/**
-	 * Get the piece's abbreviation
-	 * @return { pieceAbbreviations } - The abbreviation of the piece: B, N, K, P, Q or R
-	 */
-	get abbr() {
-		return this._abbreviation;
-	}
-
-	/**
-	 * Get the piece's file
-	 * @return { number } file - The file of the piece: 1 - 8
-	 */
-	get file() {
-		return this._file;
-	}
-
-	/**
-	 * Get the piece's rank
-	 * @return { number } rank - The rank of the piece: 1 - 8
-	 */
-	get rank() {
-		return this._rank;
-	}
-
-	/**
-	 * Get the piece's id
-	 * @return { number } id - The id of the piece: 1 - 10 (where 10 = max possible number of any given piece per color)
-	 */
-	get id() {
-		return this._id;
-	}
-
-	/**
-	 * Get the piece's icon
-	 * @return { string } id - The name of the fa icon
-	 */
-	get iconName() {
-		return this._iconName;
 	}
 
 	/**
 	 * Set the piece's color
 	 * @param color - The color of the piece: white || black
 	 */
-	set color(color : pieceColors) {
+	set color(color: pieceColors) {
 		if (color === 'white' || color === 'black') {
 			this._color = color;
 		}
 	}
 
 	/**
-	 * Set the piece's abbreviation
-	 * @param abbreviation - The abbreviation of the piece: B, N, K, P, Q or R
+	 * Get the piece's abbreviation
+	 * @return The abbreviation of the piece: B, N, K, P, Q or R
 	 */
-	set abbreviation(abbreviation: pieceAbbreviations) {
-		this._abbreviation = abbreviation;
+	get abbr(): pieceAbbreviations {
+		return this._abbreviation;
+	}
+
+	/**
+	 * Get the piece's file
+	 * @return  file - The file of the piece: 1 - 8
+	 */
+	get file(): number {
+		return this._file;
 	}
 
 	/**
@@ -99,6 +67,15 @@ export class Piece {
 		if (file > 0 && file < 9) {
 			this._file = file;
 		}
+	}
+
+
+	/**
+	 * Get the piece's rank
+	 * @return rank - The rank of the piece: 1 - 8
+	 */
+	get rank(): number {
+		return this._rank;
 	}
 
 	/**
@@ -113,6 +90,14 @@ export class Piece {
 
 	/**
 	 * Get the piece's id
+	 * @return id - The id of the piece: 1 - 10 (where 10 = max possible number of any given piece per color)
+	 */
+	get id(): number {
+		return this._id;
+	}
+
+	/**
+	 * Get the piece's id
 	 * @param id - The id of the piece: 1 - 10 (where 10 = max possible number of any given piece per color)
 	 */
 	set id(id) {
@@ -120,11 +105,28 @@ export class Piece {
 	}
 
 	/**
+	 * Get the piece's icon
+	 * @return id - The name of the fa icon
+	 */
+	get iconName(): string {
+		return this._iconName;
+	}
+
+	/**
+	 * Set the piece's abbreviation
+	 * @param abbreviation - The abbreviation of the piece: B, N, K, P, Q or R
+	 */
+	set abbreviation(abbreviation: pieceAbbreviations) {
+		this._abbreviation = abbreviation;
+	}
+
+
+	/**
 	 * Returns the direction of the king from the piece. Used for checking for pinned pieces
 	 * @param occupiedSquares - the currently occupied squares
-	 * @return { number[] } kingDirection - the direction of the king from the piece, null if another piece is in the way
+	 * @return kingDirection - the direction of the king from the piece, null if another piece is in the way
 	 */
-	getKingDirection(occupiedSquares: string[][]) {
+	getKingDirection(occupiedSquares: string[][]): number[] | null {
 		let file = this.file;
 		let rank = this.rank;
 		const piece = occupiedSquares[file][rank];
@@ -155,14 +157,15 @@ export class Piece {
 			file = this.file;
 			rank = this.rank;
 		}
+
+		return null;
 	}
 
 	/**
 	 * Checks to see if a piece is pinned and if so gets the direction of the pin
-	 * @return { number[] } kingDirection - the direction of the king from the piece, null if another piece is in the way
-	 * @return { number[] } pinDirection - the direciton of the pin (ie the direction which the piece may be able to move), null if no pin
+	 * @return pinDirection - the direciton of the pin (ie the direction which the piece may be able to move), null if no pin
 	 */
-	getPinDirection(occupiedSquares: string[][]) {
+	getPinDirection(occupiedSquares: string[][]): number[] | undefined {
 		const kd = this.getKingDirection(occupiedSquares);
 		if (!kd) return;
 		else {

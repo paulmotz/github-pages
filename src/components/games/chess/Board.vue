@@ -19,43 +19,18 @@
 			.border-cell
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
-import { occupiedSquares, pieceStartingPositions, Game } from '@/lib/games/chess/game';
+import { pieceColors, allPieceTypes } from '@/lib/types';
+import { getPieceColor, getPieceName, pieceConstructors, pieceStartingPositions } from '@/lib/games/chess/helpers';
+// import { occupiedSquares, pieceStartingPositions } from '@/lib/games/chess/game';
 
 export default Vue.extend({
 	name : 'Board',
 
 	components : {
 		Square,
-	},
-
-	computed : {
-		files() {
-			return this.isWhite
-				? [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ]
-				: [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ].reverse();
-		},
-
-		ranks() {
-			return this.isWhite
-				? [ 1, 2, 3, 4, 5, 6, 7, 8 ].reverse()
-				: [ 1, 2, 3, 4, 5, 6, 7, 8 ];
-		},
-
-		isBoardSet() {
-			return occupiedSquares.some(rank => {
-				rank.some(square => square !== null);
-			});
-		},
-	},
-
-	data : function() {
-		return {
-			occupiedSquares : occupiedSquares,
-			pieces          : pieceStartingPositions,
-		};
 	},
 
 	props : {
@@ -65,8 +40,68 @@ export default Vue.extend({
 		},
 	},
 
+	data : function() {
+		return {
+			moveCounter     : 0,
+			gameStates      : [],
+			occupiedSquares : [
+				[ null, null, null, null, null, null, null, null ],
+				[ null, null, null, null, null, null, null, null ],
+				[ null, null, null, null, null, null, null, null ],
+				[ null, null, null, null, null, null, null, null ],
+				[ null, null, null, null, null, null, null, null ],
+				[ null, null, null, null, null, null, null, null ],
+				[ null, null, null, null, null, null, null, null ],
+				[ null, null, null, null, null, null, null, null ],
+			],
+			pieces : pieceStartingPositions,
+		};
+	},
+
+	computed : {
+		files(): string[] {
+			return this.isWhite
+				? [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ]
+				: [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ].reverse();
+		},
+
+		ranks(): number[] {
+			return this.isWhite
+				? [ 1, 2, 3, 4, 5, 6, 7, 8 ].reverse()
+				: [ 1, 2, 3, 4, 5, 6, 7, 8 ];
+		},
+
+		isBoardSet(): boolean {
+			return this.occupiedSquares.some(rank => {
+				rank.some(square => square !== null);
+			});
+		},
+	},
+
 	mounted() {
-		new Game();
+		this.initializePieces();
+	},
+
+	methods : {
+		initializePieces(): void {
+			for (const piece in pieceStartingPositions) {
+				// allPieces[piece] = []; 
+				const color: pieceColors = getPieceColor(piece);
+				const abbreviation: string = piece[1];
+				const pieceName: string = getPieceName(abbreviation);
+
+				for (const pieceStartingPositionIndex in pieceStartingPositions[piece]) {
+					const [ file, rank ]: number[] = pieceStartingPositions[piece][pieceStartingPositionIndex];
+
+					console.log(pieceConstructors);
+
+					const newPiece: allPieceTypes = new pieceConstructors[pieceName]({ color, abbreviation, file, rank, id : pieceStartingPositionIndex});
+
+					// allPieces[piece].push(newPiece);
+					this.occupiedSquares[rank - 1][file - 1] = newPiece;
+				}
+			}
+		},
 	},
 });
 </script>

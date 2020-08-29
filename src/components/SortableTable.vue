@@ -8,9 +8,22 @@
 			td.table-cell(v-for="(column, columnIndex) in columnData" v-bind:key="columnIndex") {{ row[column.columnName] }}
 </template>
 
-<script>
-export default {
+<script lang='ts'>
+import Vue from 'vue';
+
+export default Vue.extend({
 	name : 'SortableTable',
+
+	props : {
+		columnData : {
+			type    : Array,
+			default : (): [] => [],
+		},
+		tableDataProp : {
+			type    : Array,
+			default : (): [] => [],
+		},
+	},
 	
 	data : function() {
 		return {
@@ -21,22 +34,17 @@ export default {
 	},
 
 	watch : {
-		tableDataProp : function() {
+		tableDataProp : function(): void {
 			this.tableData = [ ...this.tableDataProp ];
 		},
 	},
 
-	props : {
-		columnData    : Array,
-		tableDataProp : Array,
-	},
-
-	mounted() {
+	mounted(): void {
 		this.tableData = [ ...this.tableDataProp ];
 	},
 
 	methods : {
-		sort(fieldName) {
+		sort(fieldName: string): void {
 			const shouldInvertSort = this.currentlySortedColumn === fieldName && this.isCurrentlySortedAscending;
 			
 			this.tableData.sort((a, b) => {
@@ -53,7 +61,7 @@ export default {
 			this.currentlySortedColumn      = fieldName;
 		},
 	},
-};
+});
 </script>
 
 <style lang='stylus'>

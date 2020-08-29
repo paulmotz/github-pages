@@ -5,24 +5,30 @@
 		) {{ buttonText }}
 </template>
 
-<script>
+<script lang='ts'>
 export default {
 	name : 'PJMButton',
 
 	props : {
 		isDisabled  : Boolean,
-		loadingText : String,
-		text        : String,
+		loadingText : {
+			type    : String,
+			default : '',
+		},
+		text : {
+			type    : String,
+			default : '',
+		},
 	},
 
 	computed : {
-		buttonText() {
+		buttonText(): string {
 			return this.isDisabled && this.loadingText ? this.loadingText : this.text;
 		},
 	},
 
 	methods : {
-		emitClicked() {
+		emitClicked(): void {
 			this.$emit('clicked');
 		},
 	},
