@@ -58,11 +58,11 @@ export class RangedPiece extends Piece {
 			rank += r;
 			if (occupiedSquares[rank - 1][file - 1]) {
 				if (isDefending || occupiedSquares[rank - 1][file - 1].color !== this.color) {
-					moves.push([file, rank]);
+					moves.push([rank, file]);
 				}
 				break;
 			}
-			moves.push([file, rank]);
+			moves.push([rank, file]);
 		}
 		
 		return moves;

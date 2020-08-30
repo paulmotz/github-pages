@@ -129,13 +129,7 @@ export class Piece {
 		let rank = this.rank;
 		let file = this.file;
 		const piece: Piece = occupiedSquares[rank - 1][file - 1];
-		console.log(rank);
-		console.log(file);
-		console.log(occupiedSquares);
-		console.log(piece);
 		const pieceType = piece.abbreviation;
-		// console.log(piece);
-		// console.log(pieceType);
 		if (pieceType === 'K') {
 			return null; // TODO: maybe this should be a special value
 		}
