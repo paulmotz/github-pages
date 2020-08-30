@@ -58,6 +58,7 @@ export default Vue.extend({
 				'dark-square'  : !this.isLightSquare,
 				'light-square' : this.isLightSquare,
 				'highlighted'  : this.isHighlighted,
+				'has-piece'    : this.piece !== null,
 			};
 		},
 	},
@@ -96,6 +97,12 @@ export default Vue.extend({
 
 .highlighted .hollow-circle
 	border: black 1px solid
+
+.highlighted .hollow-circle:hover
+	border: black 3px solid
+
+.has-piece, .highlighted
+	cursor: pointer
 
 .fa-icon
 	position: relative

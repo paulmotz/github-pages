@@ -70,6 +70,7 @@ export default Vue.extend({
 			pieces        : pieceStartingPositions,
 			isInitialized : false,
 			possibleMoves : [],
+			selectedPiece : null,
 		};
 	},
 
@@ -119,7 +120,8 @@ export default Vue.extend({
 		handleSquareClick(squareContent: Piece | null): void {
 			this.resetMoveSquares();
 
-			if (squareContent === null) {
+			if (squareContent === null || this.selectedPiece === squareContent) {
+				this.selectedPiece = null;
 				return;
 			}
 
@@ -128,6 +130,8 @@ export default Vue.extend({
 			if (moves.length) {
 				this.setMoveSquares(moves);
 			}
+
+			this.selectedPiece = squareContent;
 		},
 
 		setMoveSquares(moves: number[][]): void {
