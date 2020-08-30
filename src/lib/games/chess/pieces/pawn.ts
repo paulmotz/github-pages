@@ -102,7 +102,7 @@ export class Pawn extends Piece {
 				moves.push([rank - 1, file - 1]);
 			}
 			if (file + 1 <= 8 && occupiedSquares[rank - 2][file] && occupiedSquares[rank - 2][file].color !== color && !rookPin && !bishopPinBD) {
-				moves.push([rank - 2, file + 1]);
+				moves.push([rank - 1, file + 1]);
 			}
 
 			// en passant
