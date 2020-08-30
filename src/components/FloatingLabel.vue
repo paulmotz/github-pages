@@ -6,7 +6,7 @@
 		slot
 </template>
 
-<script lang='ts'>
+<script>
 import Vue from 'vue';
 
 export default Vue.extend({
@@ -31,7 +31,7 @@ export default Vue.extend({
 	},
 
 	computed : {
-		classObject (): Record<string, boolean> {
+		classObject () {
 			return {
 				'is-active'  : this.isActive,
 				'is-focused' : this.isFocused,
@@ -68,25 +68,25 @@ export default Vue.extend({
 	},
 
 	methods : {
-		emitClicked(): void {
+		emitClicked() {
 			this.$emit('clicked');
 		},
 
-		focusFormEl(): void {
+		focusFormEl() {
 			if (this.formEl !== null) {
 				this.formEl.focus();
 			}
 		},
 
-		setInitialIsActive(): void {
+		setInitialIsActive() {
 			this.isActive = this.formEl.value.length > 0;
 		},
 
-		updateIsActive(e: Event): void {
+		updateIsActive(e) {
 			this.isActive = e.target.value.length > 0;
 		},
 
-		updateIsFocused(e: Event): void {
+		updateIsFocused(e) {
 			this.isFocused = e.target === document.activeElement && this.isActive;
 		},
 	},
