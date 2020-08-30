@@ -26,9 +26,9 @@ import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
 import { PieceColor, PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes } from '@/lib/games/chess/helpers';
-import { getCheckingPieces } from '@/lib/games/chess/checkingHelpers';
+import { getCheckingPieces, getKingLocation, getCheckingPath } from '@/lib/games/chess/checkingHelpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
-import { Piece, Pawn, Rook, King } from '@/lib/games/chess/pieces';
+import { Piece, Pawn, Knight, Rook, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Board',
@@ -122,10 +122,20 @@ export default Vue.extend({
 			const checkingPieces = getCheckingPieces(this.allPieces, this.occupiedSquares, this.colorToMoveNext);
 
 			if (checkingPieces.length > 0) {
-				this.getLegalMoves();
+				if (this.selectedPiece !== null && this.possibleMoveSquares[rank - 1][file - 1]) {
+					this.movePiece({ piece : this.selectedPiece, rank, file });
+					this.resetMoveSquares();
+
+					return;
+				}
+
+				this.resetMoveSquares();
+				const legalMoves = this.getLegalMoves(checkingPieces, square);
+
+				this.setMoveSquares(legalMoves);
+				this.selectedPiece = square;
 				return;
 			}
-
 
 			if (this.selectedPiece !== null && this.possibleMoveSquares[rank - 1][file - 1]) {
 				this.movePiece({ piece : this.selectedPiece, rank, file });
@@ -235,16 +245,35 @@ export default Vue.extend({
 			}
 		},
 
-		getLegalMoves(): moves {
-			const moves = [];
-			for (const pieceTypeAndColor in this.allPieces) {
-				for (const piece of this.allPieces[pieceTypeAndColor]) {
-					console.log(piece);
-					moves.push(piece.moves({ occupiedSquares : this.occupiedSquares }));
+		getLegalMoves(checkingPieces: Piece[], clickedPiece: Piece | null): number[][] {
+			if (clickedPiece == null) {
+				return [];
+			}
+			const legalMoves = [];
+			// When there is only one piece checking, it might be able to be captured or blocked
+			if (checkingPieces.length === 1) {
+				const [ checkingPiece ] = checkingPieces;
+
+				const checkingPieceRank = checkingPiece.rank;
+				const checkingPieceFile = checkingPiece.file;
+
+				const captureMove: number[] | undefined = clickedPiece.protectedSquares(this.occupiedSquares).find((square) => {
+					return square[0] === checkingPieceRank && square[1] === checkingPieceFile;
+				});
+				if (captureMove) {
+					legalMoves.push(captureMove);
+				}
+
+				// Neither knights nor pawns can be blocked when checking
+				if (!(checkingPiece instanceof Knight) && !(checkingPiece instanceof Pawn)) {
+					const kingLocation = getKingLocation(this.allPieces, this.colorToMoveNext);
+
+
+					getCheckingPath(checkingPiece, kingLocation);
 				}
 			}
 
-			return [];
+			return legalMoves;
 		},
 	},
 });

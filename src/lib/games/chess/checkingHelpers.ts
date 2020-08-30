@@ -33,3 +33,10 @@ export const getCheckingPieces = (
 
 	return checkingPieces;
 };
+
+export const getCheckingPath = (checkingPieceLocation: SquareLocation, kingLocation: SquareLocation): number[][] => {
+	console.log(checkingPieceLocation.rank, checkingPieceLocation.file);
+	console.log(kingLocation.rank, kingLocation.file);
+
+	return [];
+};
