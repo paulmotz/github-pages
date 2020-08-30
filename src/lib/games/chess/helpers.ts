@@ -1,4 +1,4 @@
-import { pieceColors, AllPieces, PieceMapping, PieceStartingPositions } from '@/lib/types';
+import { pieceColors, AllPieces, PieceMapping, PieceStartingPositions, colorAndPiece} from '@/lib/types';
 
 /**
  *
@@ -76,3 +76,7 @@ export const pieceStartingPositions: PieceStartingPositions = {
 	'bQ' : [ [8, 4] ],
 	'bR' : [ [8, 1], [8, 8] ],
 };
+
+export const pieceTypes: colorAndPiece[] = [ 
+	'wB', 'wN', 'wK', 'wP', 'wQ', 'wR', 'bB', 'bN', 'bK', 'bP', 'bQ', 'bR',
+];

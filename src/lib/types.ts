@@ -62,6 +62,8 @@ export interface PieceProps {
 
 export type pieceAbbreviations = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
 
+export type colorAndPiece = 'wB' | 'wN' | 'wK' | 'wP' | 'wQ' | 'wR' | 'bB' | 'bN' | 'bK' | 'bP' | 'bQ' | 'bR';
+
 export type pieceColors = 'white' | 'black';
 
 export interface AttackedSquares {
@@ -84,7 +86,7 @@ export interface PieceMapping {
 export type allPieceTypes = Pawn | Knight | Bishop | Rook | Queen | King;
 
 export interface SquareClickedEvent {
-	piece: Piece | null;
+	square: Piece | null;
 	rank: number;
 	file: number;
 }

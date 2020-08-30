@@ -25,7 +25,7 @@
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
 import { pieceColors, allPieceTypes, SquareClickedEvent, PieceMove } from '@/lib/types';
-import { getPieceColor, getPieceName, pieceStartingPositions } from '@/lib/games/chess/helpers';
+import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes } from '@/lib/games/chess/helpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
 import { Piece, Rook, King } from '@/lib/games/chess/pieces';
 
@@ -45,45 +45,15 @@ export default Vue.extend({
 
 	data : function() {
 		return {
-			moveCounter     : 0,
-			gameStates      : [],
-			occupiedSquares : [
-				[ null, null, null, null, null, null, null, null ],
-				[ null, null, null, null, null, null, null, null ],
-				[ null, null, null, null, null, null, null, null ],
-				[ null, null, null, null, null, null, null, null ],
-				[ null, null, null, null, null, null, null, null ],
-				[ null, null, null, null, null, null, null, null ],
-				[ null, null, null, null, null, null, null, null ],
-				[ null, null, null, null, null, null, null, null ],
-			],
-			possibleMoveSquares : [
-				[ false, false, false, false, false, false, false, false ],
-				[ false, false, false, false, false, false, false, false ],
-				[ false, false, false, false, false, false, false, false ],
-				[ false, false, false, false, false, false, false, false ],
-				[ false, false, false, false, false, false, false, false ],
-				[ false, false, false, false, false, false, false, false ],
-				[ false, false, false, false, false, false, false, false ],
-				[ false, false, false, false, false, false, false, false ],
-			],
-			allPieces : {
-				'wB' : [],
-				'wN' : [],
-				'wK' : [],
-				'wP' : [],
-				'wQ' : [],
-				'wR' : [],
-				'bB' : [],
-				'bN' : [],
-				'bK' : [] ,
-				'bP' : [] ,
-				'bQ' : [],
-				'bR' : [],
-			},
-			isInitialized : false,
-			selectedPiece : null,
-			isWhitetoMove : true,
+			boardSize           : 8,
+			moveCounter         : 0,
+			gameStates          : [],
+			occupiedSquares     : [] as (Piece | null)[][],
+			possibleMoveSquares : [] as boolean[][],
+			allPieces           : {} as {[index: string]: Piece[]},
+			isInitialized       : false,
+			selectedPiece       : null as Piece | null,
+			isWhitetoMove       : true,
 		};
 	},
 
@@ -116,7 +86,19 @@ export default Vue.extend({
 	},
 
 	methods : {
+		setEmptyStates(): void {
+			for (let i = 0; i < this.boardSize; i++) {
+				this.occupiedSquares.push(new Array(this.boardSize).fill(null));
+				this.possibleMoveSquares.push(new Array(this.boardSize).fill(false));
+			}
+			for (const pieceType of pieceTypes) {
+				this.allPieces[pieceType] = [];
+			}
+		},
+
 		initializePieces(): void {
+			this.setEmptyStates();
+
 			for (const piece in pieceStartingPositions) {
 				const color: pieceColors = getPieceColor(piece);
 				const abbreviation: string = piece[1];
@@ -134,25 +116,25 @@ export default Vue.extend({
 			this.isInitialized = true;
 		},
 
-		handleSquareClick({ piece, rank, file }: SquareClickedEvent): void {
+		handleSquareClick({ square, rank, file }: SquareClickedEvent): void {
 			if (this.selectedPiece !== null && this.possibleMoveSquares[rank - 1][file - 1]) {
 				this.movePiece({ piece : this.selectedPiece, rank, file });
 				return;
 			}
 			this.resetMoveSquares();
 
-			if (piece === null || this.selectedPiece === piece || this.colorToMoveNext !== piece.color) {
+			if (square === null || this.selectedPiece === square || this.colorToMoveNext !== square.color) {
 				this.selectedPiece = null;
 				return;
 			}
 
-			const moves: number[][] = piece.moves(this.occupiedSquares);
+			const moves: number[][] = square.moves(this.occupiedSquares);
 
 			if (moves.length) {
 				this.setMoveSquares(moves);
 			}
 
-			this.selectedPiece = piece;
+			this.selectedPiece = square;
 		},
 
 		movePiece({ piece, rank, file }: PieceMove): void {
@@ -169,9 +151,8 @@ export default Vue.extend({
 			}
 
 			const newSquareContents: Piece | null = this.occupiedSquares[rank - 1][file - 1];
-			const isPieceOnNewSquare: boolean = newSquareContents !== null;
 
-			if (isPieceOnNewSquare) {
+			if (newSquareContents !== null) {
 				this.capturePiece(newSquareContents);
 			}
 
@@ -188,7 +169,7 @@ export default Vue.extend({
 		capturePiece(piece: Piece): void {
 			const pieceType = `${piece.color[0]}${piece.abbreviation}`;
 			// const pieceToRemove
-			const pieceIndexToCapture = this.allPieces[pieceType].findIndex(p => Number(p.id) === Number(piece.id));
+			const pieceIndexToCapture = this.allPieces[pieceType].findIndex((p: Piece) => Number(p.id) === Number(piece.id));
 			this.allPieces[pieceType].splice(pieceIndexToCapture, 1);
 		},
 
@@ -202,7 +183,7 @@ export default Vue.extend({
 
 		resetMoveSquares(): void {
 			for (const row in this.possibleMoveSquares) {
-				this.$set(this.possibleMoveSquares, row, new Array(8).fill(false));
+				this.$set(this.possibleMoveSquares, row, new Array(this.boardSize).fill(false));
 			}
 		},
 

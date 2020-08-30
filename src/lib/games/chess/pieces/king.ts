@@ -48,7 +48,7 @@ export class King extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the King as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: Piece[][], attackedSquares: AttackedSquares, allPieces: AllPieces): number[][] {
+	moves(occupiedSquares: (Piece | null)[][], attackedSquares: AttackedSquares, allPieces: AllPieces): number[][] {
 		const color: pieceColors = this._color;
 		const opponentColor: pieceColors = getOtherColor(color);
 		const file: number = this._file;
@@ -57,8 +57,10 @@ export class King extends Piece {
 		const possibleMoves: number[][] = this.getPossibleMoves(file, rank);
 
 		const moves = possibleMoves.filter((square) => {
+			const potentialSquare = occupiedSquares[square[0]][square[1]];
+
 			return isSquareOnBoard(square) &&
-				(!occupiedSquares[square[0]][square[1]] || occupiedSquares[square[0]][square[1]].color !== color) &&
+				(potentialSquare === null || potentialSquare.color !== color) &&
 				!attackedSquares[opponentColor].has(square);
 		});
 

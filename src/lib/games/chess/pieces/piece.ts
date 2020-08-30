@@ -1,6 +1,6 @@
-import { pieceAbbreviations, pieceColors, PieceProps} from '@/lib/types';
+import { pieceAbbreviations, pieceColors, PieceProps, AttackedSquares, AllPieces } from '@/lib/types';
 
-export class Piece {
+export abstract class Piece {
 	_color: pieceColors;
 	_abbreviation: pieceAbbreviations;
 	_file: number;
@@ -119,6 +119,8 @@ export class Piece {
 	get abbreviation(): pieceAbbreviations {
 		return this._abbreviation;
 	}
+
+	abstract moves(occupiedSquares: (Piece | null)[][], attackedSquares?: AttackedSquares, allPieces?: AllPieces): number[][]
 
 	/**
 	 * Returns the direction of the king from the piece. Used for checking for pinned pieces

@@ -1,10 +1,12 @@
 import { PieceProps} from '@/lib/types';
 import { Piece } from './piece';
 
-export class RangedPiece extends Piece {
+export abstract class RangedPiece extends Piece {
 	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 	}
+
+	abstract moves(occupiedSquares: Piece[][]): number[][]
 
 	/**
 	 * Get the piece's moves
