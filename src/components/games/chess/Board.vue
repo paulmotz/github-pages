@@ -71,6 +71,7 @@ export default Vue.extend({
 			isInitialized : false,
 			possibleMoves : [],
 			selectedPiece : null,
+			isWhitetoMove : true,
 		};
 	},
 
@@ -91,6 +92,10 @@ export default Vue.extend({
 			return this.occupiedSquares.some(rank => {
 				rank.some(square => square !== null);
 			});
+		},
+
+		colorToMoveNext(): pieceColors {
+			return this.isWhitetoMove ? 'white' : 'black';
 		},
 	},
 
@@ -123,7 +128,7 @@ export default Vue.extend({
 			}
 			this.resetMoveSquares();
 
-			if (piece === null || this.selectedPiece === piece) {
+			if (piece === null || this.selectedPiece === piece || this.colorToMoveNext !== piece.color) {
 				this.selectedPiece = null;
 				return;
 			}
@@ -150,6 +155,8 @@ export default Vue.extend({
 			const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
 			newPieceRow[file - 1] = piece;
 			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+
+			this.setNextPlayerTurn();
 		},
 
 		setMoveSquares(moves: number[][]): void {
@@ -164,6 +171,10 @@ export default Vue.extend({
 			for (const row in this.possibleMoveSquares) {
 				this.$set(this.possibleMoveSquares, row, new Array(8).fill(false));
 			}
+		},
+
+		setNextPlayerTurn(): void {
+			this.isWhitetoMove = !this.isWhitetoMove;
 		},
 	},
 });
