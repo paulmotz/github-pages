@@ -232,7 +232,6 @@ export default Vue.extend({
 		getLegalMoves(): moves {
 			const checkingPieces = this.getCheckingPieces(this.colorToMoveNext);
 
-			console.log(this.allPieces);
 			console.log(checkingPieces);
 			const moves = [];
 			for (const pieceTypeAndColor in this.allPieces) {

@@ -102,8 +102,9 @@ export default Vue.extend({
 .highlighted .hollow-circle
 	border: black 1px solid
 
-.highlighted .hollow-circle:hover
-	border: black 3px solid
+.highlighted:hover
+	.hollow-circle
+		background-color: rgba(0, 0, 0, 0.2)
 
 .has-piece, .highlighted
 	cursor: pointer
