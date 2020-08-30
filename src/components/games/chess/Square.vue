@@ -66,7 +66,11 @@ export default Vue.extend({
 
 	methods : {
 		clickPiece(): void {
-			this.$emit('square-clicked', this.piece);
+			this.$emit('square-clicked', {
+				piece : this.piece,
+				rank  : this.rankIndex,
+				file  : this.fileIndex,
+			});
 		},
 	},
 });

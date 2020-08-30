@@ -126,9 +126,13 @@ export class Piece {
 	 * @return kingDirection - the direction of the king from the piece, null if another piece is in the way
 	 */
 	getKingDirection(occupiedSquares: Piece[][]): number[] | null {
-		let file = this.file;
 		let rank = this.rank;
+		let file = this.file;
 		const piece: Piece = occupiedSquares[rank - 1][file - 1];
+		console.log(rank);
+		console.log(file);
+		console.log(occupiedSquares);
+		console.log(piece);
 		const pieceType = piece.abbreviation;
 		// console.log(piece);
 		// console.log(pieceType);

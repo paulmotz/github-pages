@@ -82,3 +82,16 @@ export interface PieceMapping {
 }
 
 export type allPieceTypes = Pawn | Knight | Bishop | Rook | Queen | King;
+
+export interface SquareClickedEvent {
+	piece: Piece | null;
+	rank: number;
+	file: number;
+}
+
+export interface PieceMove {
+	piece: Piece;
+	rank: number;
+	file: number;
+}
+

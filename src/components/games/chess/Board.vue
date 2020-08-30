@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
-import { pieceColors, allPieceTypes } from '@/lib/types';
+import { pieceColors, allPieceTypes, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions } from '@/lib/games/chess/helpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
 import { Piece } from '@/lib/games/chess/pieces';
@@ -117,21 +117,39 @@ export default Vue.extend({
 			this.isInitialized = true;
 		},
 
-		handleSquareClick(squareContent: Piece | null): void {
+		handleSquareClick({ piece, rank, file }: SquareClickedEvent): void {
+			if (this.selectedPiece !== null && this.possibleMoveSquares[rank - 1][file - 1]) {
+				this.movePiece({ piece : this.selectedPiece, rank, file });
+			}
 			this.resetMoveSquares();
 
-			if (squareContent === null || this.selectedPiece === squareContent) {
+			if (piece === null || this.selectedPiece === piece) {
 				this.selectedPiece = null;
 				return;
 			}
 
-			const moves: number[][] = squareContent.moves(this.occupiedSquares);
+			const moves: number[][] = piece.moves(this.occupiedSquares);
 
 			if (moves.length) {
 				this.setMoveSquares(moves);
 			}
 
-			this.selectedPiece = squareContent;
+			this.selectedPiece = piece;
+		},
+
+		movePiece({ piece, rank, file }: PieceMove): void {
+			const currentPieceRank = piece.rank;
+			const currentPieceFile = piece.file;
+			const currentPieceRow: (Piece | null)[] = this.occupiedSquares[currentPieceRank - 1].slice(0);
+			currentPieceRow[currentPieceFile - 1] = null;
+			this.$set(this.occupiedSquares, currentPieceRank - 1, currentPieceRow);
+
+			piece.rank = rank;
+			piece.file = file;
+
+			const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
+			newPieceRow[file - 1] = piece;
+			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
 		},
 
 		setMoveSquares(moves: number[][]): void {

@@ -1,6 +1,5 @@
 import { Piece } from './piece';
 import { Rook } from './rook';
-// import { isSquareOnBoard, findPieceIndex, getOtherColor } from '../helpers';
 import { pieceColors, AttackedSquares, AllPieces, PieceProps } from '@/lib/types';
 import { isSquareOnBoard, findPieceIndex, getOtherColor } from '@/lib/games/chess/helpers';
 
