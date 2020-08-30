@@ -75,10 +75,10 @@ export class Pawn extends Piece {
 			// en passant
 			if (rank === 5) {
 				if (file - 2 >= 0 && occupiedSquares[rank][file - 2] && occupiedSquares[rank][file - 2].isEnPassantPawn && !rookPin && !bishopPinBD) {
-					moves.push([file - 1, rank + 1]);
+					moves.push([rank + 1, file - 1]);
 				}
 				if (file + 1 <= 8 && occupiedSquares[rank][file] && occupiedSquares[rank][file].isEnPassantPawn && !rookPin && !bishopPinWD) {
-					moves.push([file + 1, rank + 1]);
+					moves.push([rank + 1, file + 1]);
 				}
 			}
 		}
@@ -107,11 +107,11 @@ export class Pawn extends Piece {
 
 			// en passant
 			if (rank === 4) {
-				if (file - 1 >= 1 && occupiedSquares[file - 1][rank] && occupiedSquares[file - 1][rank].isEnPassantPawn && !rookPin && !bishopPinWD) {
-					moves.push([file - 1, rank - 1]);
+				if (file - 1 >= 1 && occupiedSquares[rank - 1][file - 2] && occupiedSquares[rank - 1][file - 2].isEnPassantPawn && !rookPin && !bishopPinWD) {
+					moves.push([rank - 1, file - 1]);
 				}
-				if (file + 1 <= 8 && occupiedSquares[file + 1][rank] && occupiedSquares[file + 1][rank].isEnPassantPawn && !rookPin && !bishopPinBD) {
-					moves.push([file + 1, rank - 1]);
+				if (file + 1 <= 8 && occupiedSquares[file - 1][file] && occupiedSquares[file - 1][file].isEnPassantPawn && !rookPin && !bishopPinBD) {
+					moves.push([rank - 1, file + 1]);
 				}
 			}
 		}

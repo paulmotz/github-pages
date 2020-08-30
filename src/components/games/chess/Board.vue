@@ -27,7 +27,7 @@ import Square from '@/components/games/chess/Square.vue';
 import { pieceColors, allPieceTypes, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions } from '@/lib/games/chess/helpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
-import { Piece } from '@/lib/games/chess/pieces';
+import { Piece, Rook, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Board',
@@ -164,6 +164,9 @@ export default Vue.extend({
 
 			piece.rank = rank;
 			piece.file = file;
+			if (piece instanceof Rook || piece instanceof King) {
+				piece.hasMoved = true;
+			}
 
 			const newSquareContents: Piece | null = this.occupiedSquares[rank - 1][file - 1];
 			const isPieceOnNewSquare: boolean = newSquareContents !== null;
