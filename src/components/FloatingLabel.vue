@@ -22,6 +22,7 @@ export default Vue.extend({
 
 	data : function() {
 		return {
+			// formEl    : [ Element, null ],
 			formEl    : null,
 			labelEl   : undefined,
 			isActive  : false,
@@ -41,22 +42,29 @@ export default Vue.extend({
 	mounted () {
 		this.formEl = this.$el.querySelector('input, textarea, select');
 
-		this.formEl.addEventListener('input', this.updateIsActive);
-		this.formEl.addEventListener('input', this.updateIsFocused);
-		this.formEl.addEventListener('blur', this.updateIsFocused);
-		this.formEl.addEventListener('focus', this.updateIsFocused);
+		if (this.formEl !== null) {
+			this.formEl.addEventListener('input', this.updateIsActive);
+			this.formEl.addEventListener('input', this.updateIsFocused);
+			this.formEl.addEventListener('blur', this.updateIsFocused);
+			this.formEl.addEventListener('focus', this.updateIsFocused);
+		}
 
 		this.labelEl = this.$el.querySelector('label');
-		this.labelEl.addEventListener('click', this.focusFormEl);
+
+		if (this.labelEl !== null) {
+			this.labelEl.addEventListener('click', this.focusFormEl);
+		}
 
 		this.setInitialIsActive();
 	},
 
 	beforeDestroy () {
-		this.formEl.removeEventListener('input', this.updateIsActive);
-		this.formEl.removeEventListener('input', this.updateIsFocused);
-		this.formEl.removeEventListener('blur', this.updateIsFocused);
-		this.formEl.removeEventListener('focus', this.updateIsFocused);
+		if (this.formEl !== null) {
+			this.formEl.removeEventListener('input', this.updateIsActive);
+			this.formEl.removeEventListener('input', this.updateIsFocused);
+			this.formEl.removeEventListener('blur', this.updateIsFocused);
+			this.formEl.removeEventListener('focus', this.updateIsFocused);
+		}
 	},
 
 	methods : {
@@ -65,7 +73,9 @@ export default Vue.extend({
 		},
 
 		focusFormEl(): void {
-			this.formEl.focus();
+			if (this.formEl !== null) {
+				this.formEl.focus();
+			}
 		},
 
 		setInitialIsActive(): void {

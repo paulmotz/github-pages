@@ -11,7 +11,7 @@
 
 <script lang='ts'>
 import Vue from 'vue';
-import { Piece } from '@/lib/games/chess/pieces';
+import { Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Square',
@@ -31,7 +31,7 @@ export default Vue.extend({
 		},
 		isWhiteDown : Boolean,
 		piece       : {
-			type    : Piece,
+			type    : [ Pawn, Knight, Bishop, Rook, Queen, King ],
 			default : null,
 		},
 		isHighlighted : {

@@ -28,14 +28,15 @@
 </template>
 
 <script lang='ts'>
+import Vue from 'vue';
 import { getTracks } from '@/lib/lastfm';
-import { LastFmTrackInfo } from '@/lib/types';
+import { LastFmTrackInfo, ScrobbleCount } from '@/lib/types';
 import FloatingLabel from '../FloatingLabel.vue';
 import SortableTable from '../SortableTable.vue';
 import PJMButton from '../PJMButton.vue';
 import ValidatedInput from '../ValidatedInput.vue';
 
-export default {
+export default Vue.extend({
 	name : 'LastFM',
 
 	components : {
@@ -71,7 +72,7 @@ export default {
 			username            : 'paul_motz',
 			fromUts             : '1598197972',
 			fromUtsErrorMessage : '',
-			scrobbleCounts      : [],
+			scrobbleCounts      : [] as ScrobbleCount[],
 			shouldShowTracks    : true,
 			totalScrobbles      : 0,
 			toUts               : '',
@@ -166,11 +167,11 @@ export default {
 			this.hideToUtsErrorMessage();
 		},
 
-		setIsButtonLoading(isButtonLoading): void {
+		setIsButtonLoading(isButtonLoading: boolean): void {
 			this.isButtonLoading = isButtonLoading;
 		},
 	},
-};
+});
 </script>
 
 <style lang='stylus'>

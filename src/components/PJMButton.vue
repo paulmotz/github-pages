@@ -6,7 +6,9 @@
 </template>
 
 <script lang='ts'>
-export default {
+import Vue from 'vue';
+
+export default Vue.extend({
 	name : 'PJMButton',
 
 	props : {
@@ -32,7 +34,7 @@ export default {
 			this.$emit('clicked');
 		},
 	},
-};
+});
 </script>
 
 <style lang='stylus'>

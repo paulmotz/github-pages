@@ -29,7 +29,7 @@ export default Vue.extend({
 		return {
 			currentlySortedColumn      : '',
 			isCurrentlySortedAscending : true,
-			tableData                  : [],
+			tableData                  : [] as any[],
 		};
 	},
 

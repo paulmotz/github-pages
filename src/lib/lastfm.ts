@@ -51,7 +51,7 @@ const getDate = (date: Date): string => {
 	return `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 };
 
-const getNewestTrackInfo = (tracks: Array<LastFmTracks>): string => {
+const getLastTrackInfo = (tracks: Array<LastFmTracks>): string => {
 	for (const track of tracks) {
 		if (track.date) {
 			return `last updated ${getDate(new Date())} - last track UTS: ${track.date.uts} (${track.name} - ${track.artist['#text']})`;
@@ -71,13 +71,13 @@ const getTracks = async ({ user, from, to }: FetchInfo): Promise<LastFmTrackInfo
 
 	if (fetchedTracks.length === 0) {
 		return {
-			newestTrackInfo : '',
-			scrobbleCounts  : [],
-			totalScrobbles  : 0,
+			lastTrackInfo  : '',
+			scrobbleCounts : [],
+			totalScrobbles : 0,
 		};
 	}
 
-	const newestTrackInfo = getNewestTrackInfo(fetchedTracks);
+	const lastTrackInfo = getLastTrackInfo(fetchedTracks);
 	const scrobbleCounts: Array<ScrobbleCount> = [];
 	let totalScrobbles = 0;
 
@@ -123,10 +123,10 @@ const getTracks = async ({ user, from, to }: FetchInfo): Promise<LastFmTrackInfo
 	// eslint-disable no-console
 	console.table(scrobbleCounts);
 	console.log(totalScrobbles);
-	console.log(newestTrackInfo);
+	console.log(lastTrackInfo);
 
 	return {
-		newestTrackInfo,
+		lastTrackInfo,
 		scrobbleCounts,
 		totalScrobbles,
 	};

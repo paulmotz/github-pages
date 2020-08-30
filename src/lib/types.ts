@@ -46,7 +46,7 @@ export interface ScrobbleCount {
 }
 
 export interface LastFmTrackInfo {
-	newestTrackInfo: string;
+	lastTrackInfo: string;
 	scrobbleCounts: ScrobbleCount[];
 	totalScrobbles: number;
 }

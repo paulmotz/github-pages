@@ -9,7 +9,7 @@ import LastFM from './LastFM/LastFM.vue';
 export default Vue.extend({
 	name : 'HelloWorld',
 
-	compontents : {
+	components : {
 		LastFM,
 	},
 
