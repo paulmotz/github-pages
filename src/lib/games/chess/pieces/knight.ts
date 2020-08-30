@@ -37,14 +37,14 @@ export class Knight extends Piece {
 		}
 		
 		const color: pieceColors = this._color;
-		const file: number = this._file;
 		const rank: number = this._rank;
-		const possibleMoves: number[][] = this.getPossibleMoves(file, rank);
+		const file: number = this._file;
+		const possibleMoves: number[][] = this.getPossibleMoves(rank, file);
 
 		// in addition to not being able to move off the board, a knight can only move to a square that is unoccupied or is occupied by a piece of the opposite color
 		const moves = possibleMoves.filter((square) => {
 			return isSquareOnBoard(square) && 
-				(!occupiedSquares[square[0]][square[1]] || occupiedSquares[square[0]][square[1]].color !== color);
+				(!occupiedSquares[square[0] - 1][square[1] - 1] || occupiedSquares[square[0] - 1][square[1] - 1].color !== color);
 		});
 
 		return moves;

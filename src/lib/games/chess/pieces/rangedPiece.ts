@@ -15,14 +15,14 @@ export class RangedPiece extends Piece {
 	rangedMoves(moveDirections: number[][], occupiedSquares: Piece[][]): number[][] {
 		const moves: number[][] = [];
 
-		const file = this._file;
 		const rank = this._rank;
+		const file = this._file;
 
 		const pinDirection = this.getPinDirection(occupiedSquares);
 
 		if (!pinDirection) {
 			for (const direction of moveDirections) {
-				moves.push(...this.moveOneWay(file, rank, direction[0], direction[1], false, occupiedSquares));
+				moves.push(...this.moveOneWay(rank, file, direction[0], direction[1], false, occupiedSquares));
 			}
 	
 			return moves;
@@ -35,7 +35,7 @@ export class RangedPiece extends Piece {
 		for (const direction of moveDirections) {
 			if ((direction[0] === filePinDirectionIn && direction[0] === rankPinDirectionIn) || 
 			(direction[0] === filePinDirectionOut && direction[0] === rankPinDirectionOut))
-			moves.push(...this.moveOneWay(file, rank, direction[0], direction[1], false, occupiedSquares));
+			moves.push(...this.moveOneWay(rank, file, direction[0], direction[1], false, occupiedSquares));
 		}
 
 		return moves;
@@ -51,13 +51,13 @@ export class RangedPiece extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	moveOneWay(file: number, rank: number, f: number, r: number, isDefending: boolean, occupiedSquares: Piece[][]): number[][] {
+	moveOneWay(rank: number, file: number, r: number, f: number, isDefending: boolean, occupiedSquares: Piece[][]): number[][] {
 		const moves = [];
 		while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 			file += f;
 			rank += r;
-			if (occupiedSquares[rank][file]) {
-				if (isDefending || occupiedSquares[rank][file].color !== this.color) {
+			if (occupiedSquares[rank - 1][file - 1]) {
+				if (isDefending || occupiedSquares[rank - 1][file - 1].color !== this.color) {
 					moves.push([file, rank]);
 				}
 				break;
@@ -77,11 +77,11 @@ export class RangedPiece extends Piece {
 	rangedProtectedSquares(moveDirections: number[][], occupiedSquares: Piece[][]): number[][] {
 		const protectedSquares = [];
 
-		const file = this._file;
 		const rank = this._rank;
+		const file = this._file;
 
 		for (const direction of moveDirections) {
-			protectedSquares.push(...this.moveOneWay(file, rank, direction[0], direction[1], true, occupiedSquares));
+			protectedSquares.push(...this.moveOneWay(rank, file, direction[0], direction[1], true, occupiedSquares));
 		}
 
 		return protectedSquares;

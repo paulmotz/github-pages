@@ -24,8 +24,6 @@ export class Pawn extends Piece {
 		let bishopPinBD = false; // a diagonal pin that is parallel with the large black diagonal (A1-H8)
 		let bishopPinWD = false; // a diagonal pin that is parallel with the large white diagonal (A8-H1)
 
-		const isEnPassantPawn = 'false'; // TODO: implement en passant
-
 		// pawn pin checks work, but I don't think it is very elegant
 		const pD = this.getPinDirection(occupiedSquares);
 		if (pD) {
