@@ -67,9 +67,21 @@ export default Vue.extend({
 				[ false, false, false, false, false, false, false, false ],
 				[ false, false, false, false, false, false, false, false ],
 			],
-			pieces        : pieceStartingPositions,
+			allPieces : {
+				'wB' : [],
+				'wN' : [],
+				'wK' : [],
+				'wP' : [],
+				'wQ' : [],
+				'wR' : [],
+				'bB' : [],
+				'bN' : [],
+				'bK' : [] ,
+				'bP' : [] ,
+				'bQ' : [],
+				'bR' : [],
+			},
 			isInitialized : false,
-			possibleMoves : [],
 			selectedPiece : null,
 			isWhitetoMove : true,
 		};
@@ -111,11 +123,11 @@ export default Vue.extend({
 				const pieceName: string = getPieceName(abbreviation);
 
 				for (const pieceStartingPositionIndex in pieceStartingPositions[piece]) {
-					const [ file, rank ]: number[] = pieceStartingPositions[piece][pieceStartingPositionIndex];
+					const [ rank, file ]: number[] = pieceStartingPositions[piece][pieceStartingPositionIndex];
 
-					const newPiece: allPieceTypes = new pieceConstructors[pieceName]({ color, abbreviation, file, rank, id : pieceStartingPositionIndex});
+					const newPiece: allPieceTypes = new pieceConstructors[pieceName]({ color, abbreviation, rank, file, id : Number(pieceStartingPositionIndex)});
 
-					// allPieces[piece].push(newPiece);
+					this.allPieces[piece].push(newPiece);
 					this.occupiedSquares[rank - 1][file - 1] = newPiece;
 				}
 			}
@@ -153,6 +165,13 @@ export default Vue.extend({
 			piece.rank = rank;
 			piece.file = file;
 
+			const newSquareContents: Piece | null = this.occupiedSquares[rank - 1][file - 1];
+			const isPieceOnNewSquare: boolean = newSquareContents !== null;
+
+			if (isPieceOnNewSquare) {
+				this.capturePiece(newSquareContents);
+			}
+
 			const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
 			newPieceRow[file - 1] = piece;
 			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
@@ -161,6 +180,13 @@ export default Vue.extend({
 			this.resetMoveSquares();
 
 			this.setNextPlayerTurn();
+		},
+
+		capturePiece(piece: Piece): void {
+			const pieceType = `${piece.color[0]}${piece.abbreviation}`;
+			// const pieceToRemove
+			const pieceIndexToCapture = this.allPieces[pieceType].findIndex(p => Number(p.id) === Number(piece.id));
+			this.allPieces[pieceType].splice(pieceIndexToCapture, 1);
 		},
 
 		setMoveSquares(moves: number[][]): void {

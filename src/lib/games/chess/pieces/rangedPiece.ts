@@ -77,8 +77,8 @@ export class RangedPiece extends Piece {
 	rangedProtectedSquares(moveDirections: number[][], occupiedSquares: Piece[][]): number[][] {
 		const protectedSquares = [];
 
-		const rank = this._rank;
-		const file = this._file;
+		const rank = this.rank;
+		const file = this.file;
 
 		for (const direction of moveDirections) {
 			protectedSquares.push(...this.moveOneWay(rank, file, direction[0], direction[1], true, occupiedSquares));
