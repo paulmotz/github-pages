@@ -27,7 +27,7 @@ import Square from '@/components/games/chess/Square.vue';
 import { pieceColors, allPieceTypes, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes } from '@/lib/games/chess/helpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
-import { Piece, Rook, King } from '@/lib/games/chess/pieces';
+import { Piece, Pawn, Rook, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Board',
@@ -53,7 +53,7 @@ export default Vue.extend({
 			allPieces           : {} as {[index: string]: Piece[]},
 			isInitialized       : false,
 			selectedPiece       : null as Piece | null,
-			isWhitetoMove       : true,
+			isWhiteToMove       : true,
 		};
 	},
 
@@ -77,7 +77,7 @@ export default Vue.extend({
 		},
 
 		colorToMoveNext(): pieceColors {
-			return this.isWhitetoMove ? 'white' : 'black';
+			return this.isWhiteToMove ? 'white' : 'black';
 		},
 	},
 
@@ -144,16 +144,27 @@ export default Vue.extend({
 			currentPieceRow[currentPieceFile - 1] = null;
 			this.$set(this.occupiedSquares, currentPieceRank - 1, currentPieceRow);
 
+			// HACK: Change this once board states are kept track of
+			if (piece instanceof Pawn && Math.abs(piece.rank - rank) === 2) {
+				piece.canBeCapturedByEnPassant = true;
+			}
+
 			piece.rank = rank;
 			piece.file = file;
 			if (piece instanceof Rook || piece instanceof King) {
 				piece.hasMoved = true;
 			}
 
-			const newSquareContents: Piece | null = this.occupiedSquares[rank - 1][file - 1];
 
+			const newSquareContents: Piece | null = this.occupiedSquares[rank - 1][file - 1];
 			if (newSquareContents !== null) {
 				this.capturePiece(newSquareContents);
+			}
+
+			const adjacentSquareRank = this.isWhiteToMove ? rank - 2 : rank;
+			const adjacentSquareContents: Piece | null = this.occupiedSquares[adjacentSquareRank][file - 1];
+			if (adjacentSquareContents instanceof Pawn && adjacentSquareContents.canBeCapturedByEnPassant) {
+				this.capturePieceByEnPassant(adjacentSquareContents);
 			}
 
 			const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
@@ -168,9 +179,15 @@ export default Vue.extend({
 
 		capturePiece(piece: Piece): void {
 			const pieceType = `${piece.color[0]}${piece.abbreviation}`;
-			// const pieceToRemove
 			const pieceIndexToCapture = this.allPieces[pieceType].findIndex((p: Piece) => Number(p.id) === Number(piece.id));
 			this.allPieces[pieceType].splice(pieceIndexToCapture, 1);
+		},
+
+		capturePieceByEnPassant(piece: Piece): void {
+			this.capturePiece(piece);
+			const newPieceRow: (Piece | null)[] = this.occupiedSquares[piece.rank - 1].slice(0);
+			newPieceRow[piece.file - 1] = null;
+			this.$set(this.occupiedSquares, piece.rank - 1, newPieceRow);
 		},
 
 		setMoveSquares(moves: number[][]): void {
@@ -188,7 +205,24 @@ export default Vue.extend({
 		},
 
 		setNextPlayerTurn(): void {
-			this.isWhitetoMove = !this.isWhitetoMove;
+			this.resetEnPassant();
+			this.isWhiteToMove = !this.isWhiteToMove;
+		},
+
+		resetEnPassant(): void {
+			if (this.isWhiteToMove) {
+				for (const pawn of this.allPieces.bP) {
+					if (pawn instanceof Pawn) {
+						pawn.canBeCapturedByEnPassant = false;
+					}
+				}
+			} else {
+				for (const pawn of this.allPieces.wP) {
+					if (pawn instanceof Pawn) {
+						pawn.canBeCapturedByEnPassant = false;
+					}
+				}
+			}
 		},
 	},
 });
@@ -222,4 +256,3 @@ export default Vue.extend({
 	text-align: center
 	color: white
 </style>
-

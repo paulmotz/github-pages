@@ -4,10 +4,26 @@ import { isSquareOnBoard } from '../helpers';
 
 export class Pawn extends Piece {
 	_iconName: string;
+	_canBeCapturedByEnPassant: boolean;
 
 	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._iconName = 'chess-pawn';
+		this._canBeCapturedByEnPassant = false;
+	}
+
+	/**
+	 * Get whether the pawn can be captured vy en passant
+	 */
+	get canBeCapturedByEnPassant(): boolean {
+		return this._canBeCapturedByEnPassant;
+	}
+
+	/**
+	 * Keep track of whether the pawn can be captured vy en passant
+	 */
+	set canBeCapturedByEnPassant(canBeCapturedByEnPassant) {
+		this._canBeCapturedByEnPassant = canBeCapturedByEnPassant;
 	}
 
 	/**
@@ -72,15 +88,21 @@ export class Pawn extends Piece {
 				moves.push([rank + 1, file + 1]);
 			}
 
-			// // en passant
-			// if (rank === 5) {
-			// 	if (file - 2 >= 0 && occupiedSquares[rank][file - 2] && occupiedSquares[rank][file - 2].isEnPassantPawn && !rookPin && !bishopPinBD) {
-			// 		moves.push([rank + 1, file - 1]);
-			// 	}
-			// 	if (file + 1 <= 8 && occupiedSquares[rank][file] && occupiedSquares[rank][file].isEnPassantPawn && !rookPin && !bishopPinWD) {
-			// 		moves.push([rank + 1, file + 1]);
-			// 	}
-			// }
+			// en passant
+			if (rank === 5) {
+				if (file - 1 >= 1) {
+					const adjacentSquare = occupiedSquares[rank - 1][file - 2];
+					if (adjacentSquare instanceof Pawn && adjacentSquare.canBeCapturedByEnPassant && !rookPin && !bishopPinBD) {
+						moves.push([rank + 1, file - 1]);
+					}
+				}
+				if (file + 1 <= 8) {
+					const adjacentSquare = occupiedSquares[rank - 1][file];
+					if (adjacentSquare instanceof Pawn && adjacentSquare.canBeCapturedByEnPassant && !rookPin && !bishopPinWD) {
+						moves.push([rank + 1, file + 1]);
+					}
+				}
+			}
 		}
 
 		// black pawns move down the ranks
@@ -105,15 +127,21 @@ export class Pawn extends Piece {
 				moves.push([rank - 1, file + 1]);
 			}
 
-			// // en passant
-			// if (rank === 4) {
-			// 	if (file - 1 >= 1 && occupiedSquares[rank - 1][file - 2] && occupiedSquares[rank - 1][file - 2].isEnPassantPawn && !rookPin && !bishopPinWD) {
-			// 		moves.push([rank - 1, file - 1]);
-			// 	}
-			// 	if (file + 1 <= 8 && occupiedSquares[file - 1][file] && occupiedSquares[file - 1][file].isEnPassantPawn && !rookPin && !bishopPinBD) {
-			// 		moves.push([rank - 1, file + 1]);
-			// 	}
-			// }
+			// en passant
+			if (rank === 4) {
+				if (file - 1 >= 1) {
+					const adjacentSquare = occupiedSquares[rank - 1][file - 2];
+					if (adjacentSquare instanceof Pawn && adjacentSquare.canBeCapturedByEnPassant && !rookPin && !bishopPinWD) {
+						moves.push([rank - 1, file - 1]);
+					}
+				}
+				if (file + 1 <= 8) {
+					const adjacentSquare = occupiedSquares[rank - 1][file];
+					if (adjacentSquare instanceof Pawn && adjacentSquare.canBeCapturedByEnPassant && !rookPin && !bishopPinBD) {
+						moves.push([rank - 1, file + 1]);
+					}
+				}
+			}
 		}
 
 		return moves;
