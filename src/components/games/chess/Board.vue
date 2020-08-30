@@ -125,6 +125,7 @@ export default Vue.extend({
 		handleSquareClick({ piece, rank, file }: SquareClickedEvent): void {
 			if (this.selectedPiece !== null && this.possibleMoveSquares[rank - 1][file - 1]) {
 				this.movePiece({ piece : this.selectedPiece, rank, file });
+				return;
 			}
 			this.resetMoveSquares();
 
@@ -155,6 +156,9 @@ export default Vue.extend({
 			const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
 			newPieceRow[file - 1] = piece;
 			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+
+			this.selectedPiece = null;
+			this.resetMoveSquares();
 
 			this.setNextPlayerTurn();
 		},
