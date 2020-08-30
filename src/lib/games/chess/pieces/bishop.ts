@@ -1,4 +1,5 @@
 import { PieceProps} from '@/lib/types';
+import { Piece } from './piece';
 import { RangedPiece } from './rangedPiece';
 
 export class Bishop extends RangedPiece {
@@ -21,7 +22,7 @@ export class Bishop extends RangedPiece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: string[][]): number[][] {
+	moves(occupiedSquares: Piece[][]): number[][] {
 		return this.rangedMoves(this._bishopDirections, occupiedSquares);
 	}
 
@@ -30,7 +31,7 @@ export class Bishop extends RangedPiece {
 	 * @param occupiedSquares - the squares that are currently occupied, array entries are piece names (eg wP3)
 	 * @return protectedSquares - the squares that the Bishop protects as an array of co-ordinates (also an array)
 	 */
-	protectedSquares(occupiedSquares: string[][]): number[][] {
+	protectedSquares(occupiedSquares: Piece[][]): number[][] {
 		return this.rangedProtectedSquares(this._bishopDirections, occupiedSquares);
 	}
 }

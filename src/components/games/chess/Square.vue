@@ -2,7 +2,8 @@
 	.square(
 		v-bind:class="classObject"
 		v-on:click="clickPiece")
-		font-awesome-icon(
+		.hollow-circle
+		//- font-awesome-icon.fa-icon(
 			v-if="iconName !== ''"
 			v-bind:color="pieceColor"
 			v-bind:icon="iconName")
@@ -73,6 +74,11 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='stylus'>
 @import '../../../assets/variables.styl'
+.sqaure
+	display: flex
+	justify-content: center
+	align-content: center
+	padding: 10%
 
 .dark-square
 	background-color: $board-dark-square
@@ -82,5 +88,44 @@ export default Vue.extend({
 
 .highlighted
 	background-color: blue
+
+.hollow-circle::after
+	// display: inline-block
+	
+	// display: inline-block
+	// width: 50px
+	// height: 50px
+	// border-radius: 50%
+	// border-style: solid
+	// border-width: 2px
+	// border-color: blue
+	// background-color: rgba(0, 0, 0, 0)
+	// position: absolute
+	// top:0
+	// left:0
+	// pointer-events:none
+
+	// position: relative
+	// left: 0
+	// top: 0
+	// width: 30px;
+	// height: 30px;
+	width: 80%
+	height: 80%
+	background-color: transparent
+	border-radius: 50%
+	// display: inline-flex
+	// margin: auto auto
+
+	/* Use this */
+	border-color: black
+	border-width: 1px
+	border-style: solid
+
+.fa-icon
+	position: absolute
+	// top: 10px
+	// left: 10px
+	z-index: 2
 </style>
 

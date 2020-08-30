@@ -12,7 +12,7 @@ export class RangedPiece extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	rangedMoves(moveDirections: number[][], occupiedSquares: string[][]): number[][] {
+	rangedMoves(moveDirections: number[][], occupiedSquares: Piece[][]): number[][] {
 		const moves: number[][] = [];
 
 		const file = this._file;
@@ -51,13 +51,13 @@ export class RangedPiece extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	moveOneWay(file: number, rank: number, f: number, r: number, isDefending: boolean, occupiedSquares: string[][]): number[][] {
+	moveOneWay(file: number, rank: number, f: number, r: number, isDefending: boolean, occupiedSquares: Piece[][]): number[][] {
 		const moves = [];
 		while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 			file += f;
 			rank += r;
 			if (occupiedSquares[rank][file]) {
-				if (isDefending || occupiedSquares[rank][file] !== this.color) {
+				if (isDefending || occupiedSquares[rank][file].color !== this.color) {
 					moves.push([file, rank]);
 				}
 				break;
@@ -74,7 +74,7 @@ export class RangedPiece extends Piece {
 	 * @param occupiedSquares - the squares that are currently occupied, array entries are piece names (eg wP3)
 	 * @return protectedSquares - the squares that the piece protects as an array of co-ordinates (also an array)
 	 */
-	rangedProtectedSquares(moveDirections: number[][], occupiedSquares: string[][]): number[][] {
+	rangedProtectedSquares(moveDirections: number[][], occupiedSquares: Piece[][]): number[][] {
 		const protectedSquares = [];
 
 		const file = this._file;
