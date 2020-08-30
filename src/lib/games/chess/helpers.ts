@@ -1,4 +1,4 @@
-import { pieceColors, AllPieces, PieceMapping, PieceStartingPositions, colorAndPiece} from '@/lib/types';
+import { PieceColor, AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece} from '@/lib/types';
 
 /**
  *
@@ -15,11 +15,11 @@ export const isSquareOnBoard = (square: number[]): boolean =>  {
  * @param color - the player's color
  * @return - the opposite color
  */
-export const getOtherColor = (color: pieceColors): pieceColors => {
+export const getOtherColor = (color: PieceColor): PieceColor => {
 	return color === 'white' ? 'black' : 'white';
 };
 
-export const abbreviationToColor: { [name: string]: pieceColors } = {
+export const abbreviationToColor: { [name: string]: PieceColor } = {
 	b : 'black',
 	w : 'white',
 };
@@ -29,7 +29,7 @@ export const abbreviationToColor: { [name: string]: pieceColors } = {
  * @param abbreviation - the player's color
  * @return - the opposite color
  */
-export const getPieceColor = (abbreviation: string): pieceColors => {
+export const getPieceColor = (abbreviation: string): PieceColor => {
 	return abbreviationToColor[abbreviation[0]];
 };
 
@@ -77,6 +77,6 @@ export const pieceStartingPositions: PieceStartingPositions = {
 	'bR' : [ [8, 1], [8, 8] ],
 };
 
-export const pieceTypes: colorAndPiece[] = [ 
+export const pieceTypes: ColorAndPiece[] = [ 
 	'wB', 'wN', 'wK', 'wP', 'wQ', 'wR', 'bB', 'bN', 'bK', 'bP', 'bQ', 'bR',
 ];

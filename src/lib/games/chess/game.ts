@@ -1,5 +1,5 @@
 // import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
-// import { AllPieces, PieceStartingPositions, pieceColors, allPieceTypes } from '@/lib/types';
+// import { AllPieces, PieceStartingPositions, PieceColor, PieceType } from '@/lib/types';
 // import { getPieceColor, getPieceName, pieceConstructors } from './helpers';
 
 // export const allPieces: AllPieces = {
@@ -61,14 +61,14 @@
 // 	private getInitalPiecesState = () => {
 // 		for (const piece in pieceStartingPositions) {
 // 			allPieces[piece] = []; 
-// 			const color: pieceColors = getPieceColor(piece);
+// 			const color: PieceColor = getPieceColor(piece);
 // 			const abbreviation: string = piece[1];
 // 			const pieceName: string = getPieceName(abbreviation);
 
 // 			for (const pieceStartingPositionIndex in pieceStartingPositions[piece]) {
 // 				const [ file, rank ]: number[] = pieceStartingPositions[piece][pieceStartingPositionIndex];
 
-// 				const newPiece: allPieceTypes = new pieceConstructors[pieceName]({ color, abbreviation, file, rank, id : pieceStartingPositionIndex});
+// 				const newPiece: PieceType = new pieceConstructors[pieceName]({ color, abbreviation, file, rank, id : pieceStartingPositionIndex});
 
 // 				allPieces[piece].push(newPiece);
 // 				occupiedSquares[rank - 1][file - 1] = newPiece;

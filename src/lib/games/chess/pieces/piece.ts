@@ -1,8 +1,8 @@
-import { pieceAbbreviations, pieceColors, PieceProps, AttackedSquares, AllPieces } from '@/lib/types';
+import { PieceAbbreviation, PieceColor, PieceProps, AttackedSquares, AllPieces } from '@/lib/types';
 
 export abstract class Piece {
-	_color: pieceColors;
-	_abbreviation: pieceAbbreviations;
+	_color: PieceColor;
+	_abbreviation: PieceAbbreviation;
 	_file: number;
 	_rank: number;
 	_id: number;
@@ -29,7 +29,7 @@ export abstract class Piece {
 	 * Get the piece's color
 	 * @return color - The color of the piece: white || black
 	 */
-	get color(): pieceColors {
+	get color(): PieceColor {
 		return this._color;
 	}
 
@@ -37,7 +37,7 @@ export abstract class Piece {
 	 * Set the piece's color
 	 * @param color - The color of the piece: white || black
 	 */
-	set color(color: pieceColors) {
+	set color(color: PieceColor) {
 		if (color === 'white' || color === 'black') {
 			this._color = color;
 		}
@@ -108,7 +108,7 @@ export abstract class Piece {
 	 * Set the piece's abbreviation
 	 * @param abbreviation - The abbreviation of the piece: B, N, K, P, Q or R
 	 */
-	set abbreviation(abbreviation: pieceAbbreviations) {
+	set abbreviation(abbreviation: PieceAbbreviation) {
 		this._abbreviation = abbreviation;
 	}
 
@@ -116,7 +116,7 @@ export abstract class Piece {
 	 * Get the piece's abbreviation
 	 * @return The abbreviation of the piece: B, N, K, P, Q or R
 	 */
-	get abbreviation(): pieceAbbreviations {
+	get abbreviation(): PieceAbbreviation {
 		return this._abbreviation;
 	}
 

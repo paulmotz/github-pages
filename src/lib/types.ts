@@ -52,19 +52,19 @@ export interface LastFmTrackInfo {
 }
 
 export interface PieceProps {
-	color: pieceColors;
-	abbreviation: pieceAbbreviations;
+	color: PieceColor;
+	abbreviation: PieceAbbreviation;
 	file: number;
 	rank: number;
 	id: number;
 	hasMoved?    : boolean;
 }
 
-export type pieceAbbreviations = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
+export type PieceAbbreviation = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
 
-export type colorAndPiece = 'wB' | 'wN' | 'wK' | 'wP' | 'wQ' | 'wR' | 'bB' | 'bN' | 'bK' | 'bP' | 'bQ' | 'bR';
+export type ColorAndPiece = 'wB' | 'wN' | 'wK' | 'wP' | 'wQ' | 'wR' | 'bB' | 'bN' | 'bK' | 'bP' | 'bQ' | 'bR';
 
-export type pieceColors = 'white' | 'black';
+export type PieceColor = 'white' | 'black';
 
 export interface AttackedSquares {
 	[key: string]: Set<number[]>;
@@ -83,7 +83,7 @@ export interface PieceMapping {
 	// [key: string] : Pawn | Knight | Bishop | Rook | Queen | King,
 }
 
-export type allPieceTypes = Pawn | Knight | Bishop | Rook | Queen | King;
+export type PieceType = Pawn | Knight | Bishop | Rook | Queen | King;
 
 export interface SquareClickedEvent {
 	square: Piece | null;

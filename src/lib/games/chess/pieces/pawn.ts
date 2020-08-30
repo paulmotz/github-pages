@@ -1,5 +1,5 @@
 import { Piece } from './piece';
-import { pieceColors, PieceProps } from '@/lib/types';
+import { PieceColor, PieceProps } from '@/lib/types';
 import { isSquareOnBoard } from '../helpers';
 
 export class Pawn extends Piece {
@@ -32,7 +32,7 @@ export class Pawn extends Piece {
 	 * @return moves - the squares to which the Pawn can move as an array of co-ordinates (also an array)
 	 */
 	moves(occupiedSquares: Piece[][]): number[][] {
-		const color: pieceColors = this.color;
+		const color: PieceColor = this.color;
 		const file: number = this._file;
 		const rank: number = this._rank;
 		const moves: number[][] = [];

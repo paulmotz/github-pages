@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
-import { pieceColors, allPieceTypes, SquareClickedEvent, PieceMove } from '@/lib/types';
+import { PieceColor, PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes } from '@/lib/games/chess/helpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
 import { Piece, Pawn, Rook, King } from '@/lib/games/chess/pieces';
@@ -76,7 +76,7 @@ export default Vue.extend({
 			});
 		},
 
-		colorToMoveNext(): pieceColors {
+		colorToMoveNext(): PieceColor {
 			return this.isWhiteToMove ? 'white' : 'black';
 		},
 	},
@@ -100,14 +100,14 @@ export default Vue.extend({
 			this.setEmptyStates();
 
 			for (const piece in pieceStartingPositions) {
-				const color: pieceColors = getPieceColor(piece);
+				const color: PieceColor = getPieceColor(piece);
 				const abbreviation: string = piece[1];
 				const pieceName: string = getPieceName(abbreviation);
 
 				for (const pieceStartingPositionIndex in pieceStartingPositions[piece]) {
 					const [ rank, file ]: number[] = pieceStartingPositions[piece][pieceStartingPositionIndex];
 
-					const newPiece: allPieceTypes = new pieceConstructors[pieceName]({ color, abbreviation, rank, file, id : Number(pieceStartingPositionIndex)});
+					const newPiece: PieceType = new pieceConstructors[pieceName]({ color, abbreviation, rank, file, id : Number(pieceStartingPositionIndex)});
 
 					this.allPieces[piece].push(newPiece);
 					this.occupiedSquares[rank - 1][file - 1] = newPiece;
