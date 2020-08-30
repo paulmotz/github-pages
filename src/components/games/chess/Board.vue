@@ -11,7 +11,9 @@
 				v-bind:fileIndex="fileIndex + 1"
 				v-bind:rankIndex="rank"
 				v-bind:isWhiteDown="isWhite"
-				v-bind:piece="occupiedSquares[isWhite ? 7 - rankIndex : rankIndex][isWhite ? fileIndex : 7 - fileIndex]")
+				v-bind:piece="occupiedSquares[isWhite ? 7 - rankIndex : rankIndex][isWhite ? fileIndex : 7 - fileIndex]"
+				v-bind:isHighlighted="possibleMoveSquares[isWhite ? 7 - rankIndex : rankIndex][isWhite ? fileIndex : 7 - fileIndex]"
+				v-on:square-clicked="handleSquareClick")
 			.border-cell {{ rank }}
 		.border-row
 			.border-cell
@@ -25,6 +27,7 @@ import Square from '@/components/games/chess/Square.vue';
 import { pieceColors, allPieceTypes } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions } from '@/lib/games/chess/helpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
+import { Piece } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Board',
@@ -54,8 +57,19 @@ export default Vue.extend({
 				[ null, null, null, null, null, null, null, null ],
 				[ null, null, null, null, null, null, null, null ],
 			],
+			possibleMoveSquares : [
+				[ false, false, false, false, false, false, false, false ],
+				[ false, false, false, false, false, false, false, false ],
+				[ false, false, false, false, false, false, false, false ],
+				[ false, false, false, false, false, false, false, false ],
+				[ false, false, false, false, false, false, false, false ],
+				[ false, false, false, false, false, false, false, false ],
+				[ false, false, false, false, false, false, false, false ],
+				[ false, false, false, false, false, false, false, false ],
+			],
 			pieces        : pieceStartingPositions,
 			isInitialized : false,
+			possibleMoves : [],
 		};
 	},
 
@@ -100,6 +114,34 @@ export default Vue.extend({
 				}
 			}
 			this.isInitialized = true;
+		},
+
+		handleSquareClick(squareContent: Piece | null): void {
+			this.resetMoveSquares();
+
+			if (squareContent === null) {
+				return;
+			}
+
+			const moves: number[][] = squareContent.moves(this.occupiedSquares);
+
+			if (moves.length) {
+				this.setMoveSquares(moves);
+			}
+		},
+
+		setMoveSquares(moves: number[][]): void {
+			for (const move of moves) {
+				const newRow: boolean[] = this.possibleMoveSquares[move[0] - 1].slice(0);
+				newRow[move[1] - 1] = true;
+				this.$set(this.possibleMoveSquares, move[0] - 1, newRow);
+			}
+		},
+
+		resetMoveSquares(): void {
+			for (const row in this.possibleMoveSquares) {
+				this.$set(this.possibleMoveSquares, row, new Array(8).fill(false));
+			}
 		},
 	},
 });

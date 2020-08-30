@@ -15,7 +15,7 @@ export class Pawn extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the squares to which the Pawn can move as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: string[][]): number[][] {
+	moves(occupiedSquares: Piece[][]): number[][] {
 		const color: pieceColors = this.color;
 		const file: number = this._file;
 		const rank: number = this._rank;
@@ -52,27 +52,30 @@ export class Pawn extends Piece {
 			}
 		}
 
-		
 		// white pawns move up the ranks
 		if (color === 'white') {
-			if (!occupiedSquares[file][rank + 1] && !bishopPinBD && !bishopPinWD) {
-				moves.push([file, rank + 1]);
+			if (!occupiedSquares[rank][file - 1] && !bishopPinBD && !bishopPinWD) {
+				moves.push([rank + 1, file]);
 
 				// a white pawn has not moved if it is on the 2nd rank
 				// this has to be nested since if the square one rank above is blocked, the pawn cannot move two squares
 				if (rank === 2) {
-					if (!occupiedSquares[file][rank + 2]) {
-						moves.push([file, rank + 2]);
+					if (!occupiedSquares[rank + 1][file - 1]) {
+						moves.push([rank + 2, file]);
 					}
 				}
 			}	
 
 			// normal capturing
-			if (file - 1 >= 1 && occupiedSquares[file - 1][rank + 1]&& occupiedSquares[file - 1][rank + 1][0] !== color && !rookPin && !bishopPinBD) {
-				moves.push([file - 1, rank + 1]);
+			if (file - 1 >= 1 && occupiedSquares[rank][file - 2] && occupiedSquares[rank][file - 2].color !== color && !rookPin && !bishopPinBD) {
+				console.log(1);
+				console.log(occupiedSquares);
+				moves.push([rank + 1, file - 1]);
 			}
-			if (file + 1 <= 8 && occupiedSquares[file + 1][rank + 1] && occupiedSquares[file + 1][rank + 1][0] !== color && !rookPin && !bishopPinWD) {
-				moves.push([file + 1, rank + 1]);
+			if (file + 1 <= 8 && occupiedSquares[rank][file] && occupiedSquares[rank][file].color !== color && !rookPin && !bishopPinWD) {
+				console.log(2);
+				console.log(occupiedSquares);
+				moves.push([rank + 1, file + 1]);
 			}
 
 			// en passant
@@ -89,24 +92,24 @@ export class Pawn extends Piece {
 
 		// black pawns move down the ranks
 		else {
-			if (!occupiedSquares[file][rank - 1] && !bishopPinBD && !bishopPinWD) {
-				moves.push([file, rank - 1]);
+			if (!occupiedSquares[rank - 2][file - 1] && !bishopPinBD && !bishopPinWD) {
+				moves.push([rank - 1, file]);
 
 				// a black pawn has not moved if it is on the 7th rank
 				// this has to be nested since if the square one rank below is blocked, the pawn cannot move two squares
 				if (rank === 7) {
-					if (!occupiedSquares[file][rank - 2]) {
-						moves.push([file, rank - 2]);
+					if (!occupiedSquares[rank - 3][file - 1]) {
+						moves.push([rank - 2, file]);
 					}
 				}
 			}	
 
 			// normal capturing
-			if (file - 1 >= 1 && occupiedSquares[file - 1][rank - 1] && occupiedSquares[file - 1][rank - 1][0] !== color && !rookPin && !bishopPinWD) {
-				moves.push([file - 1, rank - 1]);
+			if (file - 1 >= 1 && occupiedSquares[rank - 2][file - 2] && occupiedSquares[rank - 2][file - 2].color !== color && !rookPin && !bishopPinWD) {
+				moves.push([rank - 1, file - 1]);
 			}
-			if (file + 1 <= 8 && occupiedSquares[file + 1][rank - 1] && occupiedSquares[file + 1][rank - 1][0] !== color && !rookPin && !bishopPinBD) {
-				moves.push([file + 1, rank - 1]);
+			if (file + 1 <= 8 && occupiedSquares[rank - 2][file] && occupiedSquares[rank - 2][file].color !== color && !rookPin && !bishopPinBD) {
+				moves.push([rank - 2, file + 1]);
 			}
 
 			// en passant

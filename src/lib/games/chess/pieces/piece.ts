@@ -44,14 +44,6 @@ export class Piece {
 	}
 
 	/**
-	 * Get the piece's abbreviation
-	 * @return The abbreviation of the piece: B, N, K, P, Q or R
-	 */
-	get abbr(): pieceAbbreviations {
-		return this._abbreviation;
-	}
-
-	/**
 	 * Get the piece's file
 	 * @return  file - The file of the piece: 1 - 8
 	 */
@@ -120,17 +112,26 @@ export class Piece {
 		this._abbreviation = abbreviation;
 	}
 
+	/**
+	 * Get the piece's abbreviation
+	 * @return The abbreviation of the piece: B, N, K, P, Q or R
+	 */
+	get abbreviation(): pieceAbbreviations {
+		return this._abbreviation;
+	}
 
 	/**
 	 * Returns the direction of the king from the piece. Used for checking for pinned pieces
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return kingDirection - the direction of the king from the piece, null if another piece is in the way
 	 */
-	getKingDirection(occupiedSquares: string[][]): number[] | null {
+	getKingDirection(occupiedSquares: Piece[][]): number[] | null {
 		let file = this.file;
 		let rank = this.rank;
-		const piece = occupiedSquares[file][rank];
-		const pieceType = piece[1];
+		const piece: Piece = occupiedSquares[rank - 1][file - 1];
+		const pieceType = piece.abbreviation;
+		// console.log(piece);
+		// console.log(pieceType);
 		if (pieceType === 'K') {
 			return null; // TODO: maybe this should be a special value
 		}
@@ -145,8 +146,8 @@ export class Piece {
 			while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 				file += f;
 				rank += r;
-				if (occupiedSquares[file][rank]) {
-					if (occupiedSquares[file][rank][0] === this.color && occupiedSquares[file][rank][1] === 'K') {
+				if (occupiedSquares[rank - 1][file - 1]) {
+					if (occupiedSquares[rank - 1][file - 1].color === this.color && occupiedSquares[rank - 1][file - 1].abbreviation === 'K') {
 						return currDir;
 					} 
 					else {
@@ -165,7 +166,7 @@ export class Piece {
 	 * Checks to see if a piece is pinned and if so gets the direction of the pin
 	 * @return pinDirection - the direciton of the pin (ie the direction which the piece may be able to move), null if no pin
 	 */
-	getPinDirection(occupiedSquares: string[][]): number[] | undefined {
+	getPinDirection(occupiedSquares: Piece[][]): number[] | undefined {
 		const kd = this.getKingDirection(occupiedSquares);
 		if (!kd) return;
 		else {
@@ -179,9 +180,9 @@ export class Piece {
 				while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 					file += f;
 					rank += r;
-					const inlinePiece = occupiedSquares[file][rank];
+					const inlinePiece: Piece = occupiedSquares[rank - 1][file - 1];
 					if (inlinePiece) {
-						if (inlinePiece[0] !== this.color && (inlinePiece[1] === 'B' || inlinePiece[1] === 'Q')) {
+						if (inlinePiece.color !== this.color && (inlinePiece.abbreviation === 'B' || inlinePiece.abbreviation === 'Q')) {
 							return [f, r];
 						} 
 						else {
@@ -196,9 +197,9 @@ export class Piece {
 				while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 					file += f;
 					rank += r;
-					const inlinePiece = occupiedSquares[file][rank];
+					const inlinePiece: Piece = occupiedSquares[rank - 1][file - 1];
 					if (inlinePiece) {
-						if (inlinePiece[0] !== this.color && (inlinePiece[1] === 'R' || inlinePiece[1] === 'Q')) {
+						if (inlinePiece.color !== this.color && (inlinePiece.abbreviation === 'R' || inlinePiece.abbreviation === 'Q')) {
 							return [f, r];
 						} 
 						else {

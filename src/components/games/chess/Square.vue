@@ -1,5 +1,7 @@
 <template lang='pug'>
-	.square(v-bind:class="{'dark-square' : !isLightSquare, 'light-square' : isLightSquare }")
+	.square(
+		v-bind:class="classObject"
+		v-on:click="clickPiece")
 		font-awesome-icon(
 			v-if="iconName !== ''"
 			v-bind:color="pieceColor"
@@ -31,6 +33,10 @@ export default Vue.extend({
 			type    : Piece,
 			default : null,
 		},
+		isHighlighted : {
+			type    : Boolean,
+			default : true,
+		},
 	},
 
 	computed : {
@@ -45,6 +51,21 @@ export default Vue.extend({
 		isLightSquare(): boolean {
 			return ( this.fileIndex + this.rankIndex ) % 2 === (this.isWhiteDown ? 1 : 0);
 		},
+
+		classObject(): Record<string, boolean> {
+			return {
+				'dark-square'  : !this.isLightSquare,
+				'light-square' : this.isLightSquare,
+				'highlighted'  : this.isHighlighted,
+			};
+		},
+	},
+
+
+	methods : {
+		clickPiece(): void {
+			this.$emit('square-clicked', this.piece);
+		},
 	},
 });
 </script>
@@ -58,5 +79,8 @@ export default Vue.extend({
 
 .light-square
 	background-color: $board-light-square
+
+.highlighted
+	background-color: blue
 </style>
 
