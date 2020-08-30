@@ -91,6 +91,12 @@ export interface SquareClickedEvent {
 	file: number;
 }
 
+export interface MoveParams {
+	occupiedSquares: (Piece | null)[][];
+	attackedSquares?: AttackedSquares;
+	allPieces?: AllPieces;
+}
+
 export interface PieceMove {
 	piece: Piece;
 	rank: number;
@@ -100,4 +106,8 @@ export interface PieceMove {
 export interface SquareLocation {
 	rank: number;
 	file: number;
+}
+
+export interface PiecesByType {
+	[index: string]: Piece[];
 }

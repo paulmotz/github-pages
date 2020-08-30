@@ -1,4 +1,4 @@
-import { PieceAbbreviation, PieceColor, PieceProps, AttackedSquares, AllPieces } from '@/lib/types';
+import { PieceAbbreviation, PieceColor, PieceProps, MoveParams } from '@/lib/types';
 
 export abstract class Piece {
 	_color: PieceColor;
@@ -120,19 +120,26 @@ export abstract class Piece {
 		return this._abbreviation;
 	}
 
-	abstract moves(occupiedSquares: (Piece | null)[][], attackedSquares?: AttackedSquares, allPieces?: AllPieces): number[][]
+	abstract moves( {
+		occupiedSquares,
+		attackedSquares, 
+		allPieces,
+	}: MoveParams): number[][];
 
-	abstract protectedSquares(occupiedSquares?: (Piece | null)[][]): number[][]
+	abstract protectedSquares(occupiedSquares?: (Piece | null)[][]): number[][];
 
 	/**
 	 * Returns the direction of the king from the piece. Used for checking for pinned pieces
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return kingDirection - the direction of the king from the piece, null if another piece is in the way
 	 */
-	getKingDirection(occupiedSquares: Piece[][]): number[] | null {
+	getKingDirection(occupiedSquares: (Piece | null)[][]): number[] | null {
 		let rank = this.rank;
 		let file = this.file;
-		const piece: Piece = occupiedSquares[rank - 1][file - 1];
+		const piece: Piece | null = occupiedSquares[rank - 1][file - 1];
+		if (piece === null) {
+			return null;
+		}
 		const pieceType = piece.abbreviation;
 		if (pieceType === 'K') {
 			return null; // TODO: maybe this should be a special value
@@ -148,8 +155,9 @@ export abstract class Piece {
 			while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 				file += f;
 				rank += r;
-				if (occupiedSquares[rank - 1][file - 1]) {
-					if (occupiedSquares[rank - 1][file - 1].color === this.color && occupiedSquares[rank - 1][file - 1].abbreviation === 'K') {
+				const squareContent: Piece | null = occupiedSquares[rank - 1][file - 1];
+				if (squareContent instanceof Piece) {
+					if (squareContent.color === this.color && squareContent.abbreviation === 'K') {
 						return currDir;
 					} 
 					else {
@@ -168,7 +176,7 @@ export abstract class Piece {
 	 * Checks to see if a piece is pinned and if so gets the direction of the pin
 	 * @return pinDirection - the direciton of the pin (ie the direction which the piece may be able to move), null if no pin
 	 */
-	getPinDirection(occupiedSquares: Piece[][]): number[] | undefined {
+	getPinDirection(occupiedSquares: (Piece | null)[][]): number[] | undefined {
 		const kd = this.getKingDirection(occupiedSquares);
 		if (!kd) return;
 		else {
@@ -182,8 +190,8 @@ export abstract class Piece {
 				while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 					file += f;
 					rank += r;
-					const inlinePiece: Piece = occupiedSquares[rank - 1][file - 1];
-					if (inlinePiece) {
+					const inlinePiece: Piece | null = occupiedSquares[rank - 1][file - 1];
+					if (inlinePiece instanceof Piece) {
 						if (inlinePiece.color !== this.color && (inlinePiece.abbreviation === 'B' || inlinePiece.abbreviation === 'Q')) {
 							return [f, r];
 						} 
@@ -199,8 +207,8 @@ export abstract class Piece {
 				while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 					file += f;
 					rank += r;
-					const inlinePiece: Piece = occupiedSquares[rank - 1][file - 1];
-					if (inlinePiece) {
+					const inlinePiece: Piece | null = occupiedSquares[rank - 1][file - 1];
+					if (inlinePiece instanceof Piece) {
 						if (inlinePiece.color !== this.color && (inlinePiece.abbreviation === 'R' || inlinePiece.abbreviation === 'Q')) {
 							return [f, r];
 						} 

@@ -1,5 +1,5 @@
 import { Piece } from './piece';
-import { PieceColor, PieceProps } from '@/lib/types';
+import { PieceColor, PieceProps, MoveParams } from '@/lib/types';
 import { isSquareOnBoard } from '../helpers';
 
 export class Pawn extends Piece {
@@ -31,7 +31,7 @@ export class Pawn extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the squares to which the Pawn can move as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: Piece[][]): number[][] {
+	moves({ occupiedSquares }: MoveParams): number[][] {
 		const color: PieceColor = this.color;
 		const file: number = this._file;
 		const rank: number = this._rank;
@@ -81,10 +81,12 @@ export class Pawn extends Piece {
 			}	
 
 			// normal capturing
-			if (file - 1 >= 1 && occupiedSquares[rank][file - 2] && occupiedSquares[rank][file - 2].color !== color && !rookPin && !bishopPinBD) {
+			const captureSquareLeft = occupiedSquares[rank][file - 2];
+			if (file - 1 >= 1 && captureSquareLeft instanceof Piece && captureSquareLeft.color !== color && !rookPin && !bishopPinBD) {
 				moves.push([rank + 1, file - 1]);
 			}
-			if (file + 1 <= 8 && occupiedSquares[rank][file] && occupiedSquares[rank][file].color !== color && !rookPin && !bishopPinWD) {
+			const captureSquareRight = occupiedSquares[rank][file];
+			if (file + 1 <= 8 && captureSquareRight instanceof Piece && captureSquareRight.color !== color && !rookPin && !bishopPinWD) {
 				moves.push([rank + 1, file + 1]);
 			}
 
@@ -120,10 +122,12 @@ export class Pawn extends Piece {
 			}	
 
 			// normal capturing
-			if (file - 1 >= 1 && occupiedSquares[rank - 2][file - 2] && occupiedSquares[rank - 2][file - 2].color !== color && !rookPin && !bishopPinWD) {
+			const captureSquareLeft = occupiedSquares[rank - 2][file - 2];
+			if (file - 1 >= 1 && captureSquareLeft instanceof Piece && captureSquareLeft.color !== color && !rookPin && !bishopPinWD) {
 				moves.push([rank - 1, file - 1]);
 			}
-			if (file + 1 <= 8 && occupiedSquares[rank - 2][file] && occupiedSquares[rank - 2][file].color !== color && !rookPin && !bishopPinBD) {
+			const captureSquareRight = occupiedSquares[rank - 2][file];
+			if (file + 1 <= 8 && captureSquareRight instanceof Piece && captureSquareRight.color !== color && !rookPin && !bishopPinBD) {
 				moves.push([rank - 1, file + 1]);
 			}
 

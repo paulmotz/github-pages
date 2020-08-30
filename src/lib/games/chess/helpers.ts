@@ -58,9 +58,9 @@ export const getPieceName = (abbreviation: string): string => {
  * @param id - the piece's id
  * @return index 
  */
-export function findPieceIndex(allPieces: AllPieces, piece: string, id: number): number {
+export const findPieceIndex = (allPieces: AllPieces, piece: string, id: number): number => {
 	return allPieces[piece].findIndex(piece => Number(piece.id) === Number(id));
-}
+};
 
 export const pieceStartingPositions: PieceStartingPositions = {
 	'wB' : [ [1, 3], [1, 6] ],
@@ -77,6 +77,6 @@ export const pieceStartingPositions: PieceStartingPositions = {
 	'bR' : [ [8, 1], [8, 8] ],
 };
 
-export const pieceTypes: ColorAndPiece[] = [ 
+export const pieceTypes: ColorAndPiece[] = [
 	'wB', 'wN', 'wK', 'wP', 'wQ', 'wR', 'bB', 'bN', 'bK', 'bP', 'bQ', 'bR',
 ];

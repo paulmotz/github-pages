@@ -1,4 +1,4 @@
-import { PieceProps} from '@/lib/types';
+import { PieceProps, MoveParams } from '@/lib/types';
 import { Piece } from './piece';
 import { RangedPiece } from './rangedPiece';
 
@@ -26,7 +26,7 @@ export class Queen extends RangedPiece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: Piece[][]): number[][] {
+	moves({ occupiedSquares }: MoveParams): number[][] {
 		return this.rangedMoves(this._queenDirections, occupiedSquares);
 	}
 
@@ -35,7 +35,7 @@ export class Queen extends RangedPiece {
 	 * @param occupiedSquares - the squares that are currently occupied, array entries are piece names (eg wP3)
 	 * @return {protectedSquares - the squares that the Queen protects as an array of co-ordinates (also an array)
 	 */
-	protectedSquares(occupiedSquares: Piece[][]): number[][] {
+	protectedSquares(occupiedSquares: (Piece | null)[][]): number[][] {
 		return this.rangedProtectedSquares(this._queenDirections, occupiedSquares);
 	}
 }

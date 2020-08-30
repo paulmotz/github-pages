@@ -1,5 +1,5 @@
 import { Piece, Rook } from '@/lib/games/chess/pieces';
-import { PieceColor, AttackedSquares, AllPieces, PieceProps } from '@/lib/types';
+import { PieceColor, AttackedSquares, AllPieces, PieceProps, MoveParams } from '@/lib/types';
 import { isSquareOnBoard, findPieceIndex, getOtherColor } from '@/lib/games/chess/helpers';
 
 export class King extends Piece {
@@ -46,9 +46,19 @@ export class King extends Piece {
 	/**
 	 * Get the King's moves
 	 * @param occupiedSquares - the currently occupied squares
+	 * @param attackedSquares - the squares the opponent is attacking
+	 * @param allPieces - all pieces on the board
 	 * @return moves - the moves of the King as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: (Piece | null)[][], attackedSquares: AttackedSquares, allPieces: AllPieces): number[][] {
+	moves({
+		occupiedSquares,
+		attackedSquares,
+		allPieces,
+	}: MoveParams): number[][] {
+		if (!attackedSquares || !allPieces) {
+			return [];
+		}
+
 		const color: PieceColor = this._color;
 		const opponentColor: PieceColor = getOtherColor(color);
 		const file: number = this._file;

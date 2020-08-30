@@ -1,6 +1,6 @@
 import { Piece } from './piece';
 import { isSquareOnBoard } from '../helpers';
-import { PieceColor, PieceProps } from '@/lib/types';
+import { PieceColor, PieceProps, MoveParams } from '@/lib/types';
 
 export class Knight extends Piece {
 	_iconName: string;
@@ -30,7 +30,7 @@ export class Knight extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the Knight as an array of co-ordinates (also an array)
 	 */
-	moves(occupiedSquares: Piece[][]): number[][] {
+	moves({ occupiedSquares }: MoveParams): number[][] {
 		// pinned knights cannot move
 		if (this.getPinDirection(occupiedSquares)) {
 			return [];
@@ -43,8 +43,13 @@ export class Knight extends Piece {
 
 		// in addition to not being able to move off the board, a knight can only move to a square that is unoccupied or is occupied by a piece of the opposite color
 		const moves = possibleMoves.filter((square) => {
-			return isSquareOnBoard(square) && 
-				(!occupiedSquares[square[0] - 1][square[1] - 1] || occupiedSquares[square[0] - 1][square[1] - 1].color !== color);
+			// This check should be done separately so that targetSquare can be stored in a variable to ensure that it is not null
+			if (!isSquareOnBoard(square)) {
+				return false;
+			}
+
+			const targetSquare: Piece | null = occupiedSquares[square[0] - 1][square[1] - 1];
+			return !targetSquare || targetSquare.color !== color;
 		});
 
 		return moves;

@@ -1,4 +1,4 @@
-import { PieceProps} from '@/lib/types';
+import { PieceProps, MoveParams } from '@/lib/types';
 import { Piece } from './piece';
 
 export abstract class RangedPiece extends Piece {
@@ -6,7 +6,11 @@ export abstract class RangedPiece extends Piece {
 		super({ color, abbreviation, file, rank, id });
 	}
 
-	abstract moves(occupiedSquares: Piece[][]): number[][]
+	abstract moves( {
+		occupiedSquares,
+		attackedSquares, 
+		allPieces,
+	}: MoveParams): number[][];
 
 	/**
 	 * Get the piece's moves
@@ -14,7 +18,7 @@ export abstract class RangedPiece extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	rangedMoves(moveDirections: number[][], occupiedSquares: Piece[][]): number[][] {
+	rangedMoves(moveDirections: number[][], occupiedSquares: (Piece | null)[][]): number[][] {
 		const moves: number[][] = [];
 
 		const rank = this._rank;
@@ -53,13 +57,14 @@ export abstract class RangedPiece extends Piece {
 	 * @param occupiedSquares - the currently occupied squares
 	 * @return moves - the moves of the piece as an array of co-ordinates (also an array)
 	 */
-	moveOneWay(rank: number, file: number, r: number, f: number, isDefending: boolean, occupiedSquares: Piece[][]): number[][] {
+	moveOneWay(rank: number, file: number, r: number, f: number, isDefending: boolean, occupiedSquares: (Piece | null)[][]): number[][] {
 		const moves = [];
 		while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
 			file += f;
 			rank += r;
-			if (occupiedSquares[rank - 1][file - 1]) {
-				if (isDefending || occupiedSquares[rank - 1][file - 1].color !== this.color) {
+			const squareContent: Piece | null = occupiedSquares[rank - 1][file - 1];
+			if (squareContent instanceof Piece) {
+				if (isDefending || squareContent.color !== this.color) {
 					moves.push([rank, file]);
 				}
 				break;
@@ -76,7 +81,7 @@ export abstract class RangedPiece extends Piece {
 	 * @param occupiedSquares - the squares that are currently occupied, array entries are piece names (eg wP3)
 	 * @return protectedSquares - the squares that the piece protects as an array of co-ordinates (also an array)
 	 */
-	rangedProtectedSquares(moveDirections: number[][], occupiedSquares: Piece[][]): number[][] {
+	rangedProtectedSquares(moveDirections: number[][], occupiedSquares: (Piece | null)[][]): number[][] {
 		const protectedSquares = [];
 
 		const rank = this.rank;
