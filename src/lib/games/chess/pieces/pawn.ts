@@ -152,11 +152,12 @@ export class Pawn extends Piece {
 	 * @return protectedSquares - the squares that the Pawn protects as an array of co-ordinates (also an array)
 	 */
 	protectedSquares(): number[][] {
-		const color = this._color;
-		const file = this._file;
-		const rank = this._rank;
-		let protectedSquares = color === 'white' ? [[file - 1, rank + 1], [file + 1, rank + 1]] : 
-			[[file - 1, rank - 1], [file + 1, rank - 1]];
+		const color = this.color;
+		const rank = this.rank;
+		const file = this.file;
+		let protectedSquares = color === 'white' 
+			? [ [ rank + 1, file - 1 ], [ rank + 1, file + 1 ] ] 
+			: [ [ rank - 1, file - 1 ], [ rank - 1, file + 1 ] ];
 
 		protectedSquares = protectedSquares.filter(isSquareOnBoard);
 

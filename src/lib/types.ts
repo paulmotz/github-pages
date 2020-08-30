@@ -97,3 +97,7 @@ export interface PieceMove {
 	file: number;
 }
 
+export interface SquareLocation {
+	rank: number;
+	file: number;
+}

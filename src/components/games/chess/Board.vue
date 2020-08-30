@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
-import { PieceColor, PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
+import { PieceColor, PieceType, SquareClickedEvent, PieceMove, SquareLocation } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes } from '@/lib/games/chess/helpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
 import { Piece, Pawn, Rook, King } from '@/lib/games/chess/pieces';
@@ -54,6 +54,7 @@ export default Vue.extend({
 			isInitialized       : false,
 			selectedPiece       : null as Piece | null,
 			isWhiteToMove       : true,
+			inCheck             : false,
 		};
 	},
 
@@ -117,6 +118,8 @@ export default Vue.extend({
 		},
 
 		handleSquareClick({ square, rank, file }: SquareClickedEvent): void {
+			this.getLegalMoves();
+
 			if (this.selectedPiece !== null && this.possibleMoveSquares[rank - 1][file - 1]) {
 				this.movePiece({ piece : this.selectedPiece, rank, file });
 				return;
@@ -206,6 +209,7 @@ export default Vue.extend({
 
 		setNextPlayerTurn(): void {
 			this.resetEnPassant();
+			this.inCheck = false;
 			this.isWhiteToMove = !this.isWhiteToMove;
 		},
 
@@ -223,6 +227,48 @@ export default Vue.extend({
 					}
 				}
 			}
+		},
+
+		getLegalMoves(): moves {
+			const checkingPieces = this.getCheckingPieces(this.colorToMoveNext);
+
+			console.log(this.allPieces);
+			console.log(checkingPieces);
+			const moves = [];
+			for (const pieceTypeAndColor in this.allPieces) {
+				for (const piece of this.allPieces[pieceTypeAndColor]) {
+					// console.log(piece);
+					// moves.push(piece.moves(this.occupiedSquares));
+				}
+			}
+			return [];
+		},
+
+		getKingLocation(color: PieceColor): SquareLocation {
+			const [ king ] = this.allPieces[`${color[0]}K`];
+			return {
+				rank : king.rank,
+				file : king.file,
+			};
+		},
+
+		getCheckingPieces(color: PieceColor): Piece[] {
+			const checkingPieces: Piece[] = [];
+			const kingLocation = this.getKingLocation(color);
+
+			for (const pieceTypeAndColor in this.allPieces) {
+				for (const piece of this.allPieces[pieceTypeAndColor]) {
+					if (!(piece instanceof King) && piece.color !== color) {
+						if (piece.protectedSquares(this.occupiedSquares).find(square =>
+							square[0] === kingLocation.rank && square[1] === kingLocation.file,
+						)) {
+							checkingPieces.push(piece);
+						}
+					}
+				}
+			}
+
+			return checkingPieces;
 		},
 	},
 });

@@ -122,6 +122,8 @@ export abstract class Piece {
 
 	abstract moves(occupiedSquares: (Piece | null)[][], attackedSquares?: AttackedSquares, allPieces?: AllPieces): number[][]
 
+	abstract protectedSquares(occupiedSquares?: (Piece | null)[][]): number[][]
+
 	/**
 	 * Returns the direction of the king from the piece. Used for checking for pinned pieces
 	 * @param occupiedSquares - the currently occupied squares

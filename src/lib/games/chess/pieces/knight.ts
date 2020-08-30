@@ -55,9 +55,9 @@ export class Knight extends Piece {
 	 * @return protectedSquares - the squares that the Knight protects as an array of co-ordinates (also an array)
 	 */
 	protectedSquares(): number[][] {
-		const rank = this.rank;
 		const file = this.file;
-		const possibleMoves = this.getPossibleMoves(file, rank);
+		const rank = this.rank;
+		const possibleMoves = this.getPossibleMoves(rank, file);
 
 		const protectedSquares = possibleMoves.filter(isSquareOnBoard);
 
