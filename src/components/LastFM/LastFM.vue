@@ -143,7 +143,7 @@ export default {
 		async getTracks(user: string, from: string, to = ''): Promise<void> {
 			this.setIsButtonLoading(true);
 
-			const lastFmData = await getTracks({ user, from, to });
+			const lastFmData: LastFmTrackInfo = await getTracks({ user, from, to });
 
 			this.lastTrackInfo = lastFmData.lastTrackInfo;
 			this.scrobbleCounts = lastFmData.scrobbleCounts;
