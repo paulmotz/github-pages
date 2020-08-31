@@ -25,7 +25,7 @@
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
 import { PieceColor, PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
-import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes } from '@/lib/games/chess/helpers';
+import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes, findPieceIndex } from '@/lib/games/chess/helpers';
 import { getCheckingPieces, getKingLocation, getCheckingPath } from '@/lib/games/chess/checkingHelpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
 import { Piece, Pawn, Knight, Rook, King } from '@/lib/games/chess/pieces';
@@ -178,8 +178,33 @@ export default Vue.extend({
 				piece.canBeCapturedByEnPassant = true;
 			}
 
+			if (piece instanceof King) {
+				const colorRook = `${piece.color[0]}R`;
+
+				if (file - piece.file === -2) {
+					const queensideRook = this.allPieces[colorRook][findPieceIndex(this.allPieces, colorRook, 0)];
+
+					const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
+					newPieceRow[queensideRook.file - 1] = null;
+					queensideRook.file += 3;
+					newPieceRow[queensideRook.file - 1] = queensideRook;
+					this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+				}
+
+				if (file - piece.file === 2) {
+					const kingsideRook = this.allPieces[colorRook][findPieceIndex(this.allPieces, colorRook, 1)];
+
+					const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
+					newPieceRow[kingsideRook.file - 1] = null;
+					kingsideRook.file -= 2;
+					newPieceRow[kingsideRook.file - 1] = kingsideRook;
+					this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+				}
+			}
+
 			piece.rank = rank;
 			piece.file = file;
+
 			if (piece instanceof Rook || piece instanceof King) {
 				piece.hasMoved = true;
 			}
@@ -189,10 +214,12 @@ export default Vue.extend({
 				this.capturePiece(newSquareContents);
 			}
 
-			const adjacentSquareRank = this.isWhiteToMove ? rank - 2 : rank;
-			const adjacentSquareContents: Piece | null = this.occupiedSquares[adjacentSquareRank][file - 1];
-			if (adjacentSquareContents instanceof Pawn && adjacentSquareContents.canBeCapturedByEnPassant) {
-				this.capturePieceByEnPassant(adjacentSquareContents);
+			if (piece instanceof Pawn) {
+				const adjacentSquareRank = this.isWhiteToMove ? rank - 2 : rank;
+				const adjacentSquareContents: Piece | null = this.occupiedSquares[adjacentSquareRank][file - 1];
+				if (adjacentSquareContents instanceof Pawn && adjacentSquareContents.canBeCapturedByEnPassant) {
+					this.capturePieceByEnPassant(adjacentSquareContents);
+				}
 			}
 
 			const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);

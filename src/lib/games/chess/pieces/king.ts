@@ -85,7 +85,7 @@ export class King extends Piece {
 		if (queensideRook instanceof Rook && !hasMoved && queensideRook && !queensideRook.hasMoved &&
 			!occupiedSquares[rank - 1][file - 2] && !occupiedSquares[rank - 1][file - 3] && !occupiedSquares[file - 3][rank] &&
 			!attackedSquares.has([rank - 1, file - 1]) && !attackedSquares.has([rank- 1, file - 2]) && !attackedSquares.has([rank - 1, file - 3])) {
-			moves.push([rank - 1, file - 3]);
+			moves.push([rank, file - 2]);
 		}
 
 		const kingsideRook = allPieces[colorRook][findPieceIndex(allPieces, colorRook, 1)];
@@ -94,7 +94,7 @@ export class King extends Piece {
 		if (kingsideRook instanceof Rook && !hasMoved && kingsideRook && !kingsideRook.hasMoved &&
 			!occupiedSquares[rank - 1][file] && !occupiedSquares[rank - 1][file + 1] &&
 			!attackedSquares.has([rank - 1, file - 1]) && !attackedSquares.has([rank - 1, file]) && !attackedSquares.has([rank - 1, file + 1])) {
-			moves.push([rank - 1, file + 1]);
+			moves.push([rank, file + 2]);
 		}
 
 		return moves;
