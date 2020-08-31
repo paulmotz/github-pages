@@ -122,7 +122,6 @@ export abstract class Piece {
 
 	abstract moves( {
 		occupiedSquares,
-		attackedSquares, 
 		allPieces,
 	}: MoveParams): number[][];
 

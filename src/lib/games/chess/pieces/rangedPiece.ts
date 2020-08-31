@@ -8,7 +8,6 @@ export abstract class RangedPiece extends Piece {
 
 	abstract moves( {
 		occupiedSquares,
-		attackedSquares, 
 		allPieces,
 	}: MoveParams): number[][];
 

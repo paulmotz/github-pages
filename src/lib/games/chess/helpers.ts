@@ -1,4 +1,5 @@
 import { PieceColor, AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece} from '@/lib/types';
+import { Piece } from './pieces';
 
 /**
  *
@@ -60,6 +61,10 @@ export const getPieceName = (abbreviation: string): string => {
  */
 export const findPieceIndex = (allPieces: AllPieces, piece: string, id: number): number => {
 	return allPieces[piece].findIndex(piece => Number(piece.id) === Number(id));
+};
+
+export const getAttackedSquares = (allPieces: AllPieces, opponentColor: PieceColor): Set<number[]> => {
+	return new Set();
 };
 
 export const pieceStartingPositions: PieceStartingPositions = {

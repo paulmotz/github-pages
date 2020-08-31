@@ -93,7 +93,6 @@ export interface SquareClickedEvent {
 
 export interface MoveParams {
 	occupiedSquares: (Piece | null)[][];
-	attackedSquares?: AttackedSquares;
 	allPieces?: AllPieces;
 }
 

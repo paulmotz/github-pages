@@ -130,6 +130,12 @@ export default Vue.extend({
 				}
 
 				this.resetMoveSquares();
+
+				if (square === null || this.selectedPiece === square || this.colorToMoveNext !== square.color) {
+					this.selectedPiece = null;
+					return;
+				}
+
 				const legalMoves = this.getLegalMoves(checkingPieces, square);
 
 				this.setMoveSquares(legalMoves);
@@ -148,7 +154,10 @@ export default Vue.extend({
 				return;
 			}
 
-			const moves: number[][] = square.moves({occupiedSquares : this.occupiedSquares });
+			const moves: number[][] = square.moves({
+				occupiedSquares : this.occupiedSquares,
+				allPieces       : this.allPieces,
+			});
 
 			if (moves.length) {
 				this.setMoveSquares(moves);
@@ -257,7 +266,9 @@ export default Vue.extend({
 				const checkingPieceRank = checkingPiece.rank;
 				const checkingPieceFile = checkingPiece.file;
 
-				const captureMove: number[] | undefined = clickedPiece.protectedSquares(this.occupiedSquares).find((square) => {
+				const clickedPieceProtectedSquares = clickedPiece.protectedSquares(this.occupiedSquares);
+
+				const captureMove: number[] | undefined = clickedPieceProtectedSquares.find(square => {
 					return square[0] === checkingPieceRank && square[1] === checkingPieceFile;
 				});
 				if (captureMove) {
@@ -266,10 +277,20 @@ export default Vue.extend({
 
 				// Neither knights nor pawns can be blocked when checking
 				if (!(checkingPiece instanceof Knight) && !(checkingPiece instanceof Pawn)) {
+					const clickedPieceMoveSquares = clickedPiece.moves({ occupiedSquares : this.occupiedSquares });
+
 					const kingLocation = getKingLocation(this.allPieces, this.colorToMoveNext);
+					const checkingPath = getCheckingPath(checkingPiece, kingLocation);
 
-
-					getCheckingPath(checkingPiece, kingLocation);
+					const overlap = clickedPieceMoveSquares.filter(defendingSquare => {
+						return checkingPath.find(attackingSquare => {
+							return defendingSquare[0] === attackingSquare[0] && defendingSquare[1] === attackingSquare[1];
+						});
+					});
+					
+					if (overlap.length > 0) {
+						legalMoves.push(...overlap);
+					}
 				}
 			}
 
