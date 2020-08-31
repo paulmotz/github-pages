@@ -1,6 +1,4 @@
 import { PieceColor, SquareLocation, PiecesByType } from '@/lib/types';
-// import { PiecesByType } from '@/lib/games/chess/helpers';
-// import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
 import { Piece, King } from '@/lib/games/chess/pieces';
 
 export const getKingLocation = (allPieces: PiecesByType, color: PieceColor): SquareLocation => {
@@ -35,8 +33,32 @@ export const getCheckingPieces = (
 };
 
 export const getCheckingPath = (checkingPieceLocation: SquareLocation, kingLocation: SquareLocation): number[][] => {
-	console.log(checkingPieceLocation.rank, checkingPieceLocation.file);
-	console.log(kingLocation.rank, kingLocation.file);
+	const rankDifference = kingLocation.rank - checkingPieceLocation.rank;
+	const fileDifference = kingLocation.file - checkingPieceLocation.file;
 
-	return [];
+	const absoluteRankDifference = Math.abs(rankDifference);
+	const absoluteFileDifference = Math.abs(fileDifference);
+
+	if (absoluteRankDifference !== 0 && absoluteFileDifference !== 0 && absoluteRankDifference / absoluteFileDifference !== 1) {
+		throw new Error('invalid check path');
+	}
+
+	const checkDistance = Math.max(absoluteRankDifference, absoluteFileDifference);
+
+	const checkDirection = {
+		rank : rankDifference / checkDistance,
+		file : fileDifference / checkDistance,
+	};
+
+	const path = [];
+	let pathRank = checkingPieceLocation.rank;
+	let pathFile = checkingPieceLocation.file;
+
+	for (let i = 1; i < checkDistance; i++) {
+		pathRank += checkDirection.rank;
+		pathFile += checkDirection.file;
+		path.push([ pathRank, pathFile ]);
+	}
+
+	return path;
 };
