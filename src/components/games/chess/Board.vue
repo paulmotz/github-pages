@@ -26,7 +26,7 @@ import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
 import { PieceColor, PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes, findPieceIndex } from '@/lib/games/chess/helpers';
-import { getCheckingPieces, getKingLocation, getCheckingPath } from '@/lib/games/chess/checkingHelpers';
+import { getCheckingPieces, getKingLocation, getCheckingPath, getKing } from '@/lib/games/chess/checkingHelpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
 import { Piece, Pawn, Knight, Rook, King } from '@/lib/games/chess/pieces';
 
@@ -338,6 +338,13 @@ export default Vue.extend({
 						legalMoves.push(...overlap);
 					}
 				}
+			}
+
+			if (clickedPiece instanceof King) {
+				legalMoves.push(...clickedPiece.moves({
+					occupiedSquares : this.occupiedSquares,
+					allPieces       : this.allPieces,
+				}));
 			}
 
 			return legalMoves;

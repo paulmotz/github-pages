@@ -9,6 +9,10 @@ export const getKingLocation = (allPieces: PiecesByType, color: PieceColor): Squ
 	};
 };
 
+export const getKing = (allPieces: PiecesByType, color: PieceColor): Piece => {
+	return allPieces[`${color[0]}K`][0];
+};
+
 export const getCheckingPieces = (
 	allPieces: PiecesByType,
 	occupiedSquares: (Piece | null)[][],
