@@ -1,4 +1,4 @@
-import { getCheckingPath } from './checkingHelpers';
+import { getCheckingPath, isSquareAttacked } from './checkingHelpers';
 
 describe('checkingHelpers', () => {
 	describe('getCheckingPath', () => {
@@ -192,6 +192,28 @@ describe('checkingHelpers', () => {
 			};
 			
 			expect(() => getCheckingPath(checkingPieceLocation, kingLocation)).toThrow('invalid check path');
+		});
+	});
+
+	describe('isSquareAttacked', () => {
+		it('should return true when the square is part of the attackedSquares array', () => {
+			const square = [2, 4];
+			const attackedSquares = [
+				[ 1, 2 ],
+				[ 2, 4 ],
+			];
+
+			expect(isSquareAttacked(square, attackedSquares)).toBe(true);
+		});
+
+		it('should return false when the square is part of the attackedSquares array', () => {
+			const square = [3, 4];
+			const attackedSquares = [
+				[ 1, 2 ],
+				[ 2, 4 ],
+			];
+
+			expect(isSquareAttacked(square, attackedSquares)).toBe(false);
 		});
 	});
 });
