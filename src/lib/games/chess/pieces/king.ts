@@ -1,6 +1,7 @@
 import { Piece, Rook } from '@/lib/games/chess/pieces';
 import { PieceColor, PieceProps, MoveParams } from '@/lib/types';
 import { isSquareOnBoard, findPieceIndex, getOtherColor, getAttackedSquares } from '@/lib/games/chess/helpers';
+import { isSquareAttacked } from '@/lib/games/chess/checkingHelpers';
 
 export class King extends Piece {
 	_hasMoved: boolean;
@@ -56,10 +57,10 @@ export class King extends Piece {
 		if (!allPieces) {
 			return [];
 		}
-		
+
 		const color: PieceColor = this.color;
 		const opponentColor: PieceColor = getOtherColor(color);
-		const attackedSquares = getAttackedSquares(allPieces, opponentColor);
+		const attackedSquares = getAttackedSquares(allPieces, occupiedSquares, opponentColor);
 
 		const file: number = this.file;
 		const rank: number = this.rank;
@@ -71,11 +72,11 @@ export class King extends Piece {
 			if (!isSquareOnBoard(square)) {
 				return false;
 			}
-
+			
 			const potentialSquare = occupiedSquares[square[0] - 1][square[1] - 1];
 			
 			return (potentialSquare === null || potentialSquare.color !== color) &&
-				!attackedSquares.has(square);
+				!isSquareAttacked(square, attackedSquares);
 		});
 
 		const colorRook: string = color[0] + 'R';
@@ -84,7 +85,7 @@ export class King extends Piece {
 		// queenside castling
 		if (queensideRook instanceof Rook && !hasMoved && queensideRook && !queensideRook.hasMoved &&
 			!occupiedSquares[rank - 1][file - 2] && !occupiedSquares[rank - 1][file - 3] && !occupiedSquares[file - 3][rank] &&
-			!attackedSquares.has([rank - 1, file - 1]) && !attackedSquares.has([rank- 1, file - 2]) && !attackedSquares.has([rank - 1, file - 3])) {
+			!isSquareAttacked([rank, file], attackedSquares) && !isSquareAttacked([rank, file - 1], attackedSquares) && !isSquareAttacked([rank, file - 1], attackedSquares)) {
 			moves.push([rank, file - 2]);
 		}
 
@@ -93,7 +94,7 @@ export class King extends Piece {
 		// kingside castling
 		if (kingsideRook instanceof Rook && !hasMoved && kingsideRook && !kingsideRook.hasMoved &&
 			!occupiedSquares[rank - 1][file] && !occupiedSquares[rank - 1][file + 1] &&
-			!attackedSquares.has([rank - 1, file - 1]) && !attackedSquares.has([rank - 1, file]) && !attackedSquares.has([rank - 1, file + 1])) {
+			!isSquareAttacked([rank, file], attackedSquares) && !isSquareAttacked([rank, file + 1], attackedSquares) && !isSquareAttacked([rank, file + 2], attackedSquares)) {
 			moves.push([rank, file + 2]);
 		}
 

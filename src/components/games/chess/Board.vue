@@ -182,23 +182,11 @@ export default Vue.extend({
 				const colorRook = `${piece.color[0]}R`;
 
 				if (file - piece.file === -2) {
-					const queensideRook = this.allPieces[colorRook][findPieceIndex(this.allPieces, colorRook, 0)];
-
-					const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
-					newPieceRow[queensideRook.file - 1] = null;
-					queensideRook.file += 3;
-					newPieceRow[queensideRook.file - 1] = queensideRook;
-					this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+					this.castleQueenside(rank, colorRook);
 				}
 
 				if (file - piece.file === 2) {
-					const kingsideRook = this.allPieces[colorRook][findPieceIndex(this.allPieces, colorRook, 1)];
-
-					const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
-					newPieceRow[kingsideRook.file - 1] = null;
-					kingsideRook.file -= 2;
-					newPieceRow[kingsideRook.file - 1] = kingsideRook;
-					this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+					this.castleKingside(rank, colorRook);
 				}
 			}
 
@@ -226,11 +214,35 @@ export default Vue.extend({
 			newPieceRow[file - 1] = piece;
 			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
 
-			this.selectedPiece = null;
-			this.resetMoveSquares();
-
-			this.setNextPlayerTurn();
+			this.completeTurn();
 		},
+
+		castleQueenside(rank: number, colorRook: string): void {
+			const queensideRook = this.allPieces[colorRook][findPieceIndex(this.allPieces, colorRook, 0)];
+
+			if (queensideRook instanceof Rook) {
+				const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
+				newPieceRow[queensideRook.file - 1] = null;
+				queensideRook.file += 3;
+				newPieceRow[queensideRook.file - 1] = queensideRook;
+				this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+				queensideRook.hasMoved = true; // Don't really have to do this since king has already moved
+			}
+		},
+
+		castleKingside(rank: number, colorRook: string): void {
+			const kingsideRook = this.allPieces[colorRook][findPieceIndex(this.allPieces, colorRook, 1)];
+
+			if (kingsideRook instanceof Rook) {
+				const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
+				newPieceRow[kingsideRook.file - 1] = null;
+				kingsideRook.file -= 2;
+				newPieceRow[kingsideRook.file - 1] = kingsideRook;
+				this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+				kingsideRook.hasMoved = true; // Don't really have to do this since king has already moved
+			}
+		},
+
 
 		capturePiece(piece: Piece): void {
 			const pieceType = `${piece.color[0]}${piece.abbreviation}`;
@@ -257,6 +269,13 @@ export default Vue.extend({
 			for (const row in this.possibleMoveSquares) {
 				this.$set(this.possibleMoveSquares, row, new Array(this.boardSize).fill(false));
 			}
+		},
+
+		completeTurn(): void {
+			this.selectedPiece = null;
+			this.resetMoveSquares();
+
+			this.setNextPlayerTurn();
 		},
 
 		setNextPlayerTurn(): void {

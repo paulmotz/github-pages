@@ -63,8 +63,33 @@ export const findPieceIndex = (allPieces: AllPieces, piece: string, id: number):
 	return allPieces[piece].findIndex(piece => Number(piece.id) === Number(id));
 };
 
-export const getAttackedSquares = (allPieces: AllPieces, opponentColor: PieceColor): Set<number[]> => {
-	return new Set();
+export const removeDuplicates = (moves: number[][]): number[][] => {
+	const uniqueMoves = [];
+
+	const existing = {}  as { [index: string]: boolean};
+	for (const move of moves) {
+		const stringMove = `${move[0]}${move[1]}`;
+		if (!existing[stringMove]) {
+			uniqueMoves.push(move);
+		}
+
+		existing[stringMove] = true;
+	}
+
+	return uniqueMoves;
+};
+
+export const getAttackedSquares = (allPieces: AllPieces, occupiedSquares: (Piece | null)[][], opponentColor?: PieceColor): number[][] => {
+	const moves = [];
+	for (const pieceType in allPieces) {
+		if (!opponentColor || pieceType.startsWith(opponentColor[0])) {
+			for (const piece of allPieces[pieceType]) {
+				moves.push(...piece.protectedSquares(occupiedSquares));
+			}
+		}
+	}
+
+	return removeDuplicates(moves);
 };
 
 export const pieceStartingPositions: PieceStartingPositions = {

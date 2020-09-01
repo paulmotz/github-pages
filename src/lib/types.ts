@@ -67,7 +67,7 @@ export type ColorAndPiece = 'wB' | 'wN' | 'wK' | 'wP' | 'wQ' | 'wR' | 'bB' | 'bN
 export type PieceColor = 'white' | 'black';
 
 export interface AttackedSquares {
-	[key: string]: Set<number[]>;
+	[key: string]: number[][];
 }
 
 export interface AllPieces {

@@ -62,3 +62,7 @@ export const getCheckingPath = (checkingPieceLocation: SquareLocation, kingLocat
 
 	return path;
 };
+
+export const isSquareAttacked = (square: number[], attackedSquares: number[][]): boolean => {
+	return !!attackedSquares.find(attackedSquare => attackedSquare[0] === square[0] && attackedSquare[1] === square[1]);
+};
