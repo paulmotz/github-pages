@@ -1,4 +1,4 @@
-import { getCheckingPath, isSquareAttacked } from './checkingHelpers';
+import { getCheckingPath, isSquareAttacked, removeAttackedSquares } from './checkingHelpers';
 
 describe('checkingHelpers', () => {
 	describe('getCheckingPath', () => {
@@ -20,7 +20,7 @@ describe('checkingHelpers', () => {
 				[ 7, 5 ],
 			];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -40,7 +40,7 @@ describe('checkingHelpers', () => {
 				[ 2, 4 ],
 			];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -58,7 +58,7 @@ describe('checkingHelpers', () => {
 				[ 3, 7 ],
 			];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -79,7 +79,7 @@ describe('checkingHelpers', () => {
 				[ 1, 3 ],
 			];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -102,7 +102,7 @@ describe('checkingHelpers', () => {
 				[ 2, 7 ],
 			];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -120,7 +120,7 @@ describe('checkingHelpers', () => {
 				[ 5, 7 ],
 			];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -140,7 +140,7 @@ describe('checkingHelpers', () => {
 				[ 5, 6 ],
 			];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -160,7 +160,7 @@ describe('checkingHelpers', () => {
 				[ 3, 3 ],
 			];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -176,7 +176,7 @@ describe('checkingHelpers', () => {
 			};
 			const expectedResult: number[][] = [];
 			
-			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation);
+			const checkingPath = getCheckingPath(checkingPieceLocation, kingLocation, false);
 
 			expect(checkingPath).toEqual(expectedResult);
 		});
@@ -191,7 +191,7 @@ describe('checkingHelpers', () => {
 				file : 4,
 			};
 			
-			expect(() => getCheckingPath(checkingPieceLocation, kingLocation)).toThrow('invalid check path');
+			expect(() => getCheckingPath(checkingPieceLocation, kingLocation, false)).toThrow('invalid check path');
 		});
 	});
 
@@ -214,6 +214,70 @@ describe('checkingHelpers', () => {
 			];
 
 			expect(isSquareAttacked(square, attackedSquares)).toBe(false);
+		});
+	});
+
+	describe('removeAttackedSquares', () => {
+		it('should not return entries present in both arrays', () => {
+			const moves = [
+				[8, 6],
+				[8, 5],
+			];
+			const attackedSquares = [
+				[ 6, 4 ],
+				[ 8, 6 ],
+				[ 3, 5 ],
+				[ 4, 5 ],
+				[ 5, 5 ],
+				[ 6, 5 ],
+			];
+			const expectedLegalSquares = [
+				[8, 5],
+			];
+
+			const legalMoves = removeAttackedSquares(moves, attackedSquares);
+
+			expect(legalMoves).toEqual(expectedLegalSquares);
+		});
+
+		it('should be able to return an empty array when there all moves are in', () => {
+			const moves = [
+				[8, 6],
+				[8, 5],
+			];
+			const attackedSquares = [
+				[ 6, 4 ],
+				[ 8, 6 ],
+				[ 3, 5 ],
+				[ 4, 5 ],
+				[ 5, 5 ],
+				[ 6, 5 ],
+				[ 8, 5 ],
+			];
+			const expectedLegalSquares: number[][] = [];
+
+			const legalMoves = removeAttackedSquares(moves, attackedSquares);
+
+			expect(legalMoves).toEqual(expectedLegalSquares);
+		});
+
+		it('should return the moves when there is no overlap between moves and attackedSquares', () => {
+			const moves = [
+				[8, 6],
+				[8, 5],
+			];
+			const attackedSquares = [
+				[ 1, 2 ],
+				[ 3, 4 ],
+			];
+			const expectedLegalSquares = [
+				[8, 6],
+				[8, 5],
+			];
+
+			const legalMoves = removeAttackedSquares(moves, attackedSquares);
+
+			expect(legalMoves).toEqual(expectedLegalSquares);
 		});
 	});
 });

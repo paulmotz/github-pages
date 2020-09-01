@@ -26,9 +26,9 @@ import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
 import { PieceColor, PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes, findPieceIndex } from '@/lib/games/chess/helpers';
-import { getCheckingPieces, getKingLocation, getCheckingPath, getKing } from '@/lib/games/chess/checkingHelpers';
+import { getCheckingPieces, getKingLocation, getCheckingPath, getKing, removeAttackedSquares } from '@/lib/games/chess/checkingHelpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
-import { Piece, Pawn, Knight, Rook, King } from '@/lib/games/chess/pieces';
+import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Board',
@@ -305,6 +305,7 @@ export default Vue.extend({
 				return [];
 			}
 			const legalMoves = [];
+			const kingLocation = getKingLocation(this.allPieces, this.colorToMoveNext);
 			// When there is only one piece checking, it might be able to be captured or blocked
 			if (checkingPieces.length === 1) {
 				const [ checkingPiece ] = checkingPieces;
@@ -325,8 +326,7 @@ export default Vue.extend({
 				if (!(checkingPiece instanceof Knight) && !(checkingPiece instanceof Pawn)) {
 					const clickedPieceMoveSquares = clickedPiece.moves({ occupiedSquares : this.occupiedSquares });
 
-					const kingLocation = getKingLocation(this.allPieces, this.colorToMoveNext);
-					const checkingPath = getCheckingPath(checkingPiece, kingLocation);
+					const checkingPath = getCheckingPath(checkingPiece, kingLocation, false);
 
 					const overlap = clickedPieceMoveSquares.filter(defendingSquare => {
 						return checkingPath.find(attackingSquare => {
@@ -341,10 +341,20 @@ export default Vue.extend({
 			}
 
 			if (clickedPiece instanceof King) {
-				legalMoves.push(...clickedPiece.moves({
+				const checkingPaths = checkingPieces.map(checkingPiece => {
+					if (checkingPiece instanceof Bishop || checkingPiece instanceof Rook || checkingPiece instanceof Queen) {
+						return [ ...getCheckingPath(checkingPiece, kingLocation, true) ];
+					}
+
+					return [];
+				}).flat();
+
+				const kingMoves = clickedPiece.moves({
 					occupiedSquares : this.occupiedSquares,
 					allPieces       : this.allPieces,
-				}));
+				});
+
+				legalMoves.push(...removeAttackedSquares(kingMoves, checkingPaths));
 			}
 
 			return legalMoves;

@@ -36,7 +36,7 @@ export const getCheckingPieces = (
 	return checkingPieces;
 };
 
-export const getCheckingPath = (checkingPieceLocation: SquareLocation, kingLocation: SquareLocation): number[][] => {
+export const getCheckingPath = (checkingPieceLocation: SquareLocation, kingLocation: SquareLocation, shouldExtendPath: boolean): number[][] => {
 	const rankDifference = kingLocation.rank - checkingPieceLocation.rank;
 	const fileDifference = kingLocation.file - checkingPieceLocation.file;
 
@@ -64,9 +64,21 @@ export const getCheckingPath = (checkingPieceLocation: SquareLocation, kingLocat
 		path.push([ pathRank, pathFile ]);
 	}
 
+	if (shouldExtendPath) {
+		path.push([ pathRank + checkDirection.rank * 2, pathFile + checkDirection.file * 2 ]);
+	}
+
 	return path;
 };
 
 export const isSquareAttacked = (square: number[], attackedSquares: number[][]): boolean => {
 	return !!attackedSquares.find(attackedSquare => attackedSquare[0] === square[0] && attackedSquare[1] === square[1]);
+};
+
+export const removeAttackedSquares = (moves: number[][], attackedSquares: number[][]): number[][] => {
+	return moves.filter(move => {
+		return !attackedSquares.find(attackedSquare => {
+			return move[0] === attackedSquare[0] && move[1] === attackedSquare[1];
+		});
+	});
 };
