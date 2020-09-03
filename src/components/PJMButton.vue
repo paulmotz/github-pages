@@ -12,7 +12,10 @@ export default Vue.extend({
 	name : 'PJMButton',
 
 	props : {
-		isDisabled  : Boolean,
+		isDisabled : {
+			type    : Boolean,
+			default : false,
+		},
 		loadingText : {
 			type    : String,
 			default : '',

@@ -38,6 +38,11 @@ export default Vue.extend({
 	},
 
 	props : {
+		isNewGame : {
+			type    : Boolean,
+			default : true,
+		},
+
 		isWhite : {
 			type    : Boolean,
 			default : true,
@@ -55,7 +60,6 @@ export default Vue.extend({
 			isInitialized       : false,
 			selectedPiece       : null as Piece | null,
 			isWhiteToMove       : true,
-			inCheck             : false,
 		};
 	},
 
@@ -83,12 +87,24 @@ export default Vue.extend({
 		},
 	},
 
+	watch : {
+		isNewGame : function(): void {
+			if (this.isNewGame) {
+				this.initializeGame();
+				this.$emit('game-started');
+			}
+		},
+	},
+
 	mounted() {
-		this.initializePieces();
+		this.initializeGame();
 	},
 
 	methods : {
 		setEmptyStates(): void {
+			this.occupiedSquares = [];
+			this.possibleMoveSquares = [];
+
 			for (let i = 0; i < this.boardSize; i++) {
 				this.occupiedSquares.push(new Array(this.boardSize).fill(null));
 				this.possibleMoveSquares.push(new Array(this.boardSize).fill(false));
@@ -98,8 +114,12 @@ export default Vue.extend({
 			}
 		},
 
-		initializePieces(): void {
+		initializeGame(): void {
 			this.setEmptyStates();
+			this.isWhiteToMove = true;
+			this.selectedPiece = null;
+			this.moveCounter = 0;
+			this.gameStates = [];
 
 			for (const piece in pieceStartingPositions) {
 				const color: PieceColor = getPieceColor(piece);
@@ -115,6 +135,7 @@ export default Vue.extend({
 					this.occupiedSquares[rank - 1][file - 1] = newPiece;
 				}
 			}
+
 			this.isInitialized = true;
 		},
 
@@ -280,8 +301,14 @@ export default Vue.extend({
 
 		setNextPlayerTurn(): void {
 			this.resetEnPassant();
-			this.inCheck = false;
 			this.isWhiteToMove = !this.isWhiteToMove;
+			const isCheckmate = this.isCheckmate();
+			if (isCheckmate) {
+				const result = this.isWhiteToMove
+					? '0 - 1 Black Wins!'
+					: '1 - 0 White Wins!';
+				this.$emit('game-over', result);
+			}
 		},
 
 		resetEnPassant(): void {
@@ -300,10 +327,34 @@ export default Vue.extend({
 			}
 		},
 
+		isCheckmate(): boolean {
+			const checkingPieces = getCheckingPieces(this.allPieces, this.occupiedSquares, this.colorToMoveNext);
+
+			for (const pieceType in this.allPieces) {
+				if (pieceType[0] === this.colorToMoveNext[0]) {
+					for (const piece of this.allPieces[pieceType]) {
+						if (this.getLegalMoves(checkingPieces, piece).length > 0) {
+							return false;
+						}
+					}
+				}
+			}
+
+			return true;
+		},
+
 		getLegalMoves(checkingPieces: Piece[], clickedPiece: Piece | null): number[][] {
 			if (clickedPiece == null) {
 				return [];
 			}
+
+			if (checkingPieces.length === 0) {
+				return clickedPiece.moves({
+					occupiedSquares : this.occupiedSquares,
+					allPieces       : this.allPieces,
+				});
+			}
+
 			const legalMoves = [];
 			const kingLocation = getKingLocation(this.allPieces, this.colorToMoveNext);
 			// When there is only one piece checking, it might be able to be captured or blocked
@@ -313,7 +364,12 @@ export default Vue.extend({
 				const checkingPieceRank = checkingPiece.rank;
 				const checkingPieceFile = checkingPiece.file;
 
-				const clickedPieceProtectedSquares = clickedPiece.protectedSquares(this.occupiedSquares);
+				const clickedPieceProtectedSquares = clickedPiece instanceof King
+					? clickedPiece.moves({
+						allPieces       : this.allPieces,
+						occupiedSquares : this.occupiedSquares,
+					})
+					: clickedPiece.protectedSquares(this.occupiedSquares);
 
 				const captureMove: number[] | undefined = clickedPieceProtectedSquares.find(square => {
 					return square[0] === checkingPieceRank && square[1] === checkingPieceFile;
