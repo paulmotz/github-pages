@@ -24,7 +24,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
-import { PieceColor, PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
+import { PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
+import { PieceColor } from '../../../../types';
 import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes, findPieceIndex } from '@/lib/games/chess/helpers';
 import { getCheckingPieces, getKingLocation, getCheckingPath, getKing, removeAttackedSquares } from '@/lib/games/chess/checkingHelpers';
 import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
@@ -78,7 +79,7 @@ export default Vue.extend({
 			});
 		},
 
-		colorToMoveNext(): PieceColor {
+		colorToMoveNext(): Chess.PieceColor {
 			return this.isWhiteToMove ? 'white' : 'black';
 		},
 	},

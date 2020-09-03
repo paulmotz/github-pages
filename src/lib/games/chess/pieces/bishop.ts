@@ -1,4 +1,4 @@
-import { PieceProps, MoveParams} from '@/lib/types';
+import { MoveParams} from '@/lib/types';
 import { Piece } from './piece';
 import { RangedPiece } from './rangedPiece';
 
@@ -6,7 +6,7 @@ export class Bishop extends RangedPiece {
 	_iconName: string;
 	_bishopDirections: number[][];
 	
-	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: Chess.PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._bishopDirections = [
 			[-1, -1],

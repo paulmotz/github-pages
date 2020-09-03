@@ -1,8 +1,8 @@
-import { PieceProps, MoveParams } from '@/lib/types';
+import { MoveParams } from '@/lib/types';
 import { Piece } from './piece';
 
 export abstract class RangedPiece extends Piece {
-	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: Chess.PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 	}
 

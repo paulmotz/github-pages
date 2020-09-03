@@ -1,12 +1,12 @@
 import { Piece } from './piece';
-import { PieceColor, PieceProps, MoveParams } from '@/lib/types';
+import { MoveParams } from '@/lib/types';
 import { isSquareOnBoard } from '../helpers';
 
 export class Pawn extends Piece {
 	_iconName: string;
 	_canBeCapturedByEnPassant: boolean;
 
-	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: Chess.PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._iconName = 'chess-pawn';
 		this._canBeCapturedByEnPassant = false;
@@ -32,7 +32,7 @@ export class Pawn extends Piece {
 	 * @return moves - the squares to which the Pawn can move as an array of co-ordinates (also an array)
 	 */
 	moves({ occupiedSquares }: MoveParams): number[][] {
-		const color: PieceColor = this.color;
+		const color: Chess.PieceColor = this.color;
 		const file: number = this._file;
 		const rank: number = this._rank;
 		const moves: number[][] = [];

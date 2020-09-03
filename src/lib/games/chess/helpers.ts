@@ -1,4 +1,4 @@
-import { PieceColor, AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece} from '@/lib/types';
+import { AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece} from '@/lib/types';
 import { Piece } from './pieces';
 
 /**
@@ -16,11 +16,11 @@ export const isSquareOnBoard = (square: number[]): boolean =>  {
  * @param color - the player's color
  * @return - the opposite color
  */
-export const getOtherColor = (color: PieceColor): PieceColor => {
+export const getOtherColor = (color: Chess.PieceColor): Chess.PieceColor => {
 	return color === 'white' ? 'black' : 'white';
 };
 
-export const abbreviationToColor: { [name: string]: PieceColor } = {
+export const abbreviationToColor: { [name: string]: Chess.PieceColor } = {
 	b : 'black',
 	w : 'white',
 };
@@ -30,7 +30,7 @@ export const abbreviationToColor: { [name: string]: PieceColor } = {
  * @param abbreviation - the player's color
  * @return - the opposite color
  */
-export const getPieceColor = (abbreviation: string): PieceColor => {
+export const getPieceColor = (abbreviation: string): Chess.PieceColor => {
 	return abbreviationToColor[abbreviation[0]];
 };
 
@@ -79,7 +79,7 @@ export const removeDuplicates = (moves: number[][]): number[][] => {
 	return uniqueMoves;
 };
 
-export const getAttackedSquares = (allPieces: AllPieces, occupiedSquares: (Piece | null)[][], opponentColor?: PieceColor): number[][] => {
+export const getAttackedSquares = (allPieces: AllPieces, occupiedSquares: (Piece | null)[][], opponentColor?: Chess.PieceColor): number[][] => {
 	const moves = [];
 	for (const pieceType in allPieces) {
 		if (!opponentColor || pieceType.startsWith(opponentColor[0])) {
