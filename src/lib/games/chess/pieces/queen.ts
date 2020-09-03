@@ -1,4 +1,4 @@
-import { MoveParams } from '@/lib/types';
+import { PieceProps, MoveParams } from '@/lib/types';
 import { Piece } from './piece';
 import { RangedPiece } from './rangedPiece';
 
@@ -6,7 +6,7 @@ export class Queen extends RangedPiece {
 	_queenDirections: number[][];
 	_iconName: string;
 
-	constructor({ color, abbreviation, file, rank, id }: Chess.PieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._queenDirections = [
 			[-1, 0],

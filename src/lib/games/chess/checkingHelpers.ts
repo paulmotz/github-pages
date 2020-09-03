@@ -1,7 +1,7 @@
-import { SquareLocation, PiecesByType } from '@/lib/types';
+import { PieceColor, SquareLocation, PiecesByType } from '@/lib/types';
 import { Piece, King } from '@/lib/games/chess/pieces';
 
-export const getKingLocation = (allPieces: PiecesByType, color: Chess.PieceColor): SquareLocation => {
+export const getKingLocation = (allPieces: PiecesByType, color: PieceColor): SquareLocation => {
 	const [ king ] = allPieces[`${color[0]}K`];
 	return {
 		rank : king.rank,
@@ -9,14 +9,14 @@ export const getKingLocation = (allPieces: PiecesByType, color: Chess.PieceColor
 	};
 };
 
-export const getKing = (allPieces: PiecesByType, color: Chess.PieceColor): Piece => {
+export const getKing = (allPieces: PiecesByType, color: PieceColor): Piece => {
 	return allPieces[`${color[0]}K`][0];
 };
 
 export const getCheckingPieces = (
 	allPieces: PiecesByType,
 	occupiedSquares: (Piece | null)[][],
-	color: Chess.PieceColor,
+	color: PieceColor,
 ): Piece[] => {
 	const checkingPieces: Piece[] = [];
 	const kingLocation = getKingLocation(allPieces, color);

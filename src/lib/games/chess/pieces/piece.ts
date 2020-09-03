@@ -1,8 +1,8 @@
-import { MoveParams } from '@/lib/types';
+import { PieceAbbreviation, PieceColor, PieceProps, MoveParams } from '@/lib/types';
 
 export abstract class Piece {
-	_color: Chess.PieceColor;
-	_abbreviation: Chess.PieceAbbreviation;
+	_color: PieceColor;
+	_abbreviation: PieceAbbreviation;
 	_file: number;
 	_rank: number;
 	_id: number;
@@ -16,7 +16,7 @@ export abstract class Piece {
 	 * @param rank - the rank of the piece: 1 - 8
 	 * @param id - the id of the piece: 1 - 10 (where 10 = max possible number of any given piece per color)
 	 */
-	constructor({ color, abbreviation, file, rank, id }: Chess.PieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		this._color = color;
 		this._abbreviation = abbreviation;
 		this._file = file;
@@ -29,7 +29,7 @@ export abstract class Piece {
 	 * Get the piece's color
 	 * @return color - The color of the piece: white || black
 	 */
-	get color(): Chess.PieceColor {
+	get color(): PieceColor {
 		return this._color;
 	}
 
@@ -37,7 +37,7 @@ export abstract class Piece {
 	 * Set the piece's color
 	 * @param color - The color of the piece: white || black
 	 */
-	set color(color: Chess.PieceColor) {
+	set color(color: PieceColor) {
 		if (color === 'white' || color === 'black') {
 			this._color = color;
 		}
@@ -108,7 +108,7 @@ export abstract class Piece {
 	 * Set the piece's abbreviation
 	 * @param abbreviation - The abbreviation of the piece: B, N, K, P, Q or R
 	 */
-	set abbreviation(abbreviation: Chess.PieceAbbreviation) {
+	set abbreviation(abbreviation: PieceAbbreviation) {
 		this._abbreviation = abbreviation;
 	}
 
@@ -116,7 +116,7 @@ export abstract class Piece {
 	 * Get the piece's abbreviation
 	 * @return The abbreviation of the piece: B, N, K, P, Q or R
 	 */
-	get abbreviation(): Chess.PieceAbbreviation {
+	get abbreviation(): PieceAbbreviation {
 		return this._abbreviation;
 	}
 

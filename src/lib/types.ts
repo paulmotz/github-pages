@@ -51,7 +51,24 @@ export interface LastFmTrackInfo {
 	totalScrobbles: number;
 }
 
+export interface PieceProps {
+	color: PieceColor;
+	abbreviation: PieceAbbreviation;
+	file: number;
+	rank: number;
+	id: number;
+	hasMoved?    : boolean;
+}
+
+export type PieceAbbreviation = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
+
 export type ColorAndPiece = 'wB' | 'wN' | 'wK' | 'wP' | 'wQ' | 'wR' | 'bB' | 'bN' | 'bK' | 'bP' | 'bQ' | 'bR';
+
+export type PieceColor = 'white' | 'black';
+
+export interface AttackedSquares {
+	[key: string]: number[][];
+}
 
 export interface AllPieces {
 	[key: string]: Piece[];

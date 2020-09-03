@@ -1,11 +1,11 @@
 import { Piece } from './piece';
 import { isSquareOnBoard } from '../helpers';
-import { MoveParams } from '@/lib/types';
+import { PieceColor, PieceProps, MoveParams } from '@/lib/types';
 
 export class Knight extends Piece {
 	_iconName: string;
 
-	constructor({ color, abbreviation, file, rank, id }: Chess.PieceProps) {
+	constructor({ color, abbreviation, file, rank, id }: PieceProps) {
 		super({ color, abbreviation, file, rank, id });
 		this._iconName = 'chess-knight';
 	}
@@ -36,7 +36,7 @@ export class Knight extends Piece {
 			return [];
 		}
 		
-		const color: Chess.PieceColor = this._color;
+		const color: PieceColor = this._color;
 		const rank: number = this._rank;
 		const file: number = this._file;
 		const possibleMoves: number[][] = this.getPossibleMoves(rank, file);

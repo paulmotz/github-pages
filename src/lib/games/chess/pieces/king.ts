@@ -1,5 +1,5 @@
 import { Piece, Rook } from '@/lib/games/chess/pieces';
-import { MoveParams } from '@/lib/types';
+import { PieceColor, PieceProps, MoveParams } from '@/lib/types';
 import { isSquareOnBoard, findPieceIndex, getOtherColor, getAttackedSquares } from '@/lib/games/chess/helpers';
 import { isSquareAttacked } from '@/lib/games/chess/checkingHelpers';
 
@@ -19,7 +19,7 @@ export class King extends Piece {
 	 * @param file - file rank of the king: 1 - 8
 	 * @param hasMoved - whether or not the king has moved (used for checking if castling is possible)
 	 */
-	constructor({ color, abbreviation, rank, file, id, hasMoved}: Chess.PieceProps) {
+	constructor({ color, abbreviation, rank, file, id, hasMoved}: PieceProps) {
 		super({ color, abbreviation, rank, file, id });
 		this._hasMoved = hasMoved || false;
 		this._iconName = 'chess-king';
@@ -58,8 +58,8 @@ export class King extends Piece {
 			return [];
 		}
 
-		const color: Chess.PieceColor = this.color;
-		const opponentColor: Chess.PieceColor = getOtherColor(color);
+		const color: PieceColor = this.color;
+		const opponentColor: PieceColor = getOtherColor(color);
 		const attackedSquares = getAttackedSquares(allPieces, occupiedSquares, opponentColor);
 
 		const file: number = this.file;
