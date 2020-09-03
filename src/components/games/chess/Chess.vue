@@ -41,6 +41,7 @@ export default Vue.extend({
 		},
 
 		startGame(): void {
+			this.result = '';
 			this.isNewGame = false;
 		},
 	},
