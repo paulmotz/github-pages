@@ -1,6 +1,6 @@
-import { isStalemate, hasMajorPieces, hasPawns, hasDifferentColorSquarePieces, hasSufficientBishops } from './drawHelpers';
+import { isStalemate, hasMajorPieces, hasPawns, hasDifferentColorSquarePieces, hasSufficientBishops, hasKnightAndBishop, hasInsufficientMatingMaterial } from './drawHelpers';
 import { initializeBoard } from './helpers';
-import { Piece, Pawn, Bishop, Rook, Queen, King } from './pieces';
+import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from './pieces';
 import { PiecesByType } from '@/lib/types';
 
 const getOccupiedSquares = (allPieces: PiecesByType): (Piece | null)[][] => {
@@ -474,5 +474,114 @@ describe('drawHelpers', () => {
 
 			expect(hasSufficientBishops(allPieces)).toBe(false);
 		});
+	});
+
+	describe('hasKnightAndBishop', () => {
+		it('should return true when there is a knight and a bishop', () => {
+			const whiteKing = new King({
+				color        : 'white',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const whiteBishop = new Bishop({
+				color        : 'white',
+				abbreviation : 'B',
+				rank         : 1,
+				file         : 3,
+				id           : 0,
+			});
+			const whiteKnight = new Knight({
+				color        : 'white',
+				abbreviation : 'N',
+				rank         : 1,
+				file         : 2,
+				id           : 0,
+			});
+			const blackKing = new King({
+				color        : 'black',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+
+			const allPieces = {
+				bK : [ blackKing ],
+				wB : [ whiteBishop ],
+				wN : [ whiteKnight ],
+				wK : [ whiteKing ],
+			};
+
+			expect(hasKnightAndBishop(allPieces)).toBe(true);
+		});
+
+		it('should return false when there is a knight but not a bishop', () => {
+			const whiteKing = new King({
+				color        : 'white',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const whiteKnight = new Knight({
+				color        : 'white',
+				abbreviation : 'N',
+				rank         : 1,
+				file         : 2,
+				id           : 0,
+			});
+			const blackKing = new King({
+				color        : 'black',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+
+			const allPieces = {
+				bK : [ blackKing ],
+				wN : [ whiteKnight ],
+				wK : [ whiteKing ],
+			};
+
+			expect(hasKnightAndBishop(allPieces)).toBe(false);
+		});
+
+		it('should return false when there is a bishop but not a knight', () => {
+			const whiteKing = new King({
+				color        : 'white',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const whiteBishop = new Bishop({
+				color        : 'white',
+				abbreviation : 'B',
+				rank         : 1,
+				file         : 3,
+				id           : 0,
+			});
+			const blackKing = new King({
+				color        : 'black',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+
+			const allPieces = {
+				bK : [ blackKing ],
+				wB : [ whiteBishop ],
+				wN : [],
+				wK : [ whiteKing ],
+			};
+			expect(hasKnightAndBishop(allPieces)).toBe(false);
+		});
+	});
+
+	describe('hasInsufficientMatingMaterial', () => {
 	});
 });

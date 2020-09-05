@@ -49,8 +49,15 @@ export const hasSufficientBishops = (allPieces: PiecesByType): boolean => {
 	return bishops.some(pieceType => allPieces[pieceType] && allPieces[pieceType].length > 1 && hasDifferentColorSquarePieces(allPieces[pieceType]));
 };
 
+export const hasKnightAndBishop = (allPieces: PiecesByType): boolean => {
+	const colors = [ 'b', 'w' ];
+	return colors.some(color => allPieces[`${color}B`] && allPieces[`${color}B`].length > 0
+		&& allPieces[`${color}N`] && allPieces[`${color}N`].length > 0);
+};
+
 export const hasInsufficientMatingMaterial = (allPieces: PiecesByType): boolean => {
-	return !hasMajorPieces(allPieces) 
-		|| !hasPawns(allPieces) 
-		|| !hasSufficientBishops(allPieces);
+	return !(hasMajorPieces(allPieces) 
+		|| hasPawns(allPieces) 
+		|| hasSufficientBishops(allPieces)
+		|| hasKnightAndBishop(allPieces));
 };

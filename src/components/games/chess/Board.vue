@@ -343,7 +343,7 @@ export default Vue.extend({
 		},
 
 		checkIfStalemate(): void {
-			if(isStalemate(this.allPieces, this.occupiedSquares, this.colorToMoveNext)) {
+			if (isStalemate(this.allPieces, this.occupiedSquares, this.colorToMoveNext)) {
 				const result = '1/2 - 1/2 Draw by stalemate!';
 				this.$emit('game-over', result);
 			}
