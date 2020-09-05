@@ -1,5 +1,5 @@
-import { PieceColor, AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece} from '@/lib/types';
-import { Piece } from './pieces';
+import { PieceColor, PieceType, AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece, BoardState, PieceAbbreviation } from '@/lib/types';
+import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 /**
  *
@@ -60,6 +60,10 @@ export const getPieceName = (abbreviation: string): string => {
  * @return index 
  */
 export const findPieceIndex = (allPieces: AllPieces, piece: string, id: number): number => {
+	if (!allPieces[piece]) {
+		return -1;
+	}
+
 	return allPieces[piece].findIndex(piece => Number(piece.id) === Number(id));
 };
 
@@ -105,8 +109,53 @@ export const pieceStartingPositions: PieceStartingPositions = {
 	'bP' : [ [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8]] ,
 	'bQ' : [ [8, 4] ],
 	'bR' : [ [8, 1], [8, 8] ],
+	// 'wK' : [ [1, 5] ],
+	// 'wQ' : [ [1, 4] ],
+	// 'bK' : [ [8, 5]] ,
 };
 
 export const pieceTypes: ColorAndPiece[] = [
 	'wB', 'wN', 'wK', 'wP', 'wQ', 'wR', 'bB', 'bN', 'bK', 'bP', 'bQ', 'bR',
 ];
+
+export const initializeBoard = (position = pieceStartingPositions): BoardState => {
+	const pieceConstructors = {
+		'P' : Pawn,
+		'N' : Knight,
+		'B' : Bishop,
+		'R' : Rook,
+		'Q' : Queen,
+		'K' : King,
+	};
+
+	const allPieces: AllPieces = {};
+	const occupiedSquares: (Piece | null)[][] = [];
+	const boardSize = 8;
+
+
+	for (let i = 0; i < boardSize; i++) {
+		occupiedSquares.push(new Array(boardSize).fill(null));
+	}
+	for (const pieceType of pieceTypes) {
+		allPieces[pieceType] = [];
+	}
+	
+	for (const piece in position) {
+		const color: PieceColor = getPieceColor(piece);
+		const abbreviation = piece[1] as PieceAbbreviation;
+
+		for (const pieceStartingPositionIndex in position[piece]) {
+			const [ rank, file ]: number[] = position[piece][pieceStartingPositionIndex];
+
+			const newPiece: PieceType = new pieceConstructors[abbreviation]({ color, abbreviation, rank, file, id : Number(pieceStartingPositionIndex)});
+
+			allPieces[piece].push(newPiece);
+			occupiedSquares[rank - 1][file - 1] = newPiece;
+		}
+	}
+
+	return {
+		allPieces,
+		occupiedSquares,
+	};
+}; 

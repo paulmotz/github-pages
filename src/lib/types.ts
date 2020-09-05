@@ -96,6 +96,11 @@ export interface MoveParams {
 	allPieces?: AllPieces;
 }
 
+export interface BoardState {
+	occupiedSquares: (Piece | null)[][];
+	allPieces: AllPieces;
+}
+
 export interface PieceMove {
 	piece: Piece;
 	rank: number;

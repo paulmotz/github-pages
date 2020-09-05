@@ -1,6 +1,4 @@
 Core
-Check/checkmate
-castling
 promotion
 stalemate/draws
 

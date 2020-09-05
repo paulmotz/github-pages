@@ -24,10 +24,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
-import { PieceColor, PieceType, SquareClickedEvent, PieceMove } from '@/lib/types';
-import { getPieceColor, getPieceName, pieceStartingPositions, pieceTypes, findPieceIndex } from '@/lib/games/chess/helpers';
-import { getCheckingPieces, getKingLocation, getCheckingPath, getKing, removeAttackedSquares } from '@/lib/games/chess/checkingHelpers';
-import { pieceConstructors } from '@/lib/games/chess/setupHelpers';
+import { PieceColor, SquareClickedEvent, PieceMove } from '@/lib/types';
+import { pieceStartingPositions, findPieceIndex, pieceTypes, initializeBoard } from '@/lib/games/chess/helpers';
+import { getCheckingPieces, getKingLocation, getCheckingPath, removeAttackedSquares } from '@/lib/games/chess/checkingHelpers';
+import { isStalemate } from '@/lib/games/chess/drawHelpers';
 import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
@@ -121,20 +121,10 @@ export default Vue.extend({
 			this.moveCounter = 0;
 			this.gameStates = [];
 
-			for (const piece in pieceStartingPositions) {
-				const color: PieceColor = getPieceColor(piece);
-				const abbreviation: string = piece[1];
-				const pieceName: string = getPieceName(abbreviation);
+			const { allPieces, occupiedSquares } = initializeBoard(pieceStartingPositions);
 
-				for (const pieceStartingPositionIndex in pieceStartingPositions[piece]) {
-					const [ rank, file ]: number[] = pieceStartingPositions[piece][pieceStartingPositionIndex];
-
-					const newPiece: PieceType = new pieceConstructors[pieceName]({ color, abbreviation, rank, file, id : Number(pieceStartingPositionIndex)});
-
-					this.allPieces[piece].push(newPiece);
-					this.occupiedSquares[rank - 1][file - 1] = newPiece;
-				}
-			}
+			this.allPieces = allPieces;
+			this.occupiedSquares = occupiedSquares;
 
 			this.isInitialized = true;
 		},
@@ -302,13 +292,8 @@ export default Vue.extend({
 		setNextPlayerTurn(): void {
 			this.resetEnPassant();
 			this.isWhiteToMove = !this.isWhiteToMove;
-			const isCheckmate = this.isCheckmate();
-			if (isCheckmate) {
-				const result = this.isWhiteToMove
-					? '0 - 1 Black Wins!'
-					: '1 - 0 White Wins!';
-				this.$emit('game-over', result);
-			}
+			this.checkIfCheckmate();
+			this.checkIfDraw();
 		},
 
 		resetEnPassant(): void {
@@ -327,20 +312,54 @@ export default Vue.extend({
 			}
 		},
 
-		isCheckmate(): boolean {
+		checkIfCheckmate(): void {
 			const checkingPieces = getCheckingPieces(this.allPieces, this.occupiedSquares, this.colorToMoveNext);
+
+			if (checkingPieces.length === 0) {
+				return;
+			}
 
 			for (const pieceType in this.allPieces) {
 				if (pieceType[0] === this.colorToMoveNext[0]) {
 					for (const piece of this.allPieces[pieceType]) {
 						if (this.getLegalMoves(checkingPieces, piece).length > 0) {
-							return false;
+							return;
 						}
 					}
 				}
 			}
 
-			return true;
+			const result = this.isWhiteToMove
+				? '0 - 1 Black Wins!'
+				: '1 - 0 White Wins!';
+			this.$emit('game-over', result);
+		},
+
+		checkIfDraw(): void {
+			this.checkIfStalemate();
+			this.checkIfInsufficeintMaterial();
+			this.checkRepetition();
+			this.check50Moves();
+		},
+
+		checkIfStalemate(): void {
+			if(isStalemate(this.allPieces, this.occupiedSquares, this.colorToMoveNext)) {
+				const result = '1/2 - 1/2 Draw by stalemate!';
+				this.$emit('game-over', result);
+			}
+
+		},
+
+		checkIfInsufficeintMaterial(): void {
+			console.log(3);
+		},
+
+		checkRepetition(): void {
+
+		},
+
+		check50Moves(): void {
+
 		},
 
 		getLegalMoves(checkingPieces: Piece[], clickedPiece: Piece | null): number[][] {
