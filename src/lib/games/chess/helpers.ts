@@ -193,8 +193,6 @@ export const getPromotionPiece = (allPieces: AllPieces, { color, abbreviation, f
 		K : King,
 	};
 
-	console.log(pieceConstructors);
-
 	const id = getHighestExistingId(allPieces, abbreviation, color) + 1;
 
 	return new pieceConstructors[abbreviation]({

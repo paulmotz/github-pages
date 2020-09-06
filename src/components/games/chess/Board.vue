@@ -15,6 +15,7 @@
 				v-bind:colorToMoveNext="colorToMoveNext"
 				v-bind:piece="occupiedSquares[isWhite ? 7 - rankIndex : rankIndex][isWhite ? fileIndex : 7 - fileIndex]"
 				v-bind:isHighlighted="possibleMoveSquares[isWhite ? 7 - rankIndex : rankIndex][isWhite ? fileIndex : 7 - fileIndex]"
+				v-bind:isGameOver="isGameOver"
 				v-on:square-clicked="handleSquareClick")
 			.border-cell {{ rank }}
 		.border-row
@@ -58,6 +59,7 @@ export default Vue.extend({
 			boardStates         : {} as {[index: string]: number},
 			moveCounter         : 0,
 			gameStates          : [],
+			isGameOver          : false,
 			occupiedSquares     : [] as (Piece | null)[][],
 			possibleMoveSquares : [] as boolean[][],
 			allPieces           : {} as {[index: string]: Piece[]},
@@ -136,9 +138,14 @@ export default Vue.extend({
 			this.trackBoardState();
 
 			this.isInitialized = true;
+			this.isGameOver = false;
 		},
 
 		handleSquareClick({ square, rank, file }: SquareClickedEvent): void {
+			if (this.isGameOver) {
+				return;
+			}
+
 			const checkingPieces = getCheckingPieces(this.allPieces, this.occupiedSquares, this.colorToMoveNext);
 
 			if (checkingPieces.length > 0) {
@@ -377,6 +384,7 @@ export default Vue.extend({
 					? '0 - 1 Black Wins!'
 					: '1 - 0 White Wins!';
 				this.$emit('game-over', result);
+				this.endGame();
 			}
 		},
 
@@ -391,6 +399,7 @@ export default Vue.extend({
 			if (isStalemate(this.allPieces, this.occupiedSquares, this.colorToMoveNext)) {
 				const result = '1/2 - 1/2 Draw by stalemate!';
 				this.$emit('game-over', result);
+				this.endGame();
 			}
 		},
 
@@ -398,6 +407,7 @@ export default Vue.extend({
 			if (hasInsufficientMatingMaterial(this.allPieces)) {
 				const result = '1/2 - 1/2 Draw by insufficient material!';
 				this.$emit('game-over', result);
+				this.endGame();
 			}
 		},
 		
@@ -406,6 +416,7 @@ export default Vue.extend({
 			if (this.moveCounter >= 100) {
 				const result = '1/2 - 1/2 Draw by fifty-move rule';
 				this.$emit('game-over', result);
+				this.endGame();
 			}
 		},
 
@@ -414,8 +425,13 @@ export default Vue.extend({
 				if (this.boardStates[boardState] >= 3) {
 					const result = '1/2 - 1/2 Draw by repetition';
 					this.$emit('game-over', result);
+					this.endGame();
 				}
 			}
+		},
+
+		endGame(): void {
+			this.isGameOver = true;
 		},
 
 		trackBoardState(): void {

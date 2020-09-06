@@ -33,6 +33,10 @@ export default Vue.extend({
 			type    : Boolean,
 			default : false,
 		},
+		isGameOver : {
+			type    : Boolean,
+			default : false,
+		},
 		isWhiteDown : Boolean,
 		piece       : {
 			type    : [ Pawn, Knight, Bishop, Rook, Queen, King ],
@@ -64,6 +68,7 @@ export default Vue.extend({
 				'highlighted'   : this.isHighlighted,
 				'has-piece'     : this.piece !== null,
 				'matches-color' : this.colorToMoveNext === this.pieceColor,
+				'is-game-over'  : this.isGameOver,
 			};
 		},
 	},
@@ -111,7 +116,7 @@ export default Vue.extend({
 	.hollow-circle
 		background-color: rgba(0, 0, 0, 0.2)
 
-.has-piece.matches-color, .highlighted
+.has-piece.matches-color:not(.is-game-over), .highlighted:not(.is-game-over)
 	cursor: pointer
 
 .fa-icon
