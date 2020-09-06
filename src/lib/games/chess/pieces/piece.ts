@@ -150,10 +150,10 @@ export abstract class Piece {
 		];
 
 		for (const currDir of directions) {
-			const [f, r] = currDir;
+			const [r, f] = currDir;
 			while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
-				file += f;
 				rank += r;
+				file += f;
 				const squareContent: Piece | null = occupiedSquares[rank - 1][file - 1];
 				if (squareContent instanceof Piece) {
 					if (squareContent.color === this.color && squareContent.abbreviation === 'K') {
@@ -164,8 +164,8 @@ export abstract class Piece {
 					}
 				}
 			}
-			file = this.file;
 			rank = this.rank;
+			file = this.file;
 		}
 
 		return null;
@@ -177,22 +177,25 @@ export abstract class Piece {
 	 */
 	getPinDirection(occupiedSquares: (Piece | null)[][]): number[] | undefined {
 		const kd = this.getKingDirection(occupiedSquares);
-		if (!kd) return;
+		if (!kd) {
+			return;
+		}
+
 		else {
-			let file = this.file;
 			let rank = this.rank;
-			const f = -kd[0];
-			const r = -kd[1];
+			let file = this.file;
+			const r = kd[0] === 0 ? kd[0] : -kd[0];
+			const f = kd[1] === 0 ? kd[1] : -kd[1];
 
 			// diagonal move
-			if ((f + r) % 2 === 0) {
-				while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
-					file += f;
+			if ((r + f) % 2 === 0) {
+				while (rank + r >= 1 && rank + r <= 8 && file + f >= 1 && file + f <= 8) {
 					rank += r;
+					file += f;
 					const inlinePiece: Piece | null = occupiedSquares[rank - 1][file - 1];
 					if (inlinePiece instanceof Piece) {
 						if (inlinePiece.color !== this.color && (inlinePiece.abbreviation === 'B' || inlinePiece.abbreviation === 'Q')) {
-							return [f, r];
+							return [r, f];
 						} 
 						else {
 							break;
@@ -203,13 +206,13 @@ export abstract class Piece {
 
 			// horizontal/vertical move
 			else {
-				while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
-					file += f;
+				while (rank + r >= 1 && rank + r <= 8 && file + f >= 1 && file + f <= 8) {
 					rank += r;
+					file += f;
 					const inlinePiece: Piece | null = occupiedSquares[rank - 1][file - 1];
 					if (inlinePiece instanceof Piece) {
 						if (inlinePiece.color !== this.color && (inlinePiece.abbreviation === 'R' || inlinePiece.abbreviation === 'Q')) {
-							return [f, r];
+							return [r, f];
 						} 
 						else {
 							break;

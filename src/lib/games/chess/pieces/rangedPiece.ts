@@ -33,14 +33,15 @@ export abstract class RangedPiece extends Piece {
 			return moves;
 		}
 
-		const [ filePinDirectionIn, rankPinDirectionIn ] = pinDirection;
-		const filePinDirectionOut = filePinDirectionIn * -1 ;
+		const [ rankPinDirectionIn, filePinDirectionIn ] = pinDirection;
 		const rankPinDirectionOut = rankPinDirectionIn * -1 ;
+		const filePinDirectionOut = filePinDirectionIn * -1 ;
 
 		for (const direction of moveDirections) {
-			if ((direction[0] === filePinDirectionIn && direction[0] === rankPinDirectionIn) || 
-			(direction[0] === filePinDirectionOut && direction[0] === rankPinDirectionOut))
-			moves.push(...this.moveOneWay(rank, file, direction[0], direction[1], false, occupiedSquares));
+			if ((direction[0] === rankPinDirectionIn && direction[1] === filePinDirectionIn) ||
+				(direction[0] === rankPinDirectionOut && direction[1] === filePinDirectionOut)) {
+				moves.push(...this.moveOneWay(rank, file, direction[0], direction[1], false, occupiedSquares));
+			}
 		}
 
 		return moves;
@@ -58,9 +59,9 @@ export abstract class RangedPiece extends Piece {
 	 */
 	moveOneWay(rank: number, file: number, r: number, f: number, isDefending: boolean, occupiedSquares: (Piece | null)[][]): number[][] {
 		const moves = [];
-		while (file + f >= 1 && file + f <= 8 && rank + r >= 1 && rank + r <= 8) {
-			file += f;
+		while (rank + r >= 1 && rank + r <= 8 && file + f >= 1 && file + f <= 8) {
 			rank += r;
+			file += f;
 			const squareContent: Piece | null = occupiedSquares[rank - 1][file - 1];
 			if (squareContent instanceof Piece) {
 				if (isDefending || squareContent.color !== this.color) {

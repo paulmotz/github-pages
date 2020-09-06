@@ -1,7 +1,5 @@
 Core
 promotion
-stalemate/draws should actually end the game
-cursor should not be pointer if game is over
 
 Nice to have
 Algebraic notation
