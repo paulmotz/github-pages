@@ -96,6 +96,20 @@ export interface MoveParams {
 	allPieces?: AllPieces;
 }
 
+export interface GetLegalMoveParams {
+	allPieces: AllPieces;
+	checkingPieces: Piece[];
+	colorToMoveNext: PieceColor;
+	clickedPiece: Piece | null;
+	occupiedSquares: (Piece | null)[][];
+}
+
+export interface IsCheckmateParams {
+	allPieces: AllPieces;
+	colorToMoveNext: PieceColor;
+	occupiedSquares: (Piece | null)[][];
+}
+
 export interface BoardState {
 	occupiedSquares: (Piece | null)[][];
 	allPieces: AllPieces;

@@ -1,5 +1,5 @@
-import { PieceColor, SquareLocation, PiecesByType } from '@/lib/types';
-import { Piece, King } from '@/lib/games/chess/pieces';
+import { PieceColor, SquareLocation, PiecesByType, GetLegalMoveParams, IsCheckmateParams } from '@/lib/types';
+import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export const getKingLocation = (allPieces: PiecesByType, color: PieceColor): SquareLocation => {
 	const [ king ] = allPieces[`${color[0]}K`];
@@ -81,4 +81,113 @@ export const removeAttackedSquares = (moves: number[][], attackedSquares: number
 			return move[0] === attackedSquare[0] && move[1] === attackedSquare[1];
 		});
 	});
+};
+
+export const getLegalMoves = ({
+	allPieces,
+	checkingPieces,
+	clickedPiece,
+	colorToMoveNext,
+	occupiedSquares,
+}: GetLegalMoveParams): number[][] => {
+	if (clickedPiece == null) {
+		return [];
+	}
+
+	if (checkingPieces.length === 0) {
+		return clickedPiece.moves({
+			occupiedSquares : occupiedSquares,
+			allPieces       : allPieces,
+		});
+	}
+
+	const legalMoves = [];
+	const kingLocation = getKingLocation(allPieces, colorToMoveNext);
+	// When there is only one piece checking, it might be able to be captured or blocked
+	if (checkingPieces.length === 1) {
+		const [ checkingPiece ] = checkingPieces;
+
+		const checkingPieceRank = checkingPiece.rank;
+		const checkingPieceFile = checkingPiece.file;
+
+		const clickedPieceProtectedSquares = clickedPiece instanceof King
+			? clickedPiece.moves({
+				allPieces       : allPieces,
+				occupiedSquares : occupiedSquares,
+			})
+			: clickedPiece.protectedSquares(occupiedSquares);
+
+		const captureMove: number[] | undefined = clickedPieceProtectedSquares.find(square => {
+			return square[0] === checkingPieceRank && square[1] === checkingPieceFile;
+		});
+		if (captureMove) {
+			legalMoves.push(captureMove);
+		}
+
+		// Neither knights nor pawns can be blocked when checking
+		if (!(checkingPiece instanceof Knight) && !(checkingPiece instanceof Pawn)) {
+			const clickedPieceMoveSquares = clickedPiece.moves({ occupiedSquares : occupiedSquares });
+
+			const checkingPath = getCheckingPath(checkingPiece, kingLocation, false);
+
+			const overlap = clickedPieceMoveSquares.filter(defendingSquare => {
+				return checkingPath.find(attackingSquare => {
+					return defendingSquare[0] === attackingSquare[0] && defendingSquare[1] === attackingSquare[1];
+				});
+			});
+
+			if (overlap.length > 0) {
+				legalMoves.push(...overlap);
+			}
+		}
+	}
+
+	if (clickedPiece instanceof King) {
+		const checkingPaths = checkingPieces.map(checkingPiece => {
+			if (checkingPiece instanceof Bishop || checkingPiece instanceof Rook || checkingPiece instanceof Queen) {
+				return [ ...getCheckingPath(checkingPiece, kingLocation, true) ];
+			}
+
+			return [];
+		}).flat();
+
+		const kingMoves = clickedPiece.moves({
+			occupiedSquares : occupiedSquares,
+			allPieces       : allPieces,
+		});
+
+		legalMoves.push(...removeAttackedSquares(kingMoves, checkingPaths));
+	}
+
+	return legalMoves;
+};
+
+export const isCheckmate = ({
+	allPieces,
+	colorToMoveNext,
+	occupiedSquares,
+}: IsCheckmateParams): boolean => {
+	const checkingPieces = getCheckingPieces(allPieces, occupiedSquares, colorToMoveNext);
+
+	if (checkingPieces.length === 0) {
+		return false;
+	}
+
+	for (const pieceType in allPieces) {
+		if (pieceType[0] === colorToMoveNext[0]) {
+			for (const piece of allPieces[pieceType]) {
+				if (getLegalMoves({
+					allPieces       : allPieces,
+					checkingPieces,
+					clickedPiece    : piece,
+					colorToMoveNext : colorToMoveNext,
+					occupiedSquares : occupiedSquares,
+				}).length > 0) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
 };

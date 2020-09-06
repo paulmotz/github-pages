@@ -26,9 +26,9 @@ import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
 import { PieceColor, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { pieceStartingPositions, findPieceIndex, pieceTypes, initializeBoard } from '@/lib/games/chess/helpers';
-import { getCheckingPieces, getKingLocation, getCheckingPath, removeAttackedSquares } from '@/lib/games/chess/checkingHelpers';
+import { getCheckingPieces, getLegalMoves, isCheckmate } from '@/lib/games/chess/checkingHelpers';
 import { isStalemate, hasInsufficientMatingMaterial, getBoardState } from '@/lib/games/chess/drawHelpers';
-import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
+import { Piece, Pawn, Rook, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Board',
@@ -150,7 +150,13 @@ export default Vue.extend({
 					return;
 				}
 
-				const legalMoves = this.getLegalMoves(checkingPieces, square);
+				const legalMoves = getLegalMoves({
+					allPieces       : this.allPieces,
+					checkingPieces,
+					clickedPiece    : square,
+					colorToMoveNext : this.colorToMoveNext,
+					occupiedSquares : this.occupiedSquares,
+				});
 
 				this.setMoveSquares(legalMoves);
 				this.selectedPiece = square;
@@ -264,7 +270,6 @@ export default Vue.extend({
 			}
 		},
 
-
 		capturePiece(piece: Piece): void {
 			const pieceType = `${piece.color[0]}${piece.abbreviation}`;
 			const pieceIndexToCapture = this.allPieces[pieceType].findIndex((p: Piece) => Number(p.id) === Number(piece.id));
@@ -324,26 +329,16 @@ export default Vue.extend({
 		},
 
 		checkIfCheckmate(): void {
-			const checkingPieces = getCheckingPieces(this.allPieces, this.occupiedSquares, this.colorToMoveNext);
-
-			if (checkingPieces.length === 0) {
-				return;
+			if (isCheckmate({
+				allPieces       : this.allPieces,
+				colorToMoveNext : this.colorToMoveNext,
+				occupiedSquares : this.occupiedSquares,
+			})) {
+				const result = this.isWhiteToMove
+					? '0 - 1 Black Wins!'
+					: '1 - 0 White Wins!';
+				this.$emit('game-over', result);
 			}
-
-			for (const pieceType in this.allPieces) {
-				if (pieceType[0] === this.colorToMoveNext[0]) {
-					for (const piece of this.allPieces[pieceType]) {
-						if (this.getLegalMoves(checkingPieces, piece).length > 0) {
-							return;
-						}
-					}
-				}
-			}
-
-			const result = this.isWhiteToMove
-				? '0 - 1 Black Wins!'
-				: '1 - 0 White Wins!';
-			this.$emit('game-over', result);
 		},
 
 		checkIfDraw(): void {
@@ -392,79 +387,6 @@ export default Vue.extend({
 			} else {
 				this.boardStates[newBoardState] = 1;
 			}
-		},
-
-		getLegalMoves(checkingPieces: Piece[], clickedPiece: Piece | null): number[][] {
-			if (clickedPiece == null) {
-				return [];
-			}
-
-			if (checkingPieces.length === 0) {
-				return clickedPiece.moves({
-					occupiedSquares : this.occupiedSquares,
-					allPieces       : this.allPieces,
-				});
-			}
-
-			const legalMoves = [];
-			const kingLocation = getKingLocation(this.allPieces, this.colorToMoveNext);
-			// When there is only one piece checking, it might be able to be captured or blocked
-			if (checkingPieces.length === 1) {
-				const [ checkingPiece ] = checkingPieces;
-
-				const checkingPieceRank = checkingPiece.rank;
-				const checkingPieceFile = checkingPiece.file;
-
-				const clickedPieceProtectedSquares = clickedPiece instanceof King
-					? clickedPiece.moves({
-						allPieces       : this.allPieces,
-						occupiedSquares : this.occupiedSquares,
-					})
-					: clickedPiece.protectedSquares(this.occupiedSquares);
-
-				const captureMove: number[] | undefined = clickedPieceProtectedSquares.find(square => {
-					return square[0] === checkingPieceRank && square[1] === checkingPieceFile;
-				});
-				if (captureMove) {
-					legalMoves.push(captureMove);
-				}
-
-				// Neither knights nor pawns can be blocked when checking
-				if (!(checkingPiece instanceof Knight) && !(checkingPiece instanceof Pawn)) {
-					const clickedPieceMoveSquares = clickedPiece.moves({ occupiedSquares : this.occupiedSquares });
-
-					const checkingPath = getCheckingPath(checkingPiece, kingLocation, false);
-
-					const overlap = clickedPieceMoveSquares.filter(defendingSquare => {
-						return checkingPath.find(attackingSquare => {
-							return defendingSquare[0] === attackingSquare[0] && defendingSquare[1] === attackingSquare[1];
-						});
-					});
-
-					if (overlap.length > 0) {
-						legalMoves.push(...overlap);
-					}
-				}
-			}
-
-			if (clickedPiece instanceof King) {
-				const checkingPaths = checkingPieces.map(checkingPiece => {
-					if (checkingPiece instanceof Bishop || checkingPiece instanceof Rook || checkingPiece instanceof Queen) {
-						return [ ...getCheckingPath(checkingPiece, kingLocation, true) ];
-					}
-
-					return [];
-				}).flat();
-
-				const kingMoves = clickedPiece.moves({
-					occupiedSquares : this.occupiedSquares,
-					allPieces       : this.allPieces,
-				});
-
-				legalMoves.push(...removeAttackedSquares(kingMoves, checkingPaths));
-			}
-
-			return legalMoves;
 		},
 	},
 });
