@@ -571,17 +571,188 @@ describe('drawHelpers', () => {
 				file         : 5,
 				id           : 0,
 			});
-
 			const allPieces = {
 				bK : [ blackKing ],
 				wB : [ whiteBishop ],
 				wN : [],
 				wK : [ whiteKing ],
 			};
+
 			expect(hasKnightAndBishop(allPieces)).toBe(false);
 		});
 	});
 
 	describe('hasInsufficientMatingMaterial', () => {
+		it('should return true when there are no major pieces, pawns and insufficient minor pieces', () => {
+			const whiteKing = new King({
+				color        : 'white',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const whiteBishop = new Bishop({
+				color        : 'white',
+				abbreviation : 'B',
+				rank         : 1,
+				file         : 3,
+				id           : 0,
+			});
+			const blackKing = new King({
+				color        : 'black',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const allPieces = {
+				bK : [ blackKing ],
+				wB : [ whiteBishop ],
+				wK : [ whiteKing ],
+			};
+
+			expect(hasInsufficientMatingMaterial(allPieces)).toBe(true);
+		});
+
+		it('should return false when there are major pieces', () => {
+			const whiteKing = new King({
+				color        : 'white',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const whiteQuuen = new Queen({
+				color        : 'white',
+				abbreviation : 'Q',
+				rank         : 1,
+				file         : 4,
+				id           : 0,
+			});
+			const blackKing = new King({
+				color        : 'black',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const allPieces = {
+				bK : [ blackKing ],
+				wQ : [ whiteQuuen ],
+				wK : [ whiteKing ],
+			};
+
+			expect(hasInsufficientMatingMaterial(allPieces)).toBe(false);
+		});	
+
+		it('should return false when there are pawns', () => {
+			const whiteKing = new King({
+				color        : 'white',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const whitePawn = new Pawn({
+				color        : 'white',
+				abbreviation : 'P',
+				rank         : 2,
+				file         : 4,
+				id           : 0,
+			});
+			const blackKing = new King({
+				color        : 'black',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const allPieces = {
+				bK : [ blackKing ],
+				wP : [ whitePawn ],
+				wK : [ whiteKing ],
+			};
+
+			expect(hasInsufficientMatingMaterial(allPieces)).toBe(false);
+		});
+
+		it('should return false when there are sufficient bishops', () => {
+			const whiteKing = new King({
+				color        : 'white',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const blackBishops = [
+				new Bishop({
+					color        : 'black',
+					abbreviation : 'B',
+					rank         : 8,
+					file         : 3,
+					id           : 0,
+				}),
+				new Bishop({
+					color        : 'black',
+					abbreviation : 'B',
+					rank         : 8,
+					file         : 6,
+					id           : 0,
+				}),
+			];
+			const blackKing = new King({
+				color        : 'black',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const allPieces = {
+				bK : [ blackKing ],
+				bB : [ ...blackBishops ],
+				wK : [ whiteKing ],
+			};
+
+			expect(hasInsufficientMatingMaterial(allPieces)).toBe(false);
+		});
+
+		it('should return false when there is a knight and a bishop of the same color', () => {
+			const whiteKing = new King({
+				color        : 'white',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const blackBishop = new Bishop({
+				color        : 'black',
+				abbreviation : 'B',
+				rank         : 8,
+				file         : 3,
+				id           : 0,
+			});
+			const blackKnight = new Knight({
+				color        : 'black',
+				abbreviation : 'N',
+				rank         : 8,
+				file         : 2,
+				id           : 0,
+			});
+			const blackKing = new King({
+				color        : 'black',
+				abbreviation : 'K',
+				rank         : 1,
+				file         : 5,
+				id           : 0,
+			});
+			const allPieces = {
+				bK : [ blackKing ],
+				bB : [ blackBishop ],
+				bN : [ blackKnight ],
+				wK : [ whiteKing ],
+			};
+
+			expect(hasInsufficientMatingMaterial(allPieces)).toBe(false);
+		});
 	});
 });

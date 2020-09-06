@@ -55,9 +55,7 @@ export const hasKnightAndBishop = (allPieces: PiecesByType): boolean => {
 		&& allPieces[`${color}N`] && allPieces[`${color}N`].length > 0);
 };
 
-export const hasInsufficientMatingMaterial = (allPieces: PiecesByType): boolean => {
-	return !(hasMajorPieces(allPieces) 
-		|| hasPawns(allPieces) 
-		|| hasSufficientBishops(allPieces)
-		|| hasKnightAndBishop(allPieces));
-};
+export const hasInsufficientMatingMaterial = (allPieces: PiecesByType): boolean => !(hasMajorPieces	(allPieces)
+	|| hasPawns(allPieces)
+	|| hasSufficientBishops(allPieces)
+	|| hasKnightAndBishop(allPieces));
