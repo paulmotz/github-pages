@@ -312,8 +312,8 @@ export default Vue.extend({
 			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
 
 			const oldPieceType = `${this.colorToMoveNext[0]}P`;
-			const pieceIndexToCapture = this.allPieces[oldPieceType].findIndex((p: Piece) => Number(p.rank) === Number(rank) &&  Number(p.file) === Number(file));
-			this.allPieces[oldPieceType].splice(pieceIndexToCapture, 1);
+			const oldPiece = this.allPieces[oldPieceType].findIndex((p: Piece) => Number(p.rank) === Number(rank) &&  Number(p.file) === Number(file));
+			this.allPieces[oldPieceType].splice(oldPiece, 1);
 
 			const newPieceType = `${this.colorToMoveNext[0]}${pieceAbbreviation}`;
 			this.allPieces[newPieceType].push(promotionPiece);
