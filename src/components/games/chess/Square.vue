@@ -11,12 +11,17 @@
 
 <script lang='ts'>
 import Vue from 'vue';
+import { PieceColor } from '@/lib/types';
 import { Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
 	name : 'Square',
 	
 	props : {
+		colorToMoveNext : {
+			type    : Object as () => PieceColor,
+			default : 'white',
+		},
 		fileIndex : {
 			type    : Number,
 			default : 0,
@@ -55,10 +60,11 @@ export default Vue.extend({
 
 		classObject(): Record<string, boolean> {
 			return {
-				'dark-square'  : !this.isLightSquare,
-				'light-square' : this.isLightSquare,
-				'highlighted'  : this.isHighlighted,
-				'has-piece'    : this.piece !== null,
+				'dark-square'   : !this.isLightSquare,
+				'light-square'  : this.isLightSquare,
+				'highlighted'   : this.isHighlighted,
+				'has-piece'     : this.piece !== null,
+				'matches-color' : this.colorToMoveNext === this.pieceColor,
 			};
 		},
 	},
@@ -106,7 +112,7 @@ export default Vue.extend({
 	.hollow-circle
 		background-color: rgba(0, 0, 0, 0.2)
 
-.has-piece, .highlighted
+.has-piece.matches-color, .highlighted
 	cursor: pointer
 
 .fa-icon

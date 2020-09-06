@@ -8,9 +8,11 @@
 			.border-cell {{ rank }}
 			Square.game-cell(
 				v-for="(file, fileIndex) in files"
+				v-bind:key="fileIndex"
 				v-bind:fileIndex="fileIndex + 1"
 				v-bind:rankIndex="rank"
 				v-bind:isWhiteDown="isWhite"
+				v-bind:colorToMoveNext="colorToMoveNext"
 				v-bind:piece="occupiedSquares[isWhite ? 7 - rankIndex : rankIndex][isWhite ? fileIndex : 7 - fileIndex]"
 				v-bind:isHighlighted="possibleMoveSquares[isWhite ? 7 - rankIndex : rankIndex][isWhite ? fileIndex : 7 - fileIndex]"
 				v-on:square-clicked="handleSquareClick")
