@@ -1,4 +1,4 @@
-import { isStalemate, hasMajorPieces, hasPawns, hasDifferentColorSquarePieces, hasSufficientBishops, hasKnightAndBishop, hasInsufficientMatingMaterial } from './drawHelpers';
+import { isStalemate, hasMajorPieces, hasPawns, hasDifferentColorSquarePieces, hasSufficientBishops, hasKnightAndBishop, hasInsufficientMatingMaterial, getBoardState } from './drawHelpers';
 import { initializeBoard } from './helpers';
 import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from './pieces';
 import { PiecesByType } from '@/lib/types';
@@ -19,7 +19,7 @@ const getOccupiedSquares = (allPieces: PiecesByType): (Piece | null)[][] => {
 
 describe('drawHelpers', () => {
 	describe('isStalemate', () => {
-		it('should return true for a positino that is a stalemate', () => {
+		it('should return true for a position that is a stalemate', () => {
 			const whiteQueen = new Queen({
 				color        : 'white',
 				abbreviation : 'Q',
@@ -753,6 +753,16 @@ describe('drawHelpers', () => {
 			};
 
 			expect(hasInsufficientMatingMaterial(allPieces)).toBe(false);
+		});
+	});
+
+	describe('hasMajorPieces', () => {
+		it('shold return a string representing the current board state', () => {
+			const { occupiedSquares } = initializeBoard();
+
+			const boardState = getBoardState(occupiedSquares);
+
+			expect(boardState).toBe('wRwNwBwQwKwBwNwRwPwPwPwPwPwPwPwP________________________________________________________________bPbPbPbPbPbPbPbPbRbNbBbQbKbBbNbR');
 		});
 	});
 });

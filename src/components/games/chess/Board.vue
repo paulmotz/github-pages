@@ -27,7 +27,7 @@ import Square from '@/components/games/chess/Square.vue';
 import { PieceColor, SquareClickedEvent, PieceMove } from '@/lib/types';
 import { pieceStartingPositions, findPieceIndex, pieceTypes, initializeBoard } from '@/lib/games/chess/helpers';
 import { getCheckingPieces, getKingLocation, getCheckingPath, removeAttackedSquares } from '@/lib/games/chess/checkingHelpers';
-import { isStalemate } from '@/lib/games/chess/drawHelpers';
+import { isStalemate, hasInsufficientMatingMaterial, getBoardState } from '@/lib/games/chess/drawHelpers';
 import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
@@ -52,6 +52,7 @@ export default Vue.extend({
 	data : function() {
 		return {
 			boardSize           : 8,
+			boardStates         : {} as {[index: string]: number},
 			moveCounter         : 0,
 			gameStates          : [],
 			occupiedSquares     : [] as (Piece | null)[][],
@@ -119,12 +120,14 @@ export default Vue.extend({
 			this.isWhiteToMove = true;
 			this.selectedPiece = null;
 			this.moveCounter = 0;
+			this.boardStates = {};
 			this.gameStates = [];
 
 			const { allPieces, occupiedSquares } = initializeBoard(pieceStartingPositions);
 
 			this.allPieces = allPieces;
 			this.occupiedSquares = occupiedSquares;
+			this.trackBoardState();
 
 			this.isInitialized = true;
 		},
@@ -184,9 +187,13 @@ export default Vue.extend({
 			currentPieceRow[currentPieceFile - 1] = null;
 			this.$set(this.occupiedSquares, currentPieceRank - 1, currentPieceRow);
 
-			// HACK: Change this once board states are kept track of
-			if (piece instanceof Pawn && Math.abs(piece.rank - rank) === 2) {
-				piece.canBeCapturedByEnPassant = true;
+			if (piece instanceof Pawn) {
+				this.moveCounter = 0;
+
+				// HACK: Change this once board states are kept track of
+				if (Math.abs(piece.rank - rank) === 2) {
+					piece.canBeCapturedByEnPassant = true;
+				}
 			}
 
 			if (piece instanceof King) {
@@ -225,6 +232,9 @@ export default Vue.extend({
 			newPieceRow[file - 1] = piece;
 			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
 
+			this.moveCounter++;
+			this.trackBoardState();
+
 			this.completeTurn();
 		},
 
@@ -259,6 +269,7 @@ export default Vue.extend({
 			const pieceType = `${piece.color[0]}${piece.abbreviation}`;
 			const pieceIndexToCapture = this.allPieces[pieceType].findIndex((p: Piece) => Number(p.id) === Number(piece.id));
 			this.allPieces[pieceType].splice(pieceIndexToCapture, 1);
+			this.moveCounter = 0;
 		},
 
 		capturePieceByEnPassant(piece: Piece): void {
@@ -347,19 +358,40 @@ export default Vue.extend({
 				const result = '1/2 - 1/2 Draw by stalemate!';
 				this.$emit('game-over', result);
 			}
-
 		},
 
 		checkIfInsufficeintMaterial(): void {
-			console.log(3);
+			if (hasInsufficientMatingMaterial(this.allPieces)) {
+				const result = '1/2 - 1/2 Draw by insufficient material!';
+				this.$emit('game-over', result);
+			}
+		},
+		
+		check50Moves(): void {
+			// It's easier to just track each side's moves and check twice the amount
+			if (this.moveCounter >= 100) {
+				const result = '1/2 - 1/2 Draw by fifty-move rule';
+				this.$emit('game-over', result);
+			}
 		},
 
 		checkRepetition(): void {
-
+			for (const boardState in this.boardStates) {
+				if (this.boardStates[boardState] >= 3) {
+					const result = '1/2 - 1/2 Draw by repetition';
+					this.$emit('game-over', result);
+				}
+			}
 		},
 
-		check50Moves(): void {
+		trackBoardState(): void {
+			const newBoardState = getBoardState(this.occupiedSquares);
 
+			if (this.boardStates[newBoardState]) {
+				this.boardStates[newBoardState]++;
+			} else {
+				this.boardStates[newBoardState] = 1;
+			}
 		},
 
 		getLegalMoves(checkingPieces: Piece[], clickedPiece: Piece | null): number[][] {
@@ -408,7 +440,7 @@ export default Vue.extend({
 							return defendingSquare[0] === attackingSquare[0] && defendingSquare[1] === attackingSquare[1];
 						});
 					});
-					
+
 					if (overlap.length > 0) {
 						legalMoves.push(...overlap);
 					}

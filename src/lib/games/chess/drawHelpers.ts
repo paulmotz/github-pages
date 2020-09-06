@@ -59,3 +59,15 @@ export const hasInsufficientMatingMaterial = (allPieces: PiecesByType): boolean 
 	|| hasPawns(allPieces)
 	|| hasSufficientBishops(allPieces)
 	|| hasKnightAndBishop(allPieces));
+
+export const getBoardState = (occupiedSquares: (Piece | null)[][]): string => {
+	let boardState = '';
+
+	for (const rank of occupiedSquares) {
+		for (const square of rank) {
+			boardState += square === null ? '__' : `${square.color[0]}${square.abbreviation}`;
+		}
+	}
+
+	return boardState;
+};
