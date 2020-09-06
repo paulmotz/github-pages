@@ -1,4 +1,4 @@
-import { PieceColor, PieceType, AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece, BoardState, PieceAbbreviation } from '@/lib/types';
+import { PieceColor, PieceType, AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece, BoardState, PieceAbbreviation, SquareLocation, PiecePromoteProps } from '@/lib/types';
 import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 /**
@@ -97,21 +97,23 @@ export const getAttackedSquares = (allPieces: AllPieces, occupiedSquares: (Piece
 };
 
 export const pieceStartingPositions: PieceStartingPositions = {
-	'wB' : [ [1, 3], [1, 6] ],
-	'wN' : [ [1, 2], [1, 7] ],
-	'wK' : [ [1, 5] ],
-	'wP' : [ [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [2, 8] ],
-	'wQ' : [ [1, 4] ],
-	'wR' : [ [1, 1], [1, 8] ],
-	'bB' : [ [8, 3], [8, 6] ],
-	'bN' : [ [8, 2], [8, 7] ],
-	'bK' : [ [8, 5]] ,
-	'bP' : [ [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8]] ,
-	'bQ' : [ [8, 4] ],
-	'bR' : [ [8, 1], [8, 8] ],
+	// 'wB' : [ [1, 3], [1, 6] ],
+	// 'wN' : [ [1, 2], [1, 7] ],
 	// 'wK' : [ [1, 5] ],
+	// 'wP' : [ [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [2, 8] ],
 	// 'wQ' : [ [1, 4] ],
+	// 'wR' : [ [1, 1], [1, 8] ],
+	// 'bB' : [ [8, 3], [8, 6] ],
+	// 'bN' : [ [8, 2], [8, 7] ],
 	// 'bK' : [ [8, 5]] ,
+	// 'bP' : [ [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8]] ,
+	// 'bQ' : [ [8, 4] ],
+	// 'bR' : [ [8, 1], [8, 8] ],
+	'wK' : [ [1, 5] ],
+	'bK' : [ [7, 2] ],
+	'wP' : [ [7, 6]] ,
+	'bP' : [ [2, 1]] ,
+	'wR' : [ [1, 1], [1, 8] ],
 };
 
 export const pieceTypes: ColorAndPiece[] = [
@@ -120,12 +122,12 @@ export const pieceTypes: ColorAndPiece[] = [
 
 export const initializeBoard = (position = pieceStartingPositions): BoardState => {
 	const pieceConstructors = {
-		'P' : Pawn,
-		'N' : Knight,
-		'B' : Bishop,
-		'R' : Rook,
-		'Q' : Queen,
-		'K' : King,
+		P : Pawn,
+		N : Knight,
+		B : Bishop,
+		R : Rook,
+		Q : Queen,
+		K : King,
 	};
 
 	const allPieces: AllPieces = {};
@@ -158,4 +160,48 @@ export const initializeBoard = (position = pieceStartingPositions): BoardState =
 		allPieces,
 		occupiedSquares,
 	};
-}; 
+};
+
+// HACK: Would Vuex make this better/unnecessary?
+export const findPawnToPromoteLocation = (allPieces: AllPieces, color: PieceColor): SquareLocation => {
+	const pawn: Piece | undefined = allPieces[`${color[0]}P`].find(pawn => color === 'white' ? pawn.rank === 8 : pawn.rank === 1);
+	
+	if (!pawn) {
+		throw new Error('Could not promote pawn!');
+	}
+
+	return {
+		rank : pawn.rank,
+		file : pawn.file,
+	};
+};
+
+export const getHighestExistingId = (allPieces: AllPieces, abbreviation: PieceAbbreviation, color: string): number => {
+	const arr  = allPieces[`${color[0]}${abbreviation}`];
+	
+	return Math.max(...arr.map(e => e.id));
+};
+
+export const getPromotionPiece = (allPieces: AllPieces, { color, abbreviation, file, rank }: PiecePromoteProps): Piece => {
+	// HACK: Why does this have to be in the function body?
+	const pieceConstructors = {
+		P : Pawn,
+		N : Knight,
+		B : Bishop,
+		R : Rook,
+		Q : Queen,
+		K : King,
+	};
+
+	console.log(pieceConstructors);
+
+	const id = getHighestExistingId(allPieces, abbreviation, color) + 1;
+
+	return new pieceConstructors[abbreviation]({
+		color,
+		rank,
+		file,
+		abbreviation,
+		id,
+	});
+};

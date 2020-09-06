@@ -60,6 +60,13 @@ export interface PieceProps {
 	hasMoved?    : boolean;
 }
 
+export interface PiecePromoteProps {
+	color: PieceColor;
+	abbreviation: PieceAbbreviation;
+	file: number;
+	rank: number;
+}
+
 export type PieceAbbreviation = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
 
 export type ColorAndPiece = 'wB' | 'wN' | 'wK' | 'wP' | 'wQ' | 'wR' | 'bB' | 'bN' | 'bK' | 'bP' | 'bQ' | 'bR';

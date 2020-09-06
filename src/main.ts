@@ -18,6 +18,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
 
+export const bus = new Vue();
+
 new Vue({
   router,
   render : h => h(App),

@@ -26,11 +26,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import Square from '@/components/games/chess/Square.vue';
-import { PieceColor, SquareClickedEvent, PieceMove } from '@/lib/types';
-import { pieceStartingPositions, findPieceIndex, pieceTypes, initializeBoard } from '@/lib/games/chess/helpers';
+import { PieceColor, SquareClickedEvent, PieceMove, PieceAbbreviation } from '@/lib/types';
+import { pieceStartingPositions, findPieceIndex, pieceTypes, initializeBoard, findPawnToPromoteLocation, getPromotionPiece } from '@/lib/games/chess/helpers';
 import { getCheckingPieces, getLegalMoves, isCheckmate } from '@/lib/games/chess/checkingHelpers';
 import { isStalemate, hasInsufficientMatingMaterial, getBoardState } from '@/lib/games/chess/drawHelpers';
 import { Piece, Pawn, Rook, King } from '@/lib/games/chess/pieces';
+import { bus } from '../../../main';
 
 export default Vue.extend({
 	name : 'Board',
@@ -86,7 +87,7 @@ export default Vue.extend({
 		},
 
 		colorToMoveNext(): PieceColor {
-			return this.isWhiteToMove ? 'white' : 'black';
+			return this.isWhiteToMove ? 'white': 'black';
 		},
 	},
 
@@ -101,6 +102,9 @@ export default Vue.extend({
 
 	mounted() {
 		this.initializeGame();
+		bus.$on('promotion', (pieceType: PieceAbbreviation) => {
+			this.promotePawn(pieceType);
+		});
 	},
 
 	methods : {
@@ -198,10 +202,16 @@ export default Vue.extend({
 			if (piece instanceof Pawn) {
 				this.moveCounter = 0;
 
+				if (rank === 8 || rank === 1) {
+					this.$emit('pawn-reach-end');
+				}
+
 				// HACK: Change this once board states are kept track of
 				if (Math.abs(piece.rank - rank) === 2) {
 					piece.canBeCapturedByEnPassant = true;
 				}
+			} else {
+				this.moveCounter++;
 			}
 
 			if (piece instanceof King) {
@@ -236,12 +246,14 @@ export default Vue.extend({
 				}
 			}
 
+			if (piece instanceof Pawn && (rank === 8 || rank === 1)) {
+				this.$emit('pawn-reach-end');
+				return;
+			}
+
 			const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
 			newPieceRow[file - 1] = piece;
 			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
-
-			this.moveCounter++;
-			this.trackBoardState();
 
 			this.completeTurn();
 		},
@@ -286,6 +298,29 @@ export default Vue.extend({
 			this.$set(this.occupiedSquares, piece.rank - 1, newPieceRow);
 		},
 
+		promotePawn(pieceAbbreviation: PieceAbbreviation): void {
+			const { rank, file } = findPawnToPromoteLocation(this.allPieces, this.colorToMoveNext);
+			const promotionPiece =  getPromotionPiece(this.allPieces, {
+				color        : this.colorToMoveNext,
+				file         : file,
+				rank         : rank,
+				abbreviation : pieceAbbreviation,
+			});
+
+			const newPieceRow: (Piece | null)[] = this.occupiedSquares[rank - 1].slice(0);
+			newPieceRow[file - 1] = promotionPiece;
+			this.$set(this.occupiedSquares, rank - 1, newPieceRow);
+
+			const oldPieceType = `${this.colorToMoveNext[0]}P`;
+			const pieceIndexToCapture = this.allPieces[oldPieceType].findIndex((p: Piece) => Number(p.rank) === Number(rank) &&  Number(p.file) === Number(file));
+			this.allPieces[oldPieceType].splice(pieceIndexToCapture, 1);
+
+			const newPieceType = `${this.colorToMoveNext[0]}${pieceAbbreviation}`;
+			this.allPieces[newPieceType].push(promotionPiece);
+
+			this.completeTurn();
+		},
+
 		setMoveSquares(moves: number[][]): void {
 			for (const move of moves) {
 				const newRow: boolean[] = this.possibleMoveSquares[move[0] - 1].slice(0);
@@ -301,6 +336,8 @@ export default Vue.extend({
 		},
 
 		completeTurn(): void {
+			this.trackBoardState();
+
 			this.selectedPiece = null;
 			this.resetMoveSquares();
 

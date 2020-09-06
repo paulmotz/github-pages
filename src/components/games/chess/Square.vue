@@ -11,7 +11,6 @@
 
 <script lang='ts'>
 import Vue from 'vue';
-import { PieceColor } from '@/lib/types';
 import { Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export default Vue.extend({
@@ -19,7 +18,7 @@ export default Vue.extend({
 	
 	props : {
 		colorToMoveNext : {
-			type    : Object as () => PieceColor,
+			type    : String,
 			default : 'white',
 		},
 		fileIndex : {
