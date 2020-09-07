@@ -35,24 +35,6 @@ export const getPieceColor = (abbreviation: string): PieceColor => {
 };
 
 /**
- * Returns the color of the piece from an abbreviation
- * @param abbreviation - the player's color
- * @return - the opposite color
- */
-export const getPieceName = (abbreviation: string): string => {
-	const pieceMapping: PieceMapping  = {
-		'P' : 'Pawn',
-		'N' : 'Knight',
-		'B' : 'Bishop',
-		'R' : 'Rook',
-		'Q' : 'Queen',
-		'K' : 'King',
-	}; 
-
-	return pieceMapping[abbreviation];
-};
-
-/**
  * Returns the piece's location in its corresponding array. Due to captures, the piece's id may !== its index
  * @param allPieces - the piece type to find an index for (eg. wP for white pawn)
  * @param piece - the piece type to find an index for (eg. wP for white pawn)
