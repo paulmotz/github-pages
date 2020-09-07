@@ -2,6 +2,7 @@ Core
 promotion
 
 Nice to have
+refactor drawHelpers.test.ts to use initializeBoard
 remove duplicates in getLegalMoves
 Algebraic notation
 Game states

@@ -1,4 +1,4 @@
-import { PieceColor, PieceType, AllPieces, PieceMapping, PieceStartingPositions, ColorAndPiece, BoardState, PieceAbbreviation, SquareLocation, PiecePromoteProps } from '@/lib/types';
+import { PieceColor, PieceType, AllPieces, PieceStartingPositions, ColorAndPiece, BoardState, PieceAbbreviation, SquareLocation, PiecePromoteProps } from '@/lib/types';
 import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 /**
