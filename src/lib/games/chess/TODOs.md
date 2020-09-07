@@ -2,6 +2,7 @@ Core
 promotion
 
 Nice to have
+remove duplicates in getLegalMoves
 Algebraic notation
 Game states
 Check occupiedSquare logic (is -1 needed)
