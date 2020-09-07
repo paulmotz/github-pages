@@ -756,7 +756,7 @@ describe('drawHelpers', () => {
 		});
 	});
 
-	describe('hasMajorPieces', () => {
+	describe('getBoardState', () => {
 		it('shold return a string representing the current board state', () => {
 			const { occupiedSquares } = initializeBoard();
 
