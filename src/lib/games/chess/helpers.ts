@@ -20,7 +20,7 @@ export const getOtherColor = (color: PieceColor): PieceColor => {
 	return color === 'white' ? 'black' : 'white';
 };
 
-export const abbreviationToColor: { [name: string]: PieceColor } = {
+const abbreviationToColor: { [name: string]: PieceColor } = {
 	b : 'black',
 	w : 'white',
 };
@@ -31,7 +31,13 @@ export const abbreviationToColor: { [name: string]: PieceColor } = {
  * @return - the opposite color
  */
 export const getPieceColor = (abbreviation: string): PieceColor => {
-	return abbreviationToColor[abbreviation[0]];
+	const color = abbreviationToColor[abbreviation[0]];
+
+	if (color === undefined) {
+		throw new Error('Unknown color');
+	}
+
+	return color;
 };
 
 /**

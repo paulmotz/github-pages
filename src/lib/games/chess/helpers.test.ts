@@ -1,4 +1,4 @@
-import { isSquareOnBoard, removeDuplicates, getOtherColor } from './helpers';
+import { isSquareOnBoard, removeDuplicates, getOtherColor, getPieceColor } from './helpers';
 
 describe('helpers', () => {
 	describe('isSquareOnBoard', () => {
@@ -24,6 +24,27 @@ describe('helpers', () => {
 
 		it('should return white when black is passed in', () => {
 			expect(getOtherColor('black')).toBe('white');
+		});
+	});
+
+	describe('getPieceColor', () => {
+		it('should return the correct color for an abbreviation', () => {
+			expect(getPieceColor('bB')).toBe('black');
+			expect(getPieceColor('bN')).toBe('black');
+			expect(getPieceColor('bK')).toBe('black');
+			expect(getPieceColor('bP')).toBe('black');
+			expect(getPieceColor('bQ')).toBe('black');
+			expect(getPieceColor('bR')).toBe('black');
+			expect(getPieceColor('wB')).toBe('white');
+			expect(getPieceColor('wN')).toBe('white');
+			expect(getPieceColor('wK')).toBe('white');
+			expect(getPieceColor('wP')).toBe('white');
+			expect(getPieceColor('wQ')).toBe('white');
+			expect(getPieceColor('wR')).toBe('white');
+		});
+
+		it('should throw when an unexpected abbreviation is passed in', () => {
+			expect(() => getPieceColor('xx')).toThrow('Unknown color');
 		});
 	});
 
