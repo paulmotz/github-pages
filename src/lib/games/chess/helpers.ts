@@ -93,7 +93,7 @@ export const pieceStartingPositions: PieceStartingPositions = {
 	wR : [ [1, 1], [1, 8] ],
 	bB : [ [8, 3], [8, 6] ],
 	bN : [ [8, 2], [8, 7] ],
-	bK : [ [8, 5]] ,
+	bK : [ [8, 5] ] ,
 	bP : [ [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8] ],
 	bQ : [ [8, 4] ],
 	bR : [ [8, 1], [8, 8] ],
@@ -166,7 +166,11 @@ export const findPawnToPromoteLocation = (allPieces: AllPieces, color: PieceColo
 
 export const getHighestExistingId = (allPieces: AllPieces, abbreviation: PieceAbbreviation, color: string): number => {
 	const arr  = allPieces[`${color[0]}${abbreviation}`];
-	
+
+	if (arr.length === 0 || !arr) {
+		return -1;
+	}
+
 	return Math.max(...arr.map(e => e.id));
 };
 

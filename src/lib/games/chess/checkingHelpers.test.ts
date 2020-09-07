@@ -452,7 +452,7 @@ describe('checkingHelpers', () => {
 		});
 
 		it('should allow for a checking pieces to be captured if it is the only checking piece', () => {
-			const positions = {
+			const position = {
 				wB : [],
 				wN : [ [6, 6] ],
 				wK : [ [1, 5] ],
@@ -467,7 +467,7 @@ describe('checkingHelpers', () => {
 				bR : [],
 			};
 			
-			const { allPieces, occupiedSquares } = initializeBoard(positions);
+			const { allPieces, occupiedSquares } = initializeBoard(position);
 			const checkingPieces: Piece[] = [ allPieces.wN[0] ];
 			const clickedPiece: Piece = allPieces.bP[0];
 			const colorToMoveNext = 'black';
@@ -477,7 +477,7 @@ describe('checkingHelpers', () => {
 		});
 
 		it('should allow for a checking pieces to be captured by the king in check if it is the only checking piece', () => {
-			const positions = {
+			const position = {
 				wB : [ [7, 4] ],
 				wN : [],
 				wK : [ [1, 5] ],
@@ -492,7 +492,7 @@ describe('checkingHelpers', () => {
 				bR : [],
 			};
 			
-			const { allPieces, occupiedSquares } = initializeBoard(positions);
+			const { allPieces, occupiedSquares } = initializeBoard(position);
 			const checkingPieces: Piece[] = [ allPieces.wB[0] ];
 			const clickedPiece: Piece = allPieces.bK[0];
 			const colorToMoveNext = 'black';
@@ -502,7 +502,7 @@ describe('checkingHelpers', () => {
 		});
 
 		it('should allow for a piece to block if there is the only checking piece', () => {
-			const positions = {
+			const position = {
 				wB : [],
 				wN : [],
 				wK : [ [1, 5] ],
@@ -517,7 +517,7 @@ describe('checkingHelpers', () => {
 				bR : [],
 			};
 			
-			const { allPieces, occupiedSquares } = initializeBoard(positions);
+			const { allPieces, occupiedSquares } = initializeBoard(position);
 			const checkingPieces: Piece[] = [ allPieces.bQ[0] ];
 			const clickedPiece: Piece = allPieces.wR[0];
 			const colorToMoveNext = 'white';
@@ -528,7 +528,7 @@ describe('checkingHelpers', () => {
 		});
 
 		it('should not allow for non-king pieces to move where there are two checking pieces', () => {
-			const positions = {
+			const position = {
 				wB : [],
 				wN : [],
 				wK : [ [1, 5] ],
@@ -543,7 +543,7 @@ describe('checkingHelpers', () => {
 				bR : [ [7, 5] ],
 			};
 			
-			const { allPieces, occupiedSquares } = initializeBoard(positions);
+			const { allPieces, occupiedSquares } = initializeBoard(position);
 			const checkingPieces: Piece[] = [ allPieces.bB[0], allPieces.bR[0] ];
 			const clickedPiece: Piece = allPieces.wR[0];
 			const colorToMoveNext = 'white';
@@ -553,7 +553,7 @@ describe('checkingHelpers', () => {
 		});
 
 		it('should correctly return king moves when in double check', () => {
-			const positions = {
+			const position = {
 				wB : [],
 				wN : [],
 				wK : [ [1, 5] ],
@@ -568,7 +568,7 @@ describe('checkingHelpers', () => {
 				bR : [ [7, 5] ],
 			};
 			
-			const { allPieces, occupiedSquares } = initializeBoard(positions);
+			const { allPieces, occupiedSquares } = initializeBoard(position);
 			const checkingPieces: Piece[] = [ allPieces.bN[0], allPieces.bR[0] ];
 			const clickedPiece: Piece = allPieces.wK[0];
 			const colorToMoveNext = 'white';
@@ -585,7 +585,7 @@ describe('checkingHelpers', () => {
 		});
 
 		it('should return false when it is check and there are legal moves', () => {
-			const positions = {
+			const position = {
 				wB : [],
 				wN : [],
 				wK : [ [1, 5] ],
@@ -600,12 +600,12 @@ describe('checkingHelpers', () => {
 				bR : [ [7, 5] ],
 			};
 
-			const { allPieces, occupiedSquares } = initializeBoard(positions);
+			const { allPieces, occupiedSquares } = initializeBoard(position);
 			expect(isCheckmate({ allPieces, colorToMoveNext : 'white', occupiedSquares })).toBe(false);
 		});
 
 		it('should return true when there are no legal moves', () => {
-			const positions = {
+			const position = {
 				wB : [],
 				wN : [ [7, 6]],
 				wK : [ [1, 5] ],
@@ -620,7 +620,7 @@ describe('checkingHelpers', () => {
 				bR : [ [8, 7] ],
 			};
 
-			const { allPieces, occupiedSquares } = initializeBoard(positions);
+			const { allPieces, occupiedSquares } = initializeBoard(position);
 			expect(isCheckmate({ allPieces, colorToMoveNext : 'black', occupiedSquares })).toBe(true);
 		});
 	});
