@@ -47,7 +47,7 @@ export class Rook extends RangedPiece {
 	 * @param occupiedSquares - the squares that are currently occupied, array entries are piece names (eg wP3)
 	 * @return protectedSquares - the squares that the Bishop protects as an array of co-ordinates (also an array)
 	 */
-	protectedSquares(occupiedSquares: Piece[][]): number[][] {
+	protectedSquares(occupiedSquares: (Piece | null)[][]): number[][] {
 		return this.rangedProtectedSquares(this._rookDirections, occupiedSquares);
 	}
 }

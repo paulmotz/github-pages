@@ -1,5 +1,5 @@
 Core
-promotion
+add coverage to gitignore
 
 Nice to have
 refactor drawHelpers.test.ts to use initializeBoard
