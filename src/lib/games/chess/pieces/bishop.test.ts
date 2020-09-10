@@ -3,17 +3,15 @@ import { initializeBoard } from '../helpers';
 import { PieceProps } from '@/lib/types';
 
 describe('bishop', () => {
-	const bishopParams: PieceProps = {
-		color        : 'white',
-		abbreviation : 'B',
-		rank         : 1,
-		file         : 3,
-		id           : 0,
-	};
-
 	describe('constructor', () => {
 		it('should instantiate a new bishop', () => {
-
+			const bishopParams: PieceProps = {
+				color        : 'white',
+				abbreviation : 'B',
+				rank         : 1,
+				file         : 3,
+				id           : 0,
+			};
 			const bishop = new Bishop(bishopParams);
 
 			expect(bishop).toBeInstanceOf(Bishop);

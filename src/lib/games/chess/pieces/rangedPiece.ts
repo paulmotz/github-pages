@@ -6,7 +6,7 @@ export abstract class RangedPiece extends Piece {
 		super({ color, abbreviation, file, rank, id });
 	}
 
-	abstract moves( {
+	abstract moves({
 		occupiedSquares,
 		allPieces,
 	}: MoveParams): number[][];

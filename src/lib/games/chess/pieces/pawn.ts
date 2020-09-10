@@ -48,13 +48,10 @@ export class Pawn extends Piece {
 			// horizontal/vertical pin
 			if ((f + r) % 2 !== 0) {
 				if (r === 0) {
-
 					// a horizontally pinned pawn cannot move at all
-					return moves;
+					return [];
 				}
-				else {
-					rookPin = true;
-				}
+				rookPin = true;
 			}
 			else {
 				if (f === r) {

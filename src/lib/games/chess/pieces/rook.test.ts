@@ -3,17 +3,15 @@ import { initializeBoard } from '../helpers';
 import { PieceProps } from '@/lib/types';
 
 describe('rook', () => {
-	const rookParams: PieceProps = {
-		color        : 'white',
-		abbreviation : 'R',
-		rank         : 1,
-		file         : 3,
-		id           : 0,
-	};
-
 	describe('constructor', () => {
 		it('should instantiate a new rook', () => {
-
+			const rookParams: PieceProps = {
+				color        : 'white',
+				abbreviation : 'R',
+				rank         : 1,
+				file         : 3,
+				id           : 0,
+			};
 			const rook = new Rook(rookParams);
 
 			expect(rook).toBeInstanceOf(Rook);

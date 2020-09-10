@@ -3,17 +3,15 @@ import { initializeBoard } from '../helpers';
 import { PieceProps } from '@/lib/types';
 
 describe('queen', () => {
-	const queenParams: PieceProps = {
-		color        : 'white',
-		abbreviation : 'Q',
-		rank         : 1,
-		file         : 3,
-		id           : 0,
-	};
-
 	describe('constructor', () => {
 		it('should instantiate a new queen', () => {
-
+			const queenParams: PieceProps = {
+				color        : 'white',
+				abbreviation : 'Q',
+				rank         : 1,
+				file         : 3,
+				id           : 0,
+			};
 			const queen = new Queen(queenParams);
 
 			expect(queen).toBeInstanceOf(Queen);
