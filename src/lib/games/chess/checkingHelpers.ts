@@ -78,9 +78,7 @@ export const isSquareAttacked = (square: number[], attackedSquares: number[][]):
 
 export const removeAttackedSquares = (moves: number[][], attackedSquares: number[][]): number[][] => {
 	return moves.filter(move => {
-		return !attackedSquares.find(attackedSquare => {
-			return move[0] === attackedSquare[0] && move[1] === attackedSquare[1];
-		});
+		return !attackedSquares.find(attackedSquare => move[0] === attackedSquare[0] && move[1] === attackedSquare[1]);
 	});
 };
 
@@ -118,9 +116,9 @@ export const getLegalMoves = ({
 			})
 			: clickedPiece.protectedSquares(occupiedSquares);
 
-		const captureMove: number[] | undefined = clickedPieceProtectedSquares.find(square => {
-			return square[0] === checkingPieceRank && square[1] === checkingPieceFile;
-		});
+		const captureMove: number[] | undefined = clickedPieceProtectedSquares.find(square =>
+			square[0] === checkingPieceRank && square[1] === checkingPieceFile,
+		);
 		if (captureMove) {
 			legalMoves.push(captureMove);
 		}
@@ -132,9 +130,9 @@ export const getLegalMoves = ({
 			const checkingPath = getCheckingPath(checkingPiece, kingLocation, false);
 
 			const overlap = clickedPieceMoveSquares.filter(defendingSquare => {
-				return checkingPath.find(attackingSquare => {
-					return defendingSquare[0] === attackingSquare[0] && defendingSquare[1] === attackingSquare[1];
-				});
+				return checkingPath.find(attackingSquare =>
+					defendingSquare[0] === attackingSquare[0] && defendingSquare[1] === attackingSquare[1],
+				);
 			});
 
 			if (overlap.length > 0) {
