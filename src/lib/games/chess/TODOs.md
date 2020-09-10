@@ -1,9 +1,7 @@
 Core
-add coverage to gitignore
 
 Nice to have
 refactor drawHelpers.test.ts to use initializeBoard
-remove duplicates in getLegalMoves
 Algebraic notation
 Game states
 Check occupiedSquare logic (is -1 needed)

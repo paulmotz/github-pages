@@ -1,4 +1,5 @@
 import { PieceColor, SquareLocation, PiecesByType, GetLegalMoveParams, IsCheckmateParams } from '@/lib/types';
+import { removeDuplicates } from './helpers';
 import { Piece, Pawn, Knight, Bishop, Rook, Queen, King } from '@/lib/games/chess/pieces';
 
 export const getKingLocation = (allPieces: PiecesByType, color: PieceColor): SquareLocation => {
@@ -159,7 +160,7 @@ export const getLegalMoves = ({
 		legalMoves.push(...removeAttackedSquares(kingMoves, checkingPaths));
 	}
 
-	return legalMoves;
+	return removeDuplicates(legalMoves);
 };
 
 export const isCheckmate = ({
