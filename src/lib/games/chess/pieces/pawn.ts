@@ -43,7 +43,7 @@ export class Pawn extends Piece {
 		// pawn pin checks work, but I don't think it is very elegant
 		const pD = this.getPinDirection(occupiedSquares);
 		if (pD) {
-			const [f, r] = pD;
+			const [ r, f ] = pD;
 
 			// horizontal/vertical pin
 			if ((f + r) % 2 !== 0) {

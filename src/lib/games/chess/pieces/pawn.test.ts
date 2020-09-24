@@ -1,30 +1,7 @@
 import { Pawn } from './pawn';
 import { initializeBoard } from '../helpers'; 
+import { hasMatchingMoves } from '../testingHelpers'; 
 import { PieceProps } from '@/lib/types';
-
-const hasMatchingMoves = (moves: number[][], expectedMoves: number[][]): void => {
-	// sort moves by rank, then file
-	const sortByRankAndFile = (arr: number[][]): number[][] => {
-		return arr.sort((a, b) => {
-			if (a[0] < b[0]) {
-				return -1;
-			} else if (a[0] > b[0]) {
-				return 1;
-			} else if (a[1] < b[1]) {
-				return -1;
-			} else if (a[1] > b[1]) {
-				return 1;
-			}
-	
-			return 0;
-		});
-	};
-	
-	const sortedMoves = sortByRankAndFile(moves);
-	const sortedExpectedMoves = sortByRankAndFile(expectedMoves);
-
-	expect(sortedMoves).toEqual(sortedExpectedMoves);
-};
 
 describe('pawn', () => {
 	describe('constructor', () => {
@@ -288,20 +265,135 @@ describe('pawn', () => {
 			const position = {
 				wB : [],
 				wN : [],
-				wK : [ [2, 2] ],
-				wP : [ [3, 2] ],
+				wK : [ [2, 6] ],
+				wP : [ [2, 3] ],
 				wQ : [],
 				wR : [],
 				bB : [],
 				bN : [],
 				bK : [ [8, 2] ],
 				bP : [],
-				bQ : [],
-				bR : [ [4, 2] ],
+				bQ : [ [2, 2] ],
+				bR : [],
 			};
 			const { allPieces, occupiedSquares } = initializeBoard(position);
 			const pawn = allPieces.wP[0];
 			const expectedMoves: number[][] = [];
+
+			const pawnMoves = pawn.moves({ occupiedSquares });
+			hasMatchingMoves(pawnMoves, expectedMoves);
+		});
+
+		it('a vertically pinned pawn should not be able to capture', () => {
+			const position = {
+				wB : [],
+				wN : [],
+				wK : [ [2, 2] ],
+				wP : [ [3, 2] ],
+				wQ : [],
+				wR : [],
+				bB : [ [4, 3] ],
+				bN : [],
+				bK : [ [8, 2] ],
+				bP : [],
+				bQ : [ [4, 1] ],
+				bR : [ [6, 2] ],
+			};
+			const { allPieces, occupiedSquares } = initializeBoard(position);
+			const pawn = allPieces.wP[0];
+			const expectedMoves: number[][] = [ [4, 2] ];
+
+			const pawnMoves = pawn.moves({ occupiedSquares });
+			hasMatchingMoves(pawnMoves, expectedMoves);
+		});
+
+		it('a pawn pinned on a black diagonal should not be able to move forward or capture', () => {
+			const position = {
+				wB : [],
+				wN : [],
+				wK : [ [2, 3] ],
+				wP : [],
+				wQ : [ [1, 1] ],
+				wR : [ [5, 7] ],
+				bB : [],
+				bN : [],
+				bK : [ [8, 8] ],
+				bP : [ [6, 6] ],
+				bQ : [],
+				bR : [],
+			};
+			const { allPieces, occupiedSquares } = initializeBoard(position);
+			const pawn = allPieces.bP[0];
+			const expectedMoves: number[][] = [];
+
+			const pawnMoves = pawn.moves({ occupiedSquares });
+			hasMatchingMoves(pawnMoves, expectedMoves);
+		});
+
+		it('a pawn pinned on a black diagonal should be able to capture the pinning piece', () => {
+			const position = {
+				wB : [],
+				wN : [],
+				wK : [ [2, 3] ],
+				wP : [],
+				wQ : [ [5, 5] ],
+				wR : [ [5, 7] ],
+				bB : [],
+				bN : [],
+				bK : [ [8, 8] ],
+				bP : [ [6, 6] ],
+				bQ : [],
+				bR : [],
+			};
+			const { allPieces, occupiedSquares } = initializeBoard(position);
+			const pawn = allPieces.bP[0];
+			const expectedMoves: number[][] = [ [5, 5] ];
+
+			const pawnMoves = pawn.moves({ occupiedSquares });
+			hasMatchingMoves(pawnMoves, expectedMoves);
+		});
+
+		it('a pawn pinned on a white diagonal should not be able to move forward or capture', () => {
+			const position = {
+				wB : [],
+				wN : [],
+				wK : [ [3, 8] ],
+				wP : [ [5, 6] ],
+				wQ : [],
+				wR : [],
+				bB : [ [8, 3] ],
+				bN : [ [6, 7] ],
+				bK : [ [8, 8] ],
+				bP : [],
+				bQ : [],
+				bR : [],
+			};
+			const { allPieces, occupiedSquares } = initializeBoard(position);
+			const pawn = allPieces.wP[0];
+			const expectedMoves: number[][] = [];
+
+			const pawnMoves = pawn.moves({ occupiedSquares });
+			hasMatchingMoves(pawnMoves, expectedMoves);
+		});
+
+		it('a pawn pinned on a white diagonal should be able to capture the pinning piece', () => {
+			const position = {
+				wB : [],
+				wN : [],
+				wK : [ [3, 8] ],
+				wP : [ [5, 6] ],
+				wQ : [],
+				wR : [],
+				bB : [ [6, 5] ],
+				bN : [ [6, 7] ],
+				bK : [ [8, 8] ],
+				bP : [],
+				bQ : [],
+				bR : [],
+			};
+			const { allPieces, occupiedSquares } = initializeBoard(position);
+			const pawn = allPieces.wP[0];
+			const expectedMoves: number[][] = [ [6, 5] ];
 
 			const pawnMoves = pawn.moves({ occupiedSquares });
 			hasMatchingMoves(pawnMoves, expectedMoves);

@@ -18,6 +18,37 @@ describe('rook', () => {
 		});
 	});
 
+	describe('hasMoved', () => {
+		it('should default to false', () => {
+			const rookParams: PieceProps = {
+				color        : 'white',
+				abbreviation : 'R',
+				rank         : 1,
+				file         : 3,
+				id           : 0,
+			};
+
+			const rook = new Rook(rookParams);
+
+			expect(rook.hasMoved).toBe(false);
+		});
+
+		it('should be able to be set', () => {
+			const rookParams: PieceProps = {
+				color        : 'white',
+				abbreviation : 'R',
+				rank         : 1,
+				file         : 3,
+				id           : 0,
+			};
+			const rook = new Rook(rookParams);
+
+			rook.hasMoved = true;
+
+			expect(rook.hasMoved).toBe(true);
+		});
+	});
+
 	describe('moves', () => {
 		it('should call rangedMoves from the parent class and return its result', () => {
 			const position = {
