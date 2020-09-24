@@ -16,28 +16,28 @@ export const hasMoves = (allMoves: number[][], expectedMoves: number[][]): void 
 	expect(hasAllMoves).toBe(true);
 };
 
+export const sortByRankAndFile = (arr: number[][]): number[][] => {
+	// sort moves by rank, then file
+	return arr.sort((a, b) => {
+		if (a[0] < b[0]) {
+			return -1;
+		} else if (a[0] > b[0]) {
+			return 1;
+		} else if (a[1] < b[1]) {
+			return -1;
+		} else if (a[1] > b[1]) {
+			return 1;
+		}
+
+		return 0;
+	});
+};
+
 interface SortedMoves {
 	[key: string]: number[][];
 }
 
 export const hasMatchingMovesLogic = (moves: number[][], expectedMoves: number[][]): SortedMoves => {
-	// sort moves by rank, then file
-	const sortByRankAndFile = (arr: number[][]): number[][] => {
-		return arr.sort((a, b) => {
-			if (a[0] < b[0]) {
-				return -1;
-			} else if (a[0] > b[0]) {
-				return 1;
-			} else if (a[1] < b[1]) {
-				return -1;
-			} else if (a[1] > b[1]) {
-				return 1;
-			}
-	
-			return 0;
-		});
-	};
-	
 	const sortedMoves = sortByRankAndFile(moves);
 	const sortedExpectedMoves = sortByRankAndFile(expectedMoves);
 

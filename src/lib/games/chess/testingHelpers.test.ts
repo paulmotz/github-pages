@@ -1,4 +1,4 @@
-import { hasMovesLogic, hasMatchingMovesLogic } from './testingHelpers';
+import { hasMovesLogic, hasMatchingMovesLogic, sortByRankAndFile } from './testingHelpers';
 
 describe('testingHelpers', () => {
 	describe('hasMovesLogic', () => {
@@ -39,6 +39,31 @@ describe('testingHelpers', () => {
 			const hasMovesResult = hasMovesLogic(allMoves, expectedMoves);
 
 			expect(hasMovesResult).toBe(false);
+		});
+	});
+
+	describe('sortByRankAndFile', () => {
+		it('should handle duplicates', () => {
+			const moves = [
+				[1, 1],
+				[2, 3],
+				[5, 3],
+				[7, 4],
+				[1, 1],
+				[8, 2],
+			];
+			const expectedSortedMoves = [
+				[1, 1],
+				[1, 1],
+				[2, 3],
+				[5, 3],
+				[7, 4],
+				[8, 2],
+			];
+
+			const sortedMoves = sortByRankAndFile(moves);
+
+			expect(sortedMoves).toEqual(expectedSortedMoves);
 		});
 	});
 
