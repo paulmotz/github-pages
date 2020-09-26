@@ -19,6 +19,36 @@ describe('pawn', () => {
 		});
 	});
 
+	describe('canBeCapturedByEnPassant', () => {
+		it('should default to false', () => {
+			const pawnParams: PieceProps = {
+				color        : 'white',
+				abbreviation : 'P',
+				rank         : 2,
+				file         : 5,
+				id           : 0,
+			};
+
+			const pawn = new Pawn(pawnParams);
+
+			expect(pawn.canBeCapturedByEnPassant).toBe(false);
+		});
+
+		it('should be able to be set', () => {
+			const pawnParams: PieceProps = {
+				color        : 'white',
+				abbreviation : 'P',
+				rank         : 4,
+				file         : 5,
+				id           : 0,
+			};
+			const pawn = new Pawn(pawnParams);
+
+			pawn.canBeCapturedByEnPassant = true;
+
+			expect(pawn.canBeCapturedByEnPassant).toBe(true);
+		});
+	});
 
 	describe('moves', () => {
 		it('a white pawn on the second rank should be able to move up one or two squares', () => {

@@ -13,14 +13,14 @@ export class Pawn extends Piece {
 	}
 
 	/**
-	 * Get whether the pawn can be captured vy en passant
+	 * Get whether the pawn can be captured by en passant
 	 */
 	get canBeCapturedByEnPassant(): boolean {
 		return this._canBeCapturedByEnPassant;
 	}
 
 	/**
-	 * Keep track of whether the pawn can be captured vy en passant
+	 * Keep track of whether the pawn can be captured by en passant
 	 */
 	set canBeCapturedByEnPassant(canBeCapturedByEnPassant) {
 		this._canBeCapturedByEnPassant = canBeCapturedByEnPassant;
