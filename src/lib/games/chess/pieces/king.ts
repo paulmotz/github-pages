@@ -84,7 +84,7 @@ export class King extends Piece {
 
 		// queenside castling
 		if (queensideRook instanceof Rook && !hasMoved && queensideRook && !queensideRook.hasMoved &&
-			!occupiedSquares[rank - 1][file - 2] && !occupiedSquares[rank - 1][file - 3] && !occupiedSquares[file - 3][rank] &&
+			!occupiedSquares[rank - 1][file - 2] && !occupiedSquares[rank - 1][file - 3] && !occupiedSquares[rank - 1][file - 4] &&
 			!isSquareAttacked([rank, file], attackedSquares) && !isSquareAttacked([rank, file - 1], attackedSquares) && !isSquareAttacked([rank, file - 1], attackedSquares)) {
 			moves.push([rank, file - 2]);
 		}
