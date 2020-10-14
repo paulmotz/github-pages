@@ -8,7 +8,7 @@
 			v-on:pawn-reach-end="openModal")
 		h3.result {{result}}
 		PJMButton(
-			v-bind:text="'New Game'"
+			text="New Game"
 			v-on:clicked="buttonClicked")
 		PJMModal(v-show="shouldShowModal")
 			template(v-slot:header) Select a Piece for promotion
@@ -16,17 +16,17 @@
 				.icon-row
 					.icon-wrapper(v-on:click="pieceClicked('Q')")
 						font-awesome-icon.fa-icon(
-							v-bind:icon="'chess-queen'")
+							icon="chess-queen")
 					.icon-wrapper(v-on:click="pieceClicked('R')")
 						font-awesome-icon.fa-icon(
-							v-bind:icon="'chess-rook'")
+							icon="chess-rook")
 				.icon-row
 					.icon-wrapper(v-on:click="pieceClicked('B')")
 						font-awesome-icon.fa-icon(
-							v-bind:icon="'chess-bishop'")
+							icon="chess-bishop")
 					.icon-wrapper(v-on:click="pieceClicked('N')")
 						font-awesome-icon.fa-icon(
-							v-bind:icon="'chess-knight'")
+							icon="chess-knight")
 </template>
 
 <script lang='ts'>

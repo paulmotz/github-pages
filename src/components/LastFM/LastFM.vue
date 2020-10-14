@@ -2,20 +2,20 @@
 	.last-fm-wrapper
 		img.logo(alt="Vue logo" src="../../assets/last-fm.png")
 		.inputs
-			FloatingLabel(v-bind:labelText="'Last.fm username'")
+			FloatingLabel(labelText="Last.fm username")
 				ValidatedInput(v-bind:errorMessage="userErrorMessage")
 					input(v-model="username" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
-			FloatingLabel(v-bind:labelText="'First track uts'")
+			FloatingLabel(labelText="First track uts")
 				ValidatedInput(v-bind:errorMessage="fromUtsErrorMessage")
 					input(v-model="fromUts" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
-			FloatingLabel(v-bind:labelText="'Last track uts (optional)'")
+			FloatingLabel(labelText="Last track uts (optional)")
 				ValidatedInput(v-bind:errorMessage="toUtsErrorMessage")
 					input(v-model="toUts" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
 		.button-row
 			PJMButton(
 				v-bind:isDisabled="isButtonLoading"
-				v-bind:text="'Get tracks'"
-				v-bind:loadingText="'Geting tracks...'"
+				text="Get tracks"
+				loadingText="Geting tracks..."
 				v-on:clicked="getLastFMTracks(username, fromUts, toUts)")
 			PJMButton(
 				v-bind:isDisabled="!hasTracks"

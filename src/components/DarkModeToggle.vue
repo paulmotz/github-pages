@@ -1,10 +1,10 @@
 <template lang='pug'>
 	.dark-mode-toggle
 		font-awesome-icon.fa-icon(
-			v-bind:icon="'sun'")
+			icon="sun")
 		toggle-checkbox
 		font-awesome-icon.fa-icon(
-			v-bind:icon="'moon'")
+			icon="moon")
 </template>
 
 <script lang='ts'>
