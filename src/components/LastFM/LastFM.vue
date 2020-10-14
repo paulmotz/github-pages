@@ -70,7 +70,7 @@ export default Vue.extend({
 			lastTrackInfo       : '',
 			userErrorMessage    : '',
 			username            : 'paul_motz',
-			fromUts             : '1601139297',
+			fromUts             : '1602629828',
 			fromUtsErrorMessage : '',
 			scrobbleCounts      : [] as ScrobbleCount[],
 			shouldShowTracks    : true,
@@ -149,10 +149,6 @@ export default Vue.extend({
 			this.lastTrackInfo = lastFmData.lastTrackInfo;
 			this.scrobbleCounts = lastFmData.scrobbleCounts;
 			this.totalScrobbles = lastFmData.totalScrobbles;
-
-			console.log(lastFmData);
-			console.log(this.totalScrobbles);
-			console.log(this.lastTrackInfo);
 
 			this.setIsButtonLoading(false);
 		},

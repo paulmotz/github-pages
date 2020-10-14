@@ -1,5 +1,6 @@
 <template lang='pug'>
 	nav.header
+		DarkModeToggle
 		.links
 			router-link.header-link(to="/") Home
 			label.dropdown-top.visualizations Games
@@ -14,9 +15,14 @@
 
 <script lang='ts'>
 import Vue from 'vue';
+import DarkModeToggle from '@/components/DarkModeToggle.vue';
 
 export default Vue.extend({
 	name : 'Header',
+
+	components : {
+		DarkModeToggle,
+	},
 
 	props : {
 		msg : {
