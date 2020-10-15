@@ -8,11 +8,18 @@
 <script lang='ts'>
 import Vue from 'vue';
 import Header from '@/components/Header.vue';
+import { bus } from './main';
 
 export default Vue.extend({
 	name       : 'App',
 	components : {
 		Header,
+	},
+
+	mounted() {
+		bus.$on('darkThemeToggled', (isDarkTheme: boolean) => {
+			// console.log(isDarkTheme);
+		});
 	},
 });
 </script>

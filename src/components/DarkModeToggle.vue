@@ -1,7 +1,9 @@
 <template lang='pug'>
 	.dark-mode-toggle
 		font-awesome-icon.fa-icon(icon="sun")
-		toggle-checkbox(v-model="isDarkModeEnabled")
+		toggle-checkbox(
+			v-bind:value="isDarkModeEnabled"
+			v-on:input="handleDarkModeToggle")
 		font-awesome-icon.fa-icon(icon="moon")
 </template>
 
@@ -20,6 +22,17 @@ export default Vue.extend({
 		return {
 			isDarkModeEnabled : false,
 		};
+	},
+
+	methods : {
+		handleDarkModeToggle(isDarkModeEnabled: boolean): void {
+			this.isDarkModeEnabled = isDarkModeEnabled;
+			if (isDarkModeEnabled) {
+				document.body.setAttribute('data-theme', 'dark');
+			} else {
+				document.body.setAttribute('data-theme', 'light');
+			}
+		},
 	},
 });
 </script>
