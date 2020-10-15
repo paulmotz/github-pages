@@ -8,7 +8,6 @@
 
 <script lang='ts'>
 import Vue from 'vue';
-import { bus } from '../main';
 
 export default Vue.extend({
 	name : 'ToggleCheckbox',
@@ -23,7 +22,6 @@ export default Vue.extend({
 	methods : {
 		toggleValue(): void {
 			this.$emit('input', !this.value);
-			bus.$emit('darkThemeToggled', !this.value);
 		},
 	},
 });
