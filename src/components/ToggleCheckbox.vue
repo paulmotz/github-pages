@@ -54,6 +54,9 @@ export default Vue.extend({
 	border-radius: 50%
 	transform: translateX(0)
 
+// [data-theme='dark'] .switch
+// 	background: orange
+
 .checked .switch
 	transform: translateX(1rem)
 </style>
