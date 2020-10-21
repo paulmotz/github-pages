@@ -1,6 +1,8 @@
 <template lang='pug'>
 	.chess
-		h1 Chess
+		h1
+			font-awesome-icon.fa-icon(icon="chess-pawn")
+			span Chess
 		Board(
 			v-bind:isNewGame="isNewGame"
 			v-on:game-over="showResult"
@@ -94,6 +96,10 @@ export default Vue.extend({
 	justify-content: center
 	text-align: center
 	flex-direction: column
+	color: $text--theme-light
+
+[data-theme='dark'] .chess
+	color: $text--theme-dark
 
 .result
 	font-size: 1rem

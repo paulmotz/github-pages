@@ -36,10 +36,13 @@ export default Vue.extend({
 	display: flex
 	cursor: pointer
 	align-items: center
-	background: $inactive-toggle-color
+	background: $inactive-toggle-color--theme-light
 
 .toggle.checked
-	background: $active-toggle-color
+	background: $active-toggle-color--theme-light
+
+[data-theme='dark'] .toggle.checked
+	background: $active-toggle-color--theme-dark
 
 .toggle-checkbox
 	height: 0
@@ -54,8 +57,8 @@ export default Vue.extend({
 	border-radius: 50%
 	transform: translateX(0)
 
-// [data-theme='dark'] .switch
-// 	background: orange
+[data-theme='dark'] .switch
+	background: $vue-green
 
 .checked .switch
 	transform: translateX(1rem)

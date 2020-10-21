@@ -20,8 +20,17 @@ export default Vue.extend({
 
 	data : function() {
 		return {
-			isDarkModeEnabled : false,
+			isDarkModeEnabled       : false,
+			hasReadFromLocalStorage : false,
 		};
+	},
+
+	mounted(): void {
+		const systemTheme: string = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		const preferredTheme: string = localStorage.getItem('preferredTheme') || systemTheme;
+
+		document.body.setAttribute('data-theme', preferredTheme);
+		this.isDarkModeEnabled = preferredTheme === 'dark';
 	},
 
 	methods : {
@@ -29,8 +38,10 @@ export default Vue.extend({
 			this.isDarkModeEnabled = isDarkModeEnabled;
 			if (isDarkModeEnabled) {
 				document.body.setAttribute('data-theme', 'dark');
+				localStorage.setItem('preferredTheme', 'dark');
 			} else {
 				document.body.setAttribute('data-theme', 'light');
+				localStorage.setItem('preferredTheme', 'light');
 			}
 		},
 	},

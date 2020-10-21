@@ -37,4 +37,8 @@ html, body
 	height: 100%
 	margin-top: 50px
 	width: 100%
+	background: $background-light
+
+[data-theme='dark'] .router-view-wrapper
+	background: $background--theme-dark
 </style>

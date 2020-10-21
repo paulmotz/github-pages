@@ -111,6 +111,12 @@ export default Vue.extend({
 	pointer-events: none
 	opacity: 0.5
 
+.label.is-active
+	color: $text--theme-light
+
+[data-theme='dark'] .label.is-active
+	color: $text--theme-dark
+
 input
 	border-radius: 0.375em
 	border-style: solid
@@ -122,6 +128,9 @@ input
 	opacity: 1
 	top: -1.5em
 
-.is-focused
-	color: $active-floating-label-color
+.label.is-focused
+	color: $active-floating-label-color--theme-light
+
+[data-theme='dark'] .label.is-focused
+	color: $active-floating-label-color--theme-dark
 </style>
