@@ -131,6 +131,9 @@ input
 .label.is-focused
 	color: $active-floating-label-color--theme-light
 
+[data-theme='dark'] .label
+	color: #222
+
 [data-theme='dark'] .label.is-focused
 	color: $active-floating-label-color--theme-dark
 </style>

@@ -191,7 +191,7 @@ export default Vue.extend({
 	display flex
 
 .inputs input
-	color: $text-color
+	color: $text-color-theme-light
 	width: 100%
 
 .button-row

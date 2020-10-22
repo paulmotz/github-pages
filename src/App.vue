@@ -29,10 +29,13 @@ html, body
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	// text-align: center;
-	color: $text-color;
+	color: $text-color-theme-light;
 	display: flex
 	flex-direction: column
 	height: 100%
+
+[data-theme='dark'] #app
+	color: $text-color--theme-dark
 
 .router-view-wrapper
 	height: 100%
