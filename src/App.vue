@@ -23,6 +23,8 @@ export default Vue.extend({
 html, body
 	margin: 0
 	height: 100%
+	display: flex
+	flex-direction: column
 
 #app
 	font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -32,7 +34,7 @@ html, body
 	color: $text-color-theme-light;
 	display: flex
 	flex-direction: column
-	height: 100%
+	flex-grow: 1
 
 [data-theme='dark'] #app
 	color: $text-color--theme-dark
