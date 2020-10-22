@@ -3,6 +3,7 @@
 		v-bind:disabled="isDisabled"
 		v-on:click="emitClicked"
 		) {{ buttonText }}
+		slot
 </template>
 
 <script lang='ts'>
@@ -40,7 +41,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lang='stylus'>
+<style scoped lang='stylus'>
 @import '../assets/variables.styl'
 
 button
@@ -50,6 +51,7 @@ button
 	color: white
 	padding: 10px
 	cursor: pointer
+	font-weight: 600
 
 button:hover
 	background-color: $button-background-color-hover

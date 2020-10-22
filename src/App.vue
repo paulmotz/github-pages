@@ -10,7 +10,8 @@ import Vue from 'vue';
 import Header from '@/components/Header.vue';
 
 export default Vue.extend({
-	name       : 'App',
+	name : 'App',
+
 	components : {
 		Header,
 	},
@@ -37,8 +38,8 @@ html, body
 	height: 100%
 	margin-top: 50px
 	width: 100%
-	background: $background-light
+	background: $background-color--theme-light
 
 [data-theme='dark'] .router-view-wrapper
-	background: $background--theme-dark
+	background: $background-color--theme-dark
 </style>

@@ -1,12 +1,16 @@
 <template lang='pug'>
 	nav.header
+		PJMButton.hamburger-button
+			span
+			span
+			span
 		DarkModeToggle
 		.links
 			router-link.header-link(to="/") Home
-			label.dropdown-top.visualizations Games
+			label.dropdown-top Games
 				.dropdown-content
 					router-link.dropdown-item(to="/chess") Chess
-			label.dropdown-top.visualizations Visualizations
+			label.dropdown-top Visualizations
 				.dropdown-content
 					router-link.dropdown-item(to="/provincial-covid") Provincial COVID-19
 					router-link.dropdown-item(to="/state-covid") States COVID-19
@@ -16,19 +20,14 @@
 <script lang='ts'>
 import Vue from 'vue';
 import DarkModeToggle from '@/components/DarkModeToggle.vue';
+import PJMButton from '@/components/PJMButton.vue';
 
 export default Vue.extend({
 	name : 'Header',
 
 	components : {
 		DarkModeToggle,
-	},
-
-	props : {
-		msg : {
-			type    : String,
-			default : '',
-		},
+		PJMButton,
 	},
 });
 </script>
@@ -48,13 +47,13 @@ export default Vue.extend({
 	box-sizing: border-box
 	border-bottom: 2px solid $vue-green
 
-.links, a
+.header-link, .dropdown-top, .dropdown-item
 	color: $router-link-color
 	font-weight: 600
 	height: 100%
 	text-decoration: none
 
-links:hover, .visualizations:hover
+.dropdown-top:hover
 	text-decoration: underline
 
 a:hover
@@ -78,5 +77,32 @@ a.router-link-exact-active
 	display: inline-block
 	line-height: 50px
 	margin: 0 0.5rem
+
+.hamburger-button, .hamburger-button:hover
+	display: none
+	background: none
+	margin: 0
+
+	span
+		height: 4px
+		width: 20px
+		background: white
+		margin: 1px 0
+		border-radius: 2px
+		position: relative
+		display: block
+
+.hamburger-button:hover span
+	background: red
+
+@media only screen and (max-width: 600px)
+	.hamburger-button
+		display: block
+
+	.header
+		justify-content: space-between
+
+	.links
+		display: none
 
 </style>
