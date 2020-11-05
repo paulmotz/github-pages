@@ -53,6 +53,9 @@ export default Vue.extend({
 .dark-mode-toggle
 	display: flex
 
+.dark-mode-toggle:focus
+	color: red
+
 .fa-icon
 	color: $white
 	margin: 0 0.1875rem

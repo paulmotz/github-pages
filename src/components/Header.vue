@@ -1,6 +1,8 @@
 <template lang='pug'>
 	nav.header
-		PJMButton.hamburger-button
+		PJMButton.hamburger-button(
+			v-bind:class="{ 'clicked' : this.clicked }"
+			v-on:clicked="toggleClicked")
 			span
 			span
 			span
@@ -28,6 +30,18 @@ export default Vue.extend({
 	components : {
 		DarkModeToggle,
 		PJMButton,
+	},
+
+	data : function() {
+		return {
+			clicked : false,
+		};
+	},
+
+	methods : {
+		toggleClicked(): void {
+			this.clicked = !this.clicked;
+		},
 	},
 });
 </script>
@@ -78,7 +92,7 @@ a.router-link-exact-active
 	line-height: 50px
 	margin: 0 0.5rem
 
-.hamburger-button, .hamburger-button:hover
+.hamburger-button
 	display: none
 	background: none
 	margin: 0
@@ -92,8 +106,24 @@ a.router-link-exact-active
 		position: relative
 		display: block
 
-.hamburger-button:hover span
-	background: red
+	span:nth-of-type(1), span:nth-of-type(3)
+		transition-duration: 0.3s
+
+.hamburger-button, .hamburger-button:hover
+	background: none
+
+.hamburger-button.clicked span:nth-of-type(1)
+	transform: rotate(45deg)
+	top: 5px
+	transition-duration: 0.3s
+
+.hamburger-button.clicked span:nth-of-type(2)
+	visibility: hidden
+
+.hamburger-button.clicked span:nth-of-type(3)
+	transform: rotate(-45deg)
+	top: -5px
+	transition-duration: 0.3s
 
 @media only screen and (max-width: 600px)
 	.hamburger-button

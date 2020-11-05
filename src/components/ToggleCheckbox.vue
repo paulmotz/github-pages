@@ -38,6 +38,9 @@ export default Vue.extend({
 	align-items: center
 	background: $inactive-toggle-color--theme-light
 
+.toggle:focus
+	color: blue
+
 .toggle.checked
 	background: $active-toggle-color--theme-light
 
