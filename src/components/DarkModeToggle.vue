@@ -1,10 +1,14 @@
 <template lang='pug'>
 	.dark-mode-toggle
-		font-awesome-icon.fa-icon(icon="sun")
+		font-awesome-icon.fa-icon(
+			v-on:click="handleSunClick"
+			icon="sun")
 		toggle-checkbox(
 			v-bind:value="isDarkModeEnabled"
 			v-on:input="handleDarkModeToggle")
-		font-awesome-icon.fa-icon(icon="moon")
+		font-awesome-icon.fa-icon(
+			v-on:click="handleMoonClick"
+			icon="moon")
 </template>
 
 <script lang='ts'>
@@ -44,6 +48,18 @@ export default Vue.extend({
 				localStorage.setItem('preferredTheme', 'light');
 			}
 		},
+
+		handleSunClick(): void {
+			this.isDarkModeEnabled = false;
+			document.body.setAttribute('data-theme', 'light');
+			localStorage.setItem('preferredTheme', 'light');
+		},
+
+		handleMoonClick(): void {
+			this.isDarkModeEnabled = true;
+			document.body.setAttribute('data-theme', 'dark');
+			localStorage.setItem('preferredTheme', 'dark');
+		},
 	},
 });
 </script>
@@ -57,6 +73,7 @@ export default Vue.extend({
 	color: red
 
 .fa-icon
+	cursor: pointer
 	color: $white
 	margin: 0 0.1875rem
 </style>
