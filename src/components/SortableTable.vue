@@ -84,40 +84,46 @@ table
 	box-sizing: border-box
 	cursor: pointer
 
+[data-theme='dark'] .table-header-row
+	border-color: rgb(212, 212, 212)
+
 .table-row
 	border-bottom: 1px solid
 	border-color: rgba(196, 196, 196, 0.7)
 	box-sizing: border-box
 
-.caret-up {
+.caret-up
 	width: 0
 	height: 0
 	border-left: 5px solid transparent
 	border-right: 5px solid transparent
 
-	border-bottom: 5px solid #ccc
+	border-bottom: 5px solid #aaa
 	position: relative
 	bottom: 17px
 	left: 5px
-}
 
-.caret-down {
+.caret-down
 	width: 0
 	height: 0
 	border-left: 5px solid transparent
 	border-right: 5px solid transparent
 
-	border-top: 5px solid #ccc
+	border-top: 5px solid #aaa
 	position: relative
 	bottom: -17px
 	right: 5px
-}
 
-.up-clicked {
+.up-clicked
 	border-bottom: 5px solid #333
-}
 
-.down-clicked {
+[data-theme='dark'] .up-clicked
+	border-bottom: 5px solid #fff
+
+.down-clicked
 	border-top: 5px solid #333
-}
+
+[data-theme='dark'] .down-clicked
+	border-top: 5px solid #fff
+
 </style>
