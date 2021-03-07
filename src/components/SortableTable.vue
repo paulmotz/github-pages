@@ -92,6 +92,18 @@ table
 	border-color: rgba(196, 196, 196, 0.7)
 	box-sizing: border-box
 
+.table-row:nth-child(odd)
+	background-color: $table-color--odd-light
+
+.table-row:nth-child(even)
+	background-color: $table-color--even-light
+
+[data-theme='dark'] .table-row:nth-child(odd)
+	background-color: $table-color--odd-dark
+
+[data-theme='dark'] .table-row:nth-child(even)
+	background-color: $table-color--even-dark
+
 .caret-up
 	width: 0
 	height: 0

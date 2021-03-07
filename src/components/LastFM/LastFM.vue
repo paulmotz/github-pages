@@ -70,7 +70,7 @@ export default Vue.extend({
 			lastTrackInfo       : '',
 			userErrorMessage    : '',
 			username            : 'paul_motz',
-			fromUts             : '1609537174',
+			fromUts             : '1615136944',
 			fromUtsErrorMessage : '',
 			scrobbleCounts      : [] as ScrobbleCount[],
 			shouldShowTracks    : true,
