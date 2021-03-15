@@ -1,13 +1,10 @@
 <template lang='pug'>
-	.dark-mode-toggle
+	.dark-mode-toggle(v-on:click="handleDarkModeToggle")
 		font-awesome-icon.fa-icon(
-			v-on:click="handleSunClick"
+			v-show="isDarkModeEnabled"
 			icon="sun")
-		toggle-checkbox(
-			v-bind:value="isDarkModeEnabled"
-			v-on:input="handleDarkModeToggle")
 		font-awesome-icon.fa-icon(
-			v-on:click="handleMoonClick"
+			v-show="!isDarkModeEnabled"
 			icon="moon")
 </template>
 
@@ -38,27 +35,15 @@ export default Vue.extend({
 	},
 
 	methods : {
-		handleDarkModeToggle(isDarkModeEnabled: boolean): void {
-			this.isDarkModeEnabled = isDarkModeEnabled;
-			if (isDarkModeEnabled) {
+		handleDarkModeToggle(): void {
+			this.isDarkModeEnabled = !this.isDarkModeEnabled;
+			if (this.isDarkModeEnabled) {
 				document.body.setAttribute('data-theme', 'dark');
 				localStorage.setItem('preferredTheme', 'dark');
 			} else {
 				document.body.setAttribute('data-theme', 'light');
 				localStorage.setItem('preferredTheme', 'light');
 			}
-		},
-
-		handleSunClick(): void {
-			this.isDarkModeEnabled = false;
-			document.body.setAttribute('data-theme', 'light');
-			localStorage.setItem('preferredTheme', 'light');
-		},
-
-		handleMoonClick(): void {
-			this.isDarkModeEnabled = true;
-			document.body.setAttribute('data-theme', 'dark');
-			localStorage.setItem('preferredTheme', 'dark');
 		},
 	},
 });
@@ -67,13 +52,15 @@ export default Vue.extend({
 <style scoped lang='stylus'>
 @import '../assets/variables.styl'
 .dark-mode-toggle
+	height: 100%
 	display: flex
+	align-items: center
+	padding: 0 0.5rem
+	cursor: pointer
 
-.dark-mode-toggle:focus
-	color: red
+.dark-mode-toggle:hover
+	background-color: $darker-vue-blue
 
 .fa-icon
-	cursor: pointer
 	color: $white
-	margin: 0 0.1875rem
 </style>
