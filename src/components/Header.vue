@@ -58,8 +58,7 @@ export default Vue.extend({
 	position: fixed
 	top: 0
 	z-index: 1
-	box-sizing: border-box
-	border-bottom: 2px solid $vue-green
+	border-bottom: 1px solid $vue-green
 
 .header-link, .dropdown-top, .dropdown-item
 	color: $router-link-color
@@ -67,11 +66,12 @@ export default Vue.extend({
 	height: 100%
 	text-decoration: none
 
-.dropdown-top:hover
-	text-decoration: underline
+.links
+	.header-link:hover, .dropdown-top:hover
+		background-color: $darker-vue-blue
 
 a:hover
-	text-decoration: underline
+	background-color: $darker-vue-blue
 
 a.router-link-exact-active
 	color: $active-router-link-color
@@ -79,10 +79,12 @@ a.router-link-exact-active
 .dropdown-content
 	display: none
 	position: absolute
-	top: 50px
+	top: 51px
 	margin-left: -0.5rem
-	padding: 0 0.5rem
 	background-color: $header-footer-background-color
+
+.dropdown-item
+	padding: 0 0.5rem
 
 .dropdown-top:hover .dropdown-content, .dropdown-item
 	display: block
@@ -90,7 +92,7 @@ a.router-link-exact-active
 .header-link, .dropdown-top
 	display: inline-block
 	line-height: 50px
-	margin: 0 0.5rem
+	padding: 0 0.5rem
 
 .hamburger-button
 	display: none
