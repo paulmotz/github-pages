@@ -38,13 +38,16 @@ export default Vue.extend({
 	align-items: center
 
 .modal
-	background: $modal-background-color
+	background-color: $modal-background-color
 	box-shadow: 2px 2px 20px 1px
 	overflow-x: auto
 	display: flex
 	flex-direction: column
 	min-width: 15rem
 	text-align: left
+
+[data-theme='dark']  .modal
+	background-color: $background-color--theme-dark
 
 .modal-header
 	background-color: $header-footer-background-color

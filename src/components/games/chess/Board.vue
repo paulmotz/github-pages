@@ -57,6 +57,8 @@ export default Vue.extend({
 		return {
 			boardSize           : 8,
 			boardStates         : {} as {[index: string]: number},
+			fileLetters         : [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ],
+			rankNumbers         : [ 1, 2, 3, 4, 5, 6, 7, 8 ],
 			moveCounter         : 0,
 			gameStates          : [],
 			isGameOver          : false,
@@ -72,14 +74,14 @@ export default Vue.extend({
 	computed : {
 		files(): string[] {
 			return this.isWhite
-				? [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ]
-				: [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ].reverse();
+				? this.fileLetters
+				: this.fileLetters.slice().reverse();
 		},
 
 		ranks(): number[] {
 			return this.isWhite
-				? [ 1, 2, 3, 4, 5, 6, 7, 8 ].reverse()
-				: [ 1, 2, 3, 4, 5, 6, 7, 8 ];
+				? this.rankNumbers.slice().reverse()
+				: this.rankNumbers;
 		},
 
 		isBoardSet(): boolean {
