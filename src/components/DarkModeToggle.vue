@@ -1,5 +1,8 @@
 <template lang='pug'>
-	.dark-mode-toggle(v-on:click="handleDarkModeToggle")
+	.dark-mode-toggle(
+		v-on:click="handleDarkModeToggle"
+		v-on:keyup.enter="handleDarkModeToggle"
+		tabindex="0")
 		font-awesome-icon.fa-icon(
 			v-show="isDarkModeEnabled"
 			icon="sun")
