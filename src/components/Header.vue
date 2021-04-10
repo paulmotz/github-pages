@@ -9,10 +9,10 @@
 		DarkModeToggle
 		.links
 			router-link.header-link(to="/") Home
-			label.dropdown-top Games
+			label.dropdown-top(tabindex="0") Games
 				.dropdown-content
 					router-link.dropdown-item(to="/chess") Chess
-			label.dropdown-top Visualizations
+			label.dropdown-top(tabindex="0") Visualizations
 				.dropdown-content
 					router-link.dropdown-item(to="/provincial-covid") Provincial COVID-19
 					router-link.dropdown-item(to="/state-covid") States COVID-19
