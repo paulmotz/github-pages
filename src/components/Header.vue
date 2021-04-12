@@ -9,19 +9,18 @@
 		DarkModeToggle
 		.links
 			router-link.header-link(to="/") Home
-			label.dropdown-top(tabindex="0") Games
-				.dropdown-content
-					router-link.dropdown-item(to="/chess") Chess
-			label.dropdown-top(tabindex="0") Visualizations
-				.dropdown-content
-					router-link.dropdown-item(to="/provincial-covid") Provincial COVID-19
-					router-link.dropdown-item(to="/state-covid") States COVID-19
+			HeaderDropdown(dropdownLabel="Games")
+				router-link.dropdown-item(to="/chess") Chess
+			HeaderDropdown(dropdownLabel="Visualizations")
+				router-link.dropdown-item(to="/provincial-covid") Provincial COVID-19
+				router-link.dropdown-item(to="/state-covid") States COVID-19
 			router-link.header-link(to="/lastfm") last.fm
 </template>
 
 <script lang='ts'>
 import Vue from 'vue';
 import DarkModeToggle from '@/components/DarkModeToggle.vue';
+import HeaderDropdown from '@/components/HeaderDropdown.vue';
 import PJMButton from '@/components/PJMButton.vue';
 
 export default Vue.extend({
@@ -29,6 +28,7 @@ export default Vue.extend({
 
 	components : {
 		DarkModeToggle,
+		HeaderDropdown,
 		PJMButton,
 	},
 
@@ -75,19 +75,6 @@ a:hover
 
 a.router-link-exact-active
 	color: $active-router-link-color
-
-.dropdown-content
-	display: none
-	position: absolute
-	top: 51px
-	margin-left: -0.5rem
-	background-color: $header-footer-background-color
-
-.dropdown-item
-	padding: 0 0.5rem
-
-.dropdown-top:hover .dropdown-content, .dropdown-item
-	display: block
 
 .header-link, .dropdown-top
 	display: inline-block
