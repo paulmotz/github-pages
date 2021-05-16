@@ -14,7 +14,9 @@
 			HeaderDropdown(dropdownLabel="Visualizations")
 				router-link.dropdown-item(to="/provincial-covid") Provincial COVID-19
 				router-link.dropdown-item(to="/state-covid") States COVID-19
-			router-link.header-link(to="/lastfm") last.fm
+			HeaderDropdown(dropdownLabel="last.fm")
+				router-link.dropdown-item(to="/lastfm/fetch") Fetcher
+				router-link.dropdown-item(to="/lastfm/scrobble") Scrobbler
 </template>
 
 <script lang='ts'>

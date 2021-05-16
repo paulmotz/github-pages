@@ -2,7 +2,8 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
 import About from '../views/About.vue';
-import LastFM from '../components/LastFM/LastFM.vue';
+import LastFMTracks from '../components/LastFM/LastFMTracks.vue';
+import LastFMScrobbles from '../components/LastFM/LastFMScrobbles.vue';
 import Chess from '../components/games/chess/Chess.vue';
 import ProvincialCOVID from '../components/visualizations/ProvincialCOVID.vue';
 import StateCOVID from '../components/visualizations/StateCOVID.vue';
@@ -17,9 +18,14 @@ const routes: Array<RouteConfig> = [
 		component : Home,
 	},
 	{
-		path      : '/lastfm',
-		name      : 'LastFM',
-		component : LastFM,
+		path      : '/lastfm/fetch',
+		name      : 'LastFMTracks',
+		component : LastFMTracks,
+	},
+	{
+		path      : '/lastfm/scrobble',
+		name      : 'LastFMScrobbles',
+		component : LastFMScrobbles,
 	},
 	{
 		path      : '/chess',

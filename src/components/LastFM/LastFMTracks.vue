@@ -37,7 +37,7 @@ import PJMButton from '../PJMButton.vue';
 import ValidatedInput from '../ValidatedInput.vue';
 
 export default Vue.extend({
-	name : 'LastFM',
+	name : 'LastFMTracks',
 
 	components : {
 		FloatingLabel,
