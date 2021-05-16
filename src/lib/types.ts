@@ -30,6 +30,7 @@ export interface LastFmTracks {
 	'@attr': Record<string, boolean>;
 }
 
+
 export interface Scrobble {
 	title: string;
 	artist: string;
@@ -48,13 +49,6 @@ export interface LastFmTrackInfo {
 	lastTrackInfo: string;
 	scrobbleCounts: ScrobbleCount[];
 	totalScrobbles: number;
-}
-
-export interface SpotifyTrack {
-	artistName: string;
-	endTime: string;
-	msPlayed: number;
-	trackName: string;
 }
 
 export interface PieceProps {

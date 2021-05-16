@@ -385,7 +385,8 @@ export default Vue.extend({
 				const result = this.isWhiteToMove
 					? '0 - 1 Black Wins!'
 					: '1 - 0 White Wins!';
-				this.endGame(result);
+				this.$emit('game-over', result);
+				this.endGame();
 			}
 		},
 
@@ -399,14 +400,16 @@ export default Vue.extend({
 		checkIfStalemate(): void {
 			if (isStalemate(this.allPieces, this.occupiedSquares, this.colorToMoveNext)) {
 				const result = '1/2 - 1/2 Draw by stalemate!';
-				this.endGame(result);
+				this.$emit('game-over', result);
+				this.endGame();
 			}
 		},
 
 		checkIfInsufficeintMaterial(): void {
 			if (hasInsufficientMatingMaterial(this.allPieces)) {
 				const result = '1/2 - 1/2 Draw by insufficient material!';
-				this.endGame(result);
+				this.$emit('game-over', result);
+				this.endGame();
 			}
 		},
 		
@@ -414,7 +417,8 @@ export default Vue.extend({
 			// It's easier to just track each side's moves and check twice the amount
 			if (this.moveCounter >= 100) {
 				const result = '1/2 - 1/2 Draw by fifty-move rule';
-				this.endGame(result);
+				this.$emit('game-over', result);
+				this.endGame();
 			}
 		},
 
@@ -422,13 +426,13 @@ export default Vue.extend({
 			for (const boardState in this.boardStates) {
 				if (this.boardStates[boardState] >= 3) {
 					const result = '1/2 - 1/2 Draw by repetition';
-					this.endGame(result);
+					this.$emit('game-over', result);
+					this.endGame();
 				}
 			}
 		},
 
-		endGame(result: string): void {
-			this.$emit('game-over', result);
+		endGame(): void {
 			this.isGameOver = true;
 		},
 
