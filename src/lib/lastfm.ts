@@ -1,6 +1,7 @@
 import { AllScrobbles, FetchInfo, LastFmTracks, ScrobbleCount, LastFmTrackInfo } from './types';
 
 const USER = 'paul_motz';
+const API_KEY = '7c4429b3e36474312ac2157b5e3bcddf';
 
 const getOldestTrackUts = (tracks: Array<LastFmTracks>): string => {
 	// If there is currently a track being scrobbled and it is the only track returned
@@ -10,8 +11,8 @@ const getOldestTrackUts = (tracks: Array<LastFmTracks>): string => {
 
 const fetchTracks = async ({ user = USER, from = '', to = '', limit = 1000 } = {} ): Promise<LastFmTracks[]> => {
 	const url = to ?
-		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&to=${to}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json` :
-		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=7c4429b3e36474312ac2157b5e3bcddf&format=json`;
+		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&to=${to}&api_key=${API_KEY}&format=json` :
+		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=${API_KEY}&format=json`;
 	const rawData = await fetch(url);
 	const data = await rawData.json();
 	const tracks = data.recenttracks.track;
@@ -135,7 +136,7 @@ const getTracks = async ({ user, from, to }: FetchInfo): Promise<LastFmTrackInfo
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getTrack = async (trackName: string, pagesToSearch = 5): Promise<void> => {
 	for (let pageNumber = 1; pageNumber <= pagesToSearch; pageNumber++) {
-		const url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USER}&api_key=7c4429b3e36474312ac2157b5e3bcddf&page=${pageNumber}&format=json`;
+		const url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USER}&api_key=${API_KEY}&page=${pageNumber}&format=json`;
 		const rawData = await fetch(url);
 		const data = await rawData.json();
 
