@@ -70,7 +70,7 @@ export default Vue.extend({
 			lastTrackInfo       : '',
 			userErrorMessage    : '',
 			username            : 'paul_motz',
-			fromUts             : '1618265027',
+			fromUts             : '1621176908',
 			fromUtsErrorMessage : '',
 			scrobbleCounts      : [] as ScrobbleCount[],
 			shouldShowTracks    : true,
@@ -201,4 +201,31 @@ export default Vue.extend({
 
 button
 	margin: 1.25rem 0.25rem
+
+.sortable-table
+	width: 100%
+	table-layout: fixed;
+
+	td
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis;
+
+	td:nth-child(1)
+		width: 35%
+		max-width: 600px
+
+	td:nth-child(2)
+		width: 35%
+		max-width: 600px
+
+	td:nth-child(3)
+		width: 10%
+		max-width: 200px
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis;
+
+	td:nth-child(4)
+		width: 10%
 </style>

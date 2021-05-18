@@ -138,4 +138,7 @@ table
 [data-theme='dark'] .down-clicked
 	border-top: 5px solid #fff
 
+.table-cell
+	padding: 4px
+
 </style>
