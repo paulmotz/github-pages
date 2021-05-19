@@ -226,6 +226,10 @@ button
 		white-space: nowrap
 		text-overflow: ellipsis;
 
+	@media only screen and (max-width: 1440px)
+		td:nth-child(1), td:nth-child(2)
+			max-width: 400px
+
 	td:nth-child(4)
 		width: 10%
 </style>
