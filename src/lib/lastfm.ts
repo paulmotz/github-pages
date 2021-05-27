@@ -12,7 +12,16 @@ const fetchTracks = async ({ user = '', apiKey = '', from = '', to = '', limit =
 		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=${apiKey}&format=json`;
 	const rawData = await fetch(url);
 	const data = await rawData.json();
-	const tracks = data.recenttracks.track;
+	const tracks: LastFmTracks[] = data.recenttracks.track;
+
+	if (!tracks.length) {
+		return [];
+	}
+
+	const currentTrackIndex = tracks.findIndex(track => track['@attr']);
+	if (currentTrackIndex !== -1) {
+		tracks.splice(currentTrackIndex, 1);
+	}
 
 	return Array.isArray(tracks) ? tracks : [ tracks ];
 };
@@ -26,15 +35,10 @@ const fetchAllTracks = async ({user = '', apiKey = '', from = '', to = '', limit
 
 	let oldestTrackUts = getOldestTrackUts(allTracks);
 
-	while (Number(from) <= Number(oldestTrackUts)) {
-		console.log(from, to);
+	while (Number(from) <= Number(oldestTrackUts) && allTracks.length >= limit) {
 		const newTracks = await fetchTracks({user, apiKey, from, to : oldestTrackUts, limit});
 		if (newTracks.length === 0) {
-			return allTracks;
-		}
-		const currentTrackIndex = newTracks.findIndex(track => track['@attr']);
-		if (currentTrackIndex !== -1) {
-			newTracks.splice(currentTrackIndex, 1);
+			break;
 		}
 		allTracks.push(...newTracks);
 		oldestTrackUts = getOldestTrackUts(allTracks);
