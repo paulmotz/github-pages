@@ -68,7 +68,7 @@ export default Vue.extend({
 					columnName  : 'album',
 				},
 				{
-					columnLabel : 'Scrobble Counts',
+					columnLabel : 'Scrobbles',
 					columnName  : 'scrobbleCount',
 				},
 			],
