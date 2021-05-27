@@ -1,18 +1,15 @@
 import { AllScrobbles, FetchInfo, LastFmTracks, ScrobbleCount, LastFmTrackInfo } from './types';
 
-const USER = 'paul_motz';
-const API_KEY = process.env.VUE_APP_LASTFM_API_KEY;
-
 const getOldestTrackUts = (tracks: Array<LastFmTracks>): string => {
 	// If there is currently a track being scrobbled and it is the only track returned
 	// it will not have a date property.
 	return tracks[tracks.length - 1].date ? tracks[tracks.length - 1].date.uts : '';
 };
 
-const fetchTracks = async ({ user = USER, from = '', to = '', limit = 1000 } = {} ): Promise<LastFmTracks[]> => {
+const fetchTracks = async ({ user = '', apiKey = '', from = '', to = '', limit = 1000 } = {} ): Promise<LastFmTracks[]> => {
 	const url = to ?
-		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&to=${to}&api_key=${API_KEY}&format=json` :
-		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=${API_KEY}&format=json`;
+		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&to=${to}&api_key=${apiKey}&format=json` :
+		`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&limit=${limit}&from=${from}&api_key=${apiKey}&format=json`;
 	const rawData = await fetch(url);
 	const data = await rawData.json();
 	const tracks = data.recenttracks.track;
@@ -20,25 +17,27 @@ const fetchTracks = async ({ user = USER, from = '', to = '', limit = 1000 } = {
 	return Array.isArray(tracks) ? tracks : [ tracks ];
 };
 
-const fetchAllTracks = async ({user = USER, from = '', to = '', limit = 1000} = {}): Promise<LastFmTracks[]> => {
-	const allTracks = await fetchTracks({user, from, to, limit});
+const fetchAllTracks = async ({user = '', apiKey = '', from = '', to = '', limit = 1000} = {}): Promise<LastFmTracks[]> => {
+	const allTracks = await fetchTracks({user, apiKey, from, to, limit});
 
 	if (allTracks.length === 0) {
 		return [];
 	}
 
 	let oldestTrackUts = getOldestTrackUts(allTracks);
-	let tracksFound = allTracks.length > 0;
 
-	while (Number(from) <= Number(oldestTrackUts) && tracksFound) {
-		const newTracks = await fetchTracks({user, from, to : oldestTrackUts, limit});
+	while (Number(from) <= Number(oldestTrackUts)) {
+		console.log(from, to);
+		const newTracks = await fetchTracks({user, apiKey, from, to : oldestTrackUts, limit});
+		if (newTracks.length === 0) {
+			return allTracks;
+		}
 		const currentTrackIndex = newTracks.findIndex(track => track['@attr']);
 		if (currentTrackIndex !== -1) {
 			newTracks.splice(currentTrackIndex, 1);
 		}
 		allTracks.push(...newTracks);
 		oldestTrackUts = getOldestTrackUts(allTracks);
-		tracksFound = newTracks.length > 0;
 	}
 
 	return allTracks;	
@@ -66,6 +65,7 @@ const getLastTrackInfo = (tracks: Array<LastFmTracks>): string => {
 const getTracks = async ({ user, apiKey, from, to }: FetchInfo): Promise<LastFmTrackInfo> => {
 	const fetchedTracks: Array<LastFmTracks> = await fetchAllTracks({
 		user,
+		apiKey,
 		from,
 		to,
 	});
@@ -134,9 +134,9 @@ const getTracks = async ({ user, apiKey, from, to }: FetchInfo): Promise<LastFmT
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getTrack = async (trackName: string, pagesToSearch = 5): Promise<void> => {
+const getTrack = async (user: string, apiKey: string, trackName: string, pagesToSearch = 5): Promise<void> => {
 	for (let pageNumber = 1; pageNumber <= pagesToSearch; pageNumber++) {
-		const url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USER}&api_key=${API_KEY}&page=${pageNumber}&format=json`;
+		const url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${user}&api_key=${apiKey}&page=${pageNumber}&format=json`;
 		const rawData = await fetch(url);
 		const data = await rawData.json();
 
