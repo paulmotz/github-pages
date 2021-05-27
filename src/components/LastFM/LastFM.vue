@@ -4,19 +4,22 @@
 		.inputs
 			FloatingLabel(labelText="Last.fm username")
 				ValidatedInput(v-bind:errorMessage="userErrorMessage")
-					input(v-model="username" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
+					input(v-model="username" v-on:keyup.enter="getLastFMTracks(username, apiKey, fromUts, toUts)")
+			FloatingLabel(labelText="Last.fm API key")
+				ValidatedInput(v-bind:errorMessage="apiKeyErrorMessage")
+					input(v-model="apiKey" v-on:keyup.enter="getLastFMTracks(username, apiKey, fromUts, toUts)")
 			FloatingLabel(labelText="First track uts")
 				ValidatedInput(v-bind:errorMessage="fromUtsErrorMessage")
-					input(v-model="fromUts" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
+					input(v-model="fromUts" v-on:keyup.enter="getLastFMTracks(username, apiKey, fromUts, toUts)")
 			FloatingLabel(labelText="Last track uts (optional)")
 				ValidatedInput(v-bind:errorMessage="toUtsErrorMessage")
-					input(v-model="toUts" v-on:keyup.enter="getLastFMTracks(username, fromUts, toUts)")
+					input(v-model="toUts" v-on:keyup.enter="getLastFMTracks(username, apiKey, fromUts, toUts)")
 		.button-row
 			PJMButton(
 				v-bind:isDisabled="isButtonLoading"
 				text="Get tracks"
 				loadingText="Geting tracks..."
-				v-on:clicked="getLastFMTracks(username, fromUts, toUts)")
+				v-on:clicked="getLastFMTracks(username, apiKey, fromUts, toUts)")
 			PJMButton(
 				v-bind:isDisabled="!hasTracks"
 				v-bind:text="showTracksText"
@@ -48,8 +51,10 @@ export default Vue.extend({
 
 	data : function() {
 		return {
-			isButtonLoading  : false,
-			lastFmColumnData : [
+			apiKey             : process.env.VUE_APP_LASTFM_API_KEY || '',
+			apiKeyErrorMessage : '',
+			isButtonLoading    : false,
+			lastFmColumnData   : [
 				{
 					columnLabel : 'Track',
 					columnName  : 'track',
@@ -99,17 +104,25 @@ export default Vue.extend({
 			this.hideFromUtsErrorMessage();
 		},
 
+		apiKey : function(): void {
+			this.hideApiKeyErrorMessage();
+		},
+
 		toUts : function(): void {
 			this.hideToUtsErrorMessage();
 		},
 	},
 
 	methods : {
-		async getLastFMTracks(user: string, from: string, to: string): Promise<LastFmTrackInfo | undefined> {
+		async getLastFMTracks(user: string, apiKey: string, from: string, to: string): Promise<LastFmTrackInfo | undefined> {
 			this.resetErrorMessages();
 
 			if (!user) {
 				this.userErrorMessage = 'Please enter a last.fm user';
+			}
+
+			if (!apiKey) {
+				this.apiKeyErrorMessage = 'Please enter an API Key';
 			}
 
 			if (!from) {
@@ -122,15 +135,19 @@ export default Vue.extend({
 				this.toUtsErrorMessage = 'Invalid last track uts';
 			}
 
-			if (!user || !from || isToUtsLessThanFromUts) {
+			if (!user || !apiKey || !from || isToUtsLessThanFromUts) {
 				return;
 			}
 
-			await this.getTracks(user, from, to);
+			await this.getTracks(user, apiKey, from, to);
 		},
 
 		hideUserErrorMessage(): void {
 			this.userErrorMessage = '';
+		},
+
+		hideApiKeyErrorMessage(): void {
+			this.apiKeyErrorMessage = '';
 		},
 
 		hideFromUtsErrorMessage(): void {
@@ -141,10 +158,10 @@ export default Vue.extend({
 			this.toUtsErrorMessage = '';
 		},
 
-		async getTracks(user: string, from: string, to = ''): Promise<void> {
+		async getTracks(user: string, apiKey: string, from: string, to = ''): Promise<void> {
 			this.setIsButtonLoading(true);
 
-			const lastFmData: LastFmTrackInfo = await getTracks({ user, from, to });
+			const lastFmData: LastFmTrackInfo = await getTracks({ user, apiKey, from, to });
 
 			this.lastTrackInfo = lastFmData.lastTrackInfo;
 			this.scrobbleCounts = lastFmData.scrobbleCounts;

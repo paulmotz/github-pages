@@ -4,6 +4,8 @@ coverage
 /dist
 
 # local env files
+.env
+.env.development
 .env.local
 .env.*.local
 

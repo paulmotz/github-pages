@@ -6,6 +6,7 @@ export interface AllScrobbles {
 
 export interface FetchInfo {
 	user: string;
+	apiKey: string;
 	from: string;
 	to: string;
 }

@@ -1,7 +1,7 @@
 import { AllScrobbles, FetchInfo, LastFmTracks, ScrobbleCount, LastFmTrackInfo } from './types';
 
 const USER = 'paul_motz';
-const API_KEY = '7c4429b3e36474312ac2157b5e3bcddf';
+const API_KEY = process.env.VUE_APP_LASTFM_API_KEY;
 
 const getOldestTrackUts = (tracks: Array<LastFmTracks>): string => {
 	// If there is currently a track being scrobbled and it is the only track returned
@@ -63,7 +63,7 @@ const getLastTrackInfo = (tracks: Array<LastFmTracks>): string => {
 };
 
 
-const getTracks = async ({ user, from, to }: FetchInfo): Promise<LastFmTrackInfo> => {
+const getTracks = async ({ user, apiKey, from, to }: FetchInfo): Promise<LastFmTrackInfo> => {
 	const fetchedTracks: Array<LastFmTracks> = await fetchAllTracks({
 		user,
 		from,
