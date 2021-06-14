@@ -53,7 +53,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang='stylus'>
-@import '../assets/variables.styl'
+@import '../assets/colors.styl'
 .dark-mode-toggle
 	height: 100%
 	display: flex
@@ -62,7 +62,7 @@ export default Vue.extend({
 	cursor: pointer
 
 .dark-mode-toggle:hover
-	background-color: $darker-vue-blue
+	background-color: $gray-800
 
 .fa-icon
 	color: $white

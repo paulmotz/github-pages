@@ -95,7 +95,7 @@ export default Vue.extend({
 </script>
 
 <style lang='stylus'>
-@import '../assets/variables.styl'
+@import '../assets/colors.styl'
 
 .floating-label
 	margin-top: 1.5rem;

@@ -19,7 +19,7 @@ export default Vue.extend({
 </script>
 
 <style lang='stylus'>
-@import './assets/variables.styl'
+@import './assets/colors.styl'
 html, body
 	margin: 0
 	height: 100%

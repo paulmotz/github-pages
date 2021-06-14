@@ -30,7 +30,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang='stylus'>
-@import '../assets/variables.styl'
+@import '../assets/colors.styl'
 .home-wrapper
 	margin: 5rem
 	font-size: 1.25rem
@@ -39,12 +39,12 @@ export default Vue.extend({
 		margin: 0 0 1rem 0
 
 		a
-			color: $vue-green
+			color: $blue-600
 			text-decoration: none
 
 			&:hover
 				text-decoration: underline
 
 			&:visited
-				color: $vue-blue
+				color: $blue-800
 </style>

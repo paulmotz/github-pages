@@ -88,7 +88,7 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='stylus'>
-@import '../../../assets/variables.styl'
+@import '../../../assets/colors.styl'
 .sqaure
 	display: flex
 	justify-content: center

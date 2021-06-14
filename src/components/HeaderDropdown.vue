@@ -19,7 +19,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang='stylus'>
-@import '../assets/variables.styl'
+@import '../assets/colors.styl'
 .dropdown-content
 	display: none
 	position: absolute

@@ -87,7 +87,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang='stylus'>
-@import '../../../assets/variables.styl'
+@import '../../../assets/colors.styl'
 
 .chess
 	height: 100%

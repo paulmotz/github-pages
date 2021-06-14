@@ -47,7 +47,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang='stylus'>
-@import '../assets/variables.styl'
+@import '../assets/colors.styl'
 .header
 	display: flex
 	align-items: center
@@ -58,7 +58,7 @@ export default Vue.extend({
 	position: fixed
 	top: 0
 	z-index: 1
-	border-bottom: 1px solid $vue-green
+	border-bottom: 1px solid $white
 
 .header-link, .dropdown-top, .dropdown-item
 	color: $router-link-color
@@ -68,10 +68,10 @@ export default Vue.extend({
 
 .links
 	.header-link:hover, .dropdown-top:hover
-		background-color: $darker-vue-blue
+		background-color: $gray-800
 
 a:hover
-	background-color: $darker-vue-blue
+	background-color: $gray-800
 
 a.router-link-exact-active
 	color: $active-router-link-color

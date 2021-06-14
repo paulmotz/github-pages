@@ -75,7 +75,7 @@ export default Vue.extend({
 			lastTrackInfo       : '',
 			userErrorMessage    : '',
 			username            : 'paul_motz',
-			fromUts             : '1621176908',
+			fromUts             : '1623607327',
 			fromUtsErrorMessage : '',
 			scrobbleCounts      : [] as ScrobbleCount[],
 			shouldShowTracks    : true,
@@ -188,7 +188,7 @@ export default Vue.extend({
 </script>
 
 <style lang='stylus'>
-@import '../../assets/variables.styl'
+@import '../../assets/colors.styl'
 .last-fm-wrapper
 	display: flex
 	flex-direction: column

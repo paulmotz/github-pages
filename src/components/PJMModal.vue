@@ -24,7 +24,7 @@ export default Vue.extend({
 </script>
 
 <style lang='stylus'>
-@import '../assets/variables.styl'
+@import '../assets/colors.styl'
 
 .modal-backdrop
 	position: fixed
