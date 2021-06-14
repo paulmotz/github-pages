@@ -59,6 +59,11 @@ export default Vue.extend({
 	top: 0
 	z-index: 1
 	border-bottom: 1px solid $white
+	-moz-user-select     : none;
+	-khtml-user-select   : none;
+	-webkit-user-select  : none;
+	-o-user-select       : none;
+	user-select          : none;
 
 .header-link, .dropdown-top, .dropdown-item
 	color: $router-link-color
