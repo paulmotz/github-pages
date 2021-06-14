@@ -1,6 +1,7 @@
 <template lang='pug'>
 	.dark-mode-toggle(
 		v-on:click="handleDarkModeToggle"
+		v-on:dblclick="handleDarkModeDoubleClick"
 		v-on:keyup.enter="handleDarkModeToggle"
 		tabindex="0")
 		font-awesome-icon.fa-icon(
@@ -46,6 +47,15 @@ export default Vue.extend({
 			} else {
 				document.body.setAttribute('data-theme', 'light');
 				localStorage.setItem('preferredTheme', 'light');
+			}
+		},
+
+		handleDarkModeDoubleClick(): void {
+			if (window.getSelection && window.getSelection() !== null) {
+				window.getSelection().removeAllRanges();
+			}
+			else if (document.selection) {
+				document.selection.empty();
 			}
 		},
 	},
