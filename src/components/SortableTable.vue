@@ -1,10 +1,12 @@
 <template lang='pug'>
 	table.sortable-table(v-if="tableData.length > 0")
 		tr.table-header-row
+			th.table-cell(v-if="sholdShowRowIndex") #
 			th.table-header-item(v-for="(column, columnHeaderIndex) in columnData" v-bind:key="columnHeaderIndex" v-on:click="sort(column.columnName)") {{ column.columnLabel }}
 				span.caret-up(v-bind:class="{ 'up-clicked' : column.columnName === currentlySortedColumn && isCurrentlySortedAscending }")
 				span.caret-down(v-bind:class="{ 'down-clicked' : column.columnName === currentlySortedColumn && !isCurrentlySortedAscending }")
 		tr.table-row(v-for="(row, rowIndex) in tableData" v-bind:key="rowIndex")
+			td.table-cell(v-if="sholdShowRowIndex") {{ rowIndex + 1 }}
 			td.table-cell(v-for="(column, columnIndex) in columnData" v-bind:key="columnIndex") {{ row[column.columnName] }}
 </template>
 
@@ -22,6 +24,10 @@ export default Vue.extend({
 		tableDataProp : {
 			type    : Array,
 			default : (): [] => [],
+		},
+		sholdShowRowIndex : {
+			type    : Boolean, 
+			default : false,
 		},
 	},
 	
@@ -79,18 +85,13 @@ table
 	border-collapse: collapse
 
 .table-header-row
-	border-bottom: 2px solid
-	border-color: rgb(32, 32, 32)
+	border-bottom: 1px solid
+	border-color: $gray-80
 	box-sizing: border-box
 	cursor: pointer
 
 [data-theme='dark'] .table-header-row
-	border-color: rgb(212, 212, 212)
-
-.table-row
-	border-bottom: 1px solid
-	border-color: rgba(196, 196, 196, 0.7)
-	box-sizing: border-box
+	border-color: $gray-50
 
 .table-row:nth-child(odd)
 	background-color: $table-color--odd-light
@@ -98,11 +99,17 @@ table
 .table-row:nth-child(even)
 	background-color: $table-color--even-light
 
+.table-row:hover
+	background-color: $table-color--hover-light
+
 [data-theme='dark'] .table-row:nth-child(odd)
 	background-color: $table-color--odd-dark
 
 [data-theme='dark'] .table-row:nth-child(even)
 	background-color: $table-color--even-dark
+
+[data-theme='dark'] .table-row:hover
+	background-color: $table-color--hover-dark
 
 .caret-up
 	width: 0

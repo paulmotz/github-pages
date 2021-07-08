@@ -27,6 +27,7 @@
 		SortableTable(
 			v-bind:tableDataProp="scrobbleCounts"
 			v-bind:columnData="lastFmColumnData"
+			v-bind:sholdShowRowIndex="true"
 			v-show="shouldShowTracks")
 </template>
 
@@ -74,8 +75,8 @@ export default Vue.extend({
 			],
 			lastTrackInfo       : '',
 			userErrorMessage    : '',
-			username            : 'paul_motz',
-			fromUts             : '1623607327',
+			username            : process.env.VUE_APP_LASTFM_USERNAME || '',
+			fromUts             : process.env.VUE_APP_LASTFM_LAST_UTS || '',
 			fromUtsErrorMessage : '',
 			scrobbleCounts      : [] as ScrobbleCount[],
 			shouldShowTracks    : true,
@@ -221,32 +222,33 @@ button
 
 .sortable-table
 	width: 100%
-	table-layout: fixed;
+	table-layout: fixed
+	margin-bottom: 20px
 
 	td
 		overflow: hidden
 		white-space: nowrap
 		text-overflow: ellipsis;
 
-	td:nth-child(1)
-		width: 35%
-		max-width: 600px
-
 	td:nth-child(2)
 		width: 35%
 		max-width: 600px
 
 	td:nth-child(3)
+		width: 35%
+		max-width: 600px
+
+	td:nth-child(4)
 		width: 10%
 		max-width: 200px
 		overflow: hidden
 		white-space: nowrap
-		text-overflow: ellipsis;
+		text-overflow: ellipsis
 
 	@media only screen and (max-width: 1440px)
 		td:nth-child(1), td:nth-child(2)
 			max-width: 400px
 
-	td:nth-child(4)
+	td:nth-child(5)
 		width: 10%
 </style>

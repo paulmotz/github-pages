@@ -26,6 +26,7 @@ export default Vue.extend({
 	top: 51px
 	margin-left: -0.5rem
 	background-color: $header-footer-background-color
+	opacity: 0.85
 
 .dropdown-item
 	padding: 0 0.5rem

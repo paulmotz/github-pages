@@ -47,7 +47,6 @@ export default Vue.extend({
 button
 	background-color: $button-background-color
 	border: none
-	border-radius: 5px
 	color: white
 	padding: 10px
 	cursor: pointer
@@ -58,7 +57,6 @@ button:hover
 
 button:disabled
 	background-color: $button-background-color-disabled
-	// color: black
 	cursor: not-allowed
 	opacity: 0.7
 </style>
