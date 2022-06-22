@@ -27,23 +27,22 @@ html, body
 	flex-direction: column
 
 #app
-	font-family: Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: $text-color-theme-light;
+	font-family: Helvetica, Arial, sans-serif
+	-webkit-font-smoothing: antialiased
+	-moz-osx-font-smoothing: grayscale
 	display: flex
 	flex-direction: column
 	flex-grow: 1
-
-[data-theme='dark'] #app
-	color: $text-color--theme-dark
 
 .router-view-wrapper
 	height: 100%
 	margin-top: 50px
 	width: 100%
 	background: $background-color--theme-light
+	color: $text-color-theme-light
+	transition: all 0.2s ease-out
 
 [data-theme='dark'] .router-view-wrapper
 	background: $background-color--theme-dark
+	color: $text-color--theme-dark
 </style>

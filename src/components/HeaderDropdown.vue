@@ -1,6 +1,9 @@
 <template lang='pug'>
-	label.dropdown-top(tabindex="0") {{ dropdownLabel }}
-		.dropdown-content
+	label.dropdown-top(
+		tabindex="0"
+		v-bind:class="{ 'clicked' : this.clicked }"
+		v-on:click="toggleClicked") {{ dropdownLabel }}
+		.dropdown-content(v-on:clicked="toggleClicked")
 			slot
 </template>
 
@@ -13,6 +16,19 @@ export default Vue.extend({
 		dropdownLabel : {
 			type    : String,
 			default : '',
+		},
+	},
+
+	data : function() {
+		return {
+			clicked : false,
+		};
+	},
+
+	methods : {
+		toggleClicked(): void {
+			console.log(123);
+			this.clicked = !this.clicked;
 		},
 	},
 });
