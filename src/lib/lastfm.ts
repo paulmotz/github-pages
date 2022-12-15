@@ -92,7 +92,7 @@ const getTracks = async ({ user, apiKey, from, to }: FetchInfo): Promise<LastFmT
 		const title = track.name;
 		const artist = track.artist['#text'];
 		const album = track.album['#text'];
-		const key = `${title} - ${artist}`;
+		const key = `${title} - ${artist} - ${album}`;
 		totalScrobbles++;
 		if (scrobbles[key]) {
 			scrobbles[key].scrobbleCount++;
